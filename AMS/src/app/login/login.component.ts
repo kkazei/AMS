@@ -47,7 +47,7 @@ export class LoginComponent implements AfterViewInit {
     this.authService.login(this.username, this.password).subscribe(
       (data) => {
         console.log('Login successful:', data);
-        this.router.navigate(['/feed']);
+        this.router.navigate(['/tenant-dashboard']);
       },
       (error) => {
         console.log('Login failed:', error);
@@ -59,10 +59,7 @@ export class LoginComponent implements AfterViewInit {
 
   // Method for registration
   userRegister() {
-    if (this.password !== this.confirmPassword) {
-      console.log('Passwords do not match');
-      return;
-    }
+    console.log('Registration method called'); // Debugging line
 
     const data = {
       user_id: this.user_id,
@@ -73,12 +70,21 @@ export class LoginComponent implements AfterViewInit {
       user_firstname: this.user_firstname,
     };
 
-    console.log(data);
+    console.log(data); // Debugging line
 
     this.authService.registerData(data).subscribe(
       (response) => {
         console.log('Registration successful:', response);
-        this.router.navigate(['/login']);
+        // Switch to the sign-in form after successful registration
+        this.container.nativeElement.classList.remove('sign-up-mode');
+
+        // Reset registration fields
+        this.user_id = '';
+        this.user_email = '';
+        this.password = '';
+        this.user_role = '';
+        this.user_lastname = '';
+        this.user_firstname = '';
       },
       (error) => {
         console.error('Error during registration:', error);

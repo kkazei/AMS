@@ -8,7 +8,7 @@ import { isPlatformBrowser } from '@angular/common';
 })
 export class AuthService {
 
-  private apiUrl = "http://localhost/BlogAPI/api/";
+  private apiUrl = "http://localhost/amsAPI/api/";
   private loggedIn: boolean = false;
   private token: string | null = null;
 

@@ -29,42 +29,58 @@
           <!-- Social Icons omitted for brevity -->
         </form>
   
-        <!-- Sign Up Form -->
-        <form class="sign-up-form" (ngSubmit)="userRegister()">
-            <h2 class="title">Sign up</h2>
-            <div class="input-field">
-              <i class="fas fa-user"></i>
-              <input
-                type="text"
-                placeholder="Username"
-                [(ngModel)]="username"
-                name="username"
-                required
-              />
-            </div>
-            <div class="input-field">
-              <i class="fas fa-envelope"></i>
-              <input
-                type="email"
-                placeholder="Email"
-                [(ngModel)]="user_email"
-                name="email"
-                required
-              />
-            </div>
-            <div class="input-field">
-              <i class="fas fa-lock"></i>
-              <input
-                type="password"
-                placeholder="Password"
-                [(ngModel)]="password"
-                name="password"
-                required
-              />
-            </div>
-            <input type="submit" class="btn" value="Sign up" />
-            <p class="social-text">Or Sign up with social platforms</p>
-          </form>
+     <!-- Sign Up Form -->
+<form class="sign-up-form" (ngSubmit)="userRegister()">
+  <h2 class="title">Sign up</h2>
+  
+  <div class="input-field">
+      <i class="fas fa-user"></i>
+      <input
+          type="text"
+          placeholder="First Name"
+          [(ngModel)]="user_firstname"
+          name="firstname"
+          required
+      />
+  </div>
+
+  <div class="input-field">
+      <i class="fas fa-user"></i>
+      <input
+          type="text"
+          placeholder="Last Name"
+          [(ngModel)]="user_lastname"
+          name="lastname"
+          required
+      />
+  </div>
+  
+  <div class="input-field">
+      <i class="fas fa-envelope"></i>
+      <input
+          type="email"
+          placeholder="Email"
+          [(ngModel)]="user_email"
+          name="email"
+          required
+      />
+  </div>
+  
+  <div class="input-field">
+      <i class="fas fa-lock"></i>
+      <input
+          type="password"
+          placeholder="Password"
+          [(ngModel)]="password"
+          name="password"
+          required
+      />
+  </div>
+  
+  <input type="submit" class="btn" value="Sign up" />
+  <p class="social-text">Or Sign up with social platforms</p>
+</form>
+
           
       </div>
     </div>
