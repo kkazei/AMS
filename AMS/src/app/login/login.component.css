@@ -12,7 +12,7 @@ input {
 }
 
 .container {
-  position: relative;
+  position: center;
   width: 100%;
   background-color: #fff;
   min-height: 100vh;
