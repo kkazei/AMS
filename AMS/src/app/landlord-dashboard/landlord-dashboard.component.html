@@ -1,0 +1,59 @@
+<div class="landlord-dashboard">
+    <h1>Landlord Dashboard</h1>
+  
+    <!-- Search Bar -->
+    <div class="search-bar">
+      <input type="text" placeholder="Search..." />
+      <button>Search</button>
+    </div>
+  
+    <!-- Records Table -->
+    <table>
+      <thead>
+        <tr>
+          <th>Select</th>
+          <th>ID</th>
+          <th>Last Name</th>
+          <th>First Name</th>
+          <th>Email</th>
+          <th>Apartment</th>
+          <th>Due Date</th>
+          <th>Status</th>
+          <th>Actions</th> <!-- New column for actions -->
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Example row -->
+        <tr>
+          <td><input type="checkbox" /></td>
+          <td>1</td>
+          <td>Doe</td>
+          <td>John</td>
+          <td>john.doeexample.com</td>
+          <td>Apartment 1</td>
+          <td>11/30/24</td>
+          <td>Unpaid</td>
+          <td>
+            <button class="verify-btn">Verify Payment</button> <!-- New button -->
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  
+    <!-- Pagination -->
+    <div class="pagination">
+      <button>Previous</button>
+      <span>Page 1 of 10</span>
+      <button>Next</button>
+    </div>
+  
+    <!-- Export Button -->
+    <button>Export to Excel</button>
+  
+    <!-- Archive Button -->
+    <button>Archive Selected Records</button>
+  
+    <!-- Delete Button -->
+    <button>Delete All Records</button>
+  </div>
+  

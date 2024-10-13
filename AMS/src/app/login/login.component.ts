@@ -47,7 +47,7 @@ export class LoginComponent implements AfterViewInit {
     this.authService.login(this.username, this.password).subscribe(
       (data) => {
         console.log('Login successful:', data);
-        this.router.navigate(['/tenant-dashboard']);
+        this.router.navigate(['/landlord-dashboard']);
       },
       (error) => {
         console.log('Login failed:', error);
