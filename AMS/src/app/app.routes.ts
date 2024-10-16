@@ -4,6 +4,7 @@ import { LoginComponent } from './login/login.component';
 import { LandlordDashboardComponent } from './landlord-dashboard/landlord-dashboard.component';
 import { TenantManagementComponent } from './tenant-management/tenant-management.component';
 import { LandlordApartmentComponent } from './landlord-apartment/landlord-apartment.component';
+import { ComposeMailComponent } from './compose-mail/compose-mail.component';
 
 
 export const routes: Routes = [
@@ -12,6 +13,7 @@ export const routes: Routes = [
   { path: 'landlord-dashboard', component: LandlordDashboardComponent },
   { path: 'tenant-management', component: TenantManagementComponent },
   { path: 'landlord-apartment', component: LandlordApartmentComponent },
+  { path: 'compose-mail', component: ComposeMailComponent },
  
 
 ];

@@ -30,7 +30,7 @@ export class AuthService {
     const headers = {
       'Content-Type': 'application/json',
     };
-  
+
     return new Observable((observer) => {
       axios
         .post(
@@ -61,29 +61,29 @@ export class AuthService {
         });
     });
   }
-  
 
   logout(): Observable<any> {
-  if (isPlatformBrowser(this.platformId)) {
-    localStorage.removeItem('jwt');
-  }
-  this.loggedIn = false;
-  this.token = null;
+    if (isPlatformBrowser(this.platformId)) {
+      localStorage.removeItem('jwt');
+    }
+    this.loggedIn = false;
+    this.token = null;
 
-  return new Observable((observer) => {
-    axios
-      .post(this.apiUrl + 'logout')
-      .then((res) => {
-        console.log(res.data);
-        observer.next(res.data);
-        observer.complete();
-      })
-      .catch((error) => {
-        console.error('Logout failed:', error);
-        observer.error(error);
-      });
-  });
-}
+    return new Observable((observer) => {
+      axios
+        .post(this.apiUrl + 'logout')
+        .then((res) => {
+          console.log(res.data);
+          observer.next(res.data);
+          observer.complete();
+        })
+        .catch((error) => {
+          console.error('Logout failed:', error);
+          observer.error(error);
+        });
+    });
+  }
+
   getUserProfileFromToken(): any {
     if (this.token) {
       const base64Url = this.token.split('.')[1];
@@ -105,24 +105,79 @@ export class AuthService {
     return this.token;
   }
 
+  registerData(data: any): Observable<any> {
+    const headers = {
+      'Content-Type': 'application/json'
+    };
 
-registerData(data: any): Observable<any> {
-  const headers = {
-    'Content-Type': 'application/JSON'
-  };
+    return new Observable((observer) => {
+      axios.post(this.apiUrl + "register", data, { headers })
+        .then(res => {
+          console.log(res.data);
+          observer.next(res.data);
+          observer.complete();
+        })
+        .catch(err => {
+          console.log(err);
+          observer.error(err);
+        });
+    });
+  }
 
-  return new Observable(observer => {
-    axios.post(this.apiUrl + "register", data, { headers })
-      .then(res => {
-        console.log(res.data);
-        observer.next(res.data);
-        observer.complete();
-      })
-      .catch(err => {
-        console.log(err);
-        observer.error(err);
-      });
-  });
-}
+  sendMail(data: any): Observable<any> {
+    const headers = {
+      'Content-Type': 'application/json'
+    };
 
+    return new Observable((observer) => {
+      axios.post(`${this.apiUrl}mail`, data, { headers })
+        .then(res => {
+          console.log(res.data);
+          observer.next(res.data);
+          observer.complete();
+        })
+        .catch(err => {
+          console.log(err);
+          observer.error(err);
+        });
+    });
+  }
+
+  schedMail(data: any): Observable<any> {
+    const headers = {
+      'Content-Type': 'application/json'
+    };
+
+    return new Observable((observer) => {
+      axios.post(`${this.apiUrl}schedule`, data, { headers })
+        .then(res => {
+          console.log(res.data);
+          observer.next(res.data);
+          observer.complete();
+        })
+        .catch(err => {
+          console.log(err);
+          observer.error(err);
+        });
+    });
+  }
+
+  submitMailHistory(data: any): Observable<any> {
+    const headers = {
+      'Content-Type': 'application/json'
+    };
+
+    return new Observable((observer) => {
+      axios.post(this.apiUrl + "mailhistory", data, { headers })
+        .then(res => {
+          console.log(res.data);
+          observer.next(res.data);
+          observer.complete();
+        })
+        .catch(err => {
+          console.log(err);
+          observer.error(err);
+        });
+    });
+  }
 }

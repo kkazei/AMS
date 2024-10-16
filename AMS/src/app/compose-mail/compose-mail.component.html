@@ -1,0 +1,16 @@
+<div>
+  <h2>Compose Email</h2>
+  <div>
+    <label for="emails">To:</label>
+    <input type="text" id="emails" (input)="handleEmailInput($event)" placeholder="Enter email addresses">
+  </div>
+  <div>
+    <label for="subject">Subject:</label>
+    <input type="text" id="subject" [(ngModel)]="subject">
+  </div>
+  <div>
+    <label for="message">Message:</label>
+    <textarea id="message" [(ngModel)]="message"></textarea>
+  </div>
+  <button (click)="sendMail()">Send Email</button>
+</div>
