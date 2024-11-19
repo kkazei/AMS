@@ -180,4 +180,76 @@ export class AuthService {
         });
     });
   }
+
+  createAnnouncement(data: any): Observable<any> {
+    const headers = {
+      'Content-Type': 'application/json'
+    };
+
+    return new Observable((observer) => {
+      axios.post(this.apiUrl + "announcement", data, { headers })
+        .then(res => {
+          console.log(res.data);
+          observer.next(res.data);
+          observer.complete();
+        })
+        .catch(err => {
+          console.log(err);
+          observer.error(err);
+        });
+    });
+  }
+
+  createApartment(data: any): Observable<any> {
+    const headers = {
+      'Content-Type': 'application/json',
+    };
+
+    return new Observable((observer) => {
+      axios
+        .post(this.apiUrl + 'apartment', data, { headers })
+        .then((res) => {
+          console.log(res.data);
+          observer.next(res.data);  // Send the response data to subscribers
+          observer.complete();  // Mark the observable as complete
+        })
+        .catch((err) => {
+          console.log(err);
+          observer.error(err);  // Notify observers of the error
+        });
+    });
+  }
+
+  getPosts(): Observable<any> {
+    return new Observable((observer) => {
+      axios
+        .get(this.apiUrl + 'getPosts')
+        .then((res) => {
+          console.log(res.data);
+          observer.next(res.data);  // Send the response data to subscribers
+          observer.complete();  // Mark the observable as complete
+        })
+        .catch((err) => {
+          console.log(err);
+          observer.error(err);  // Notify observers of the error
+        });
+    });
+  }
+
+  getApartments(): Observable<any> {
+    return new Observable((observer) => {
+      axios
+        .get(this.apiUrl + 'getApartments')
+        .then((res) => {
+          console.log(res.data);
+          observer.next(res.data);  // Send the response data to subscribers
+          observer.complete();  // Mark the observable as complete
+        })
+        .catch((err) => {
+          console.log(err);
+          observer.error(err);  // Notify observers of the error
+        });
+    });
+  }
+
 }
