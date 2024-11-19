@@ -1,59 +1,76 @@
-<div class="landlord-dashboard">
-    <h1>Landlord Dashboard</h1>
-  
-    <!-- Search Bar -->
-    <div class="search-bar">
-      <input type="text" placeholder="Search..." />
-      <button>Search</button>
-    </div>
-  
-    <!-- Records Table -->
-    <table>
-      <thead>
-        <tr>
-          <th>Select</th>
-          <th>ID</th>
-          <th>Last Name</th>
-          <th>First Name</th>
-          <th>Email</th>
-          <th>Apartment</th>
-          <th>Due Date</th>
-          <th>Status</th>
-          <th>Actions</th> <!-- New column for actions -->
-        </tr>
-      </thead>
-      <tbody>
-        <!-- Example row -->
-        <tr>
-          <td><input type="checkbox" /></td>
-          <td>1</td>
-          <td>Doe</td>
-          <td>John</td>
-          <td>john.doeexample.com</td>
-          <td>Apartment 1</td>
-          <td>11/30/24</td>
-          <td>Unpaid</td>
-          <td>
-            <button class="verify-btn">Verify Payment</button> <!-- New button -->
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  
-    <!-- Pagination -->
-    <div class="pagination">
-      <button>Previous</button>
-      <span>Page 1 of 10</span>
-      <button>Next</button>
-    </div>
-  
-    <!-- Export Button -->
-    <button>Export to Excel</button>
-  
-    <!-- Archive Button -->
-    <button>Archive Selected Records</button>
-  
-    <!-- Delete Button -->
-    <button>Delete All Records</button>
-  </div>
-  
+<div class="dashboard-container">
+  <aside class="sidebar">
+    <div class="logo">UnitPay Solutions</div>
+    <ul class="menu">
+      <li class="menu-item active">Dashboard</li>
+      <li class="menu-item">Tenant Profile</li>
+      <li class="menu-item">Lease Agreement</li>
+      <li class="menu-item">Request Submission</li>
+    </ul>
+  </aside>
+
+  <main class="content">
+    <header class="header">
+      <h1>Welcome, Juan Dela Cruz</h1>
+      <span class="date">November 08, 2024</span>
+    </header>
+
+    <section class="main-overview">
+      <div class="overview-cards">
+        <div class="card">TENANTS</div>
+        <div class="card">ROOMS</div>
+        <div class="card">MAINTENANCE</div>
+        <div class="card">STAFFS</div>
+        <div class="card">CONCERNS</div>
+        <div class="card">ANNOUNCEMENTS</div>
+      </div>
+
+      <div class="chart-section">
+        <div class="chart-container">
+          <h3>Overview of 2024</h3>
+          <canvas id="income-expense-chart"></canvas>
+        </div>
+        <div class="summary">
+          <div class="summary-item">8 Vacant</div>
+          <div class="summary-item">8 Acquired</div>
+          <div class="summary-item">Php1.2M Income</div>
+          <div class="summary-item">Php300k Expenses</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="invoices">
+      <h3>Invoices</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Amount</th>
+            <th>Date</th>
+            <th>Room</th>
+            <th>Transaction</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Juan Dela Cruz</td>
+            <td>₱450</td>
+            <td>24/10/2024</td>
+            <td>Room 2</td>
+            <td>xxxx-xxxx-xxxx</td>
+            <td class="pending">Pending</td>
+          </tr>
+          <tr>
+            <td>Juan Dela Cruz</td>
+            <td>₱650</td>
+            <td>24/10/2024</td>
+            <td>Room 1</td>
+            <td>xxxx-xxxx-xxxx</td>
+            <td class="paid">Paid</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+  </main>
+</div>
