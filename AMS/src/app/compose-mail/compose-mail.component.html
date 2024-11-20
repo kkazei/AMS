@@ -1,16 +1,265 @@
-<div>
-  <h2>Compose Email</h2>
-  <div>
-    <label for="emails">To:</label>
-    <input type="text" id="emails" (input)="handleEmailInput($event)" placeholder="Enter email addresses">
+<div class="ComposeMailContainer">
+  <div class="mail-container">
+    <div class="header">
+      <h1>Compose Mail</h1>
+    </div>
+    <div class="mainbar">
+      <form class="form1">
+        <div class="main">
+          <div class="reciever">
+            <label class="label1" for="to">To:</label>
+
+            <div class="email-box" *ngIf="showEmailBox" [hidden]="!showEmailBox">
+              <div *ngFor="let emailItem of email" class="email-list">
+                <span class="email-text">{{ emailItem }}</span>
+              </div>
+            </div>
+
+            <input class="input2" type="email" [(ngModel)]="email" name="email" id="emailInput"
+              placeholder="Enter email addresses" required (input)="handleEmailInput($event)" [hidden]="!showInput2" />
+
+            <div class="numItem" *ngIf="email.length > 0">
+              {{ email.length }}
+            </div>
+
+            <div class="dropdown">
+              <a class="btn btn-secondary" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                {{ content }}
+                <span class="dropdown-toggle"></span>
+              </a>
+
+              <ul class="dropdown-menu">
+                <li>
+                  <a class="dropdown-item" (click)="selectedType('Include Group')">None</a>
+                </li>
+                <li>
+                  <a class="dropdown-item" (click)="selectedType('BSEMC')">BSEMC</a>
+                </li>
+                <li>
+                  <a class="dropdown-item" (click)="selectedType('ACT')">ACT</a>
+                </li>
+                <li>
+                  <a class="dropdown-item" (click)="selectedType('CCS')">CCS</a>
+                </li>
+                <li>
+                  <a class="dropdown-item" (click)="selectedType('BSIT')">BSIT</a>
+                </li>
+                <li>
+                  <a class="dropdown-item" (click)="selectedType('BSCS')">BSCS</a>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div class="subject">
+            <label class="label1" for="subject">Subject:</label><br />
+            <input class="input1" type="text" id="subject" [(ngModel)]="subject" name="subject" required /><br /><br />
+          </div>
+          <div class="message">
+            <textarea class="textfield" [(ngModel)]="message" name="message" required></textarea><br /><br />
+          </div>
+          <div class="button-container">
+            <button class="add-attachment" (click)="openModal0()">
+              <i class="material-icons">preview</i>
+            </button>
+            <button class="add-photo">
+              <i class="material-icons">&#xe439;</i>
+            </button>
+            <button class="schedule-send" (click)="schedSend()">
+              Schedule Send
+            </button>
+            <!-- Button trigger modal -->
+            <button type="submit" (click)="openModal()" class="send">
+              Send
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
   </div>
-  <div>
-    <label for="subject">Subject:</label>
-    <input type="text" id="subject" [(ngModel)]="subject">
+
+  <div class="sidebar">
+    <h1>Keywords</h1>
+    <div class="keywords">
+      <div class="keywords-list">
+        <span class="keyword">Dept</span>
+        <span class="keyword">Date</span>
+      </div>
+    </div>
   </div>
-  <div>
-    <label for="message">Message:</label>
-    <textarea id="message" [(ngModel)]="message"></textarea>
+</div>
+
+
+<!-- <script>
+    function includeGroup() {
+        // Assume the group name is "Group A"
+        document.getElementById("emailInput").value = "BSIT alumni";
+    }
+</script> -->
+
+<!-- Modal -->
+<div *ngIf="isVisible0" class="modal-backdrop" (click)="closeModal0()">
+
+  <div class="custom-modal" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="false">
+    <div class="modal-dialog1" role="document">
+      <div class="modal-content1">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel"></h5>
+          <button type="button" class="close" aria-label="Close" (click)="closeModal0()">
+            <span class="x-button" aria-hidden="false">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body" style="    width: 100%;
+        height: 100%;
+        overflow: auto; padding-bottom: 4rem;">
+          <div style="width: 100%; background: #e7e7e7 !important;">
+            <div style="margin: 0px auto; width: 100%; max-width: 700px; background: #fff;">
+              <table align="center" border="0" cellpadding="0" cellspacing="0" role="presentation"
+                style="border-radius: 23px; width:100%; border-left: none;">
+                <tbody>
+                  <tr>
+                    <td>
+                      <img src="https://gcaco.online/assets/images/form-banner.png"
+                        style="margin: 2vmin 0 0 0; width: 100%;">
+                    </td>
+
+                  </tr>
+                  <tr>
+                    <td>
+                      <hr>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <h1
+                        style="color: #000000 !important; text-align: center; line-height: 4vmin; font-size: 4vmin; padding: 0 3vmin 0 3vmin;">
+                        Greetings! Alumnus of
+                        <span style="color: green;">Gordon College</span> - <span style="color: #E17713;">College of
+                          Computer
+                          Studies</span>
+                      </h1>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <hr>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <p style="line-height: 3.5vmin; font-size: 2.5vmin; padding: 0 3vmin 0 3vmin; white-space: pre;
+                      word-break: break-word; text-wrap: wrap;">{{message}}</p>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td style="display: flex; padding: 4vmin 2vmin 4vmin 2vmin;">
+                      <button
+                        style="background: green; padding: 1vmin 3vmin 1vmin 3vmin; border-radius: 1vmin; margin: auto; cursor: pointer; height: auto; width: auto; font-weight: 500; border: none;"><a
+                          href="http://localhost:4200/form-survey"
+                          style="text-align: center; text-decoration: none; font-size: 3vmin;"><span
+                            style="color: #ffffff;">
+                            Go to Form</span></a></button>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <hr>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td style="padding: 0 30px 0 30px;">
+                      <p style="color: red; "><i>Note: you can unsubscribe by: verifying your email in the form >>
+                          disagree to the Privacy Act >> Next</i></p>
+                    </td>
+                  </tr>
+                  <tr>
+                  <tr>
+                    <td style="padding-bottom: 3vmin;">
+                      <footer
+                        style="margin: auto; background-color: #E17713; color: white !important; text-align: center; padding: 1vmin 0 1vmin; font-size: 2vmin; height: auto; width: 100%;">
+                        Â© 2022 Gordon College - College of Computer Studies
+                      </footer>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+
+
+        </div>
+      </div>
+    </div>
   </div>
-  <button (click)="sendMail()">Send Email</button>
+
+</div>
+
+<!-- Modal -->
+<div *ngIf="isVisible" class="modal-backdrop" (click)="closeModal()">
+
+  <div class="custom-modal" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="false">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Send Mail?</h5>
+          <button type="button" class="close" aria-label="Close" (click)="closeModal()">
+            <span class="x-button" aria-hidden="false">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          Do you want to send this mail?
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary cancel" (click)="closeModal()">Cancel</button>
+          <button type="button" class="btn btn-primary sendThis" (click)="onSubmit()" (click)="sendMail()"
+             (click)="closeModal()">Send</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- Success Modal -->
+<div *ngIf="isVisible1" class="modal-backdrop" (click)="closeModal1()">
+
+  <div class="custom-modal" id="successModal" aria-labelledby="exampleModalLabel" aria-hidden="false">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content alerts">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Successfully Sent</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="closeModal1()">
+            <span class="x-button" aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body mess">
+          Your email was successfully sent
+          <img class="gifs" src="assets/images/Success.gif">
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- Error Modal -->
+
+<div *ngIf="isVisible2" class="modal-backdrop" (click)="closeModal2()">
+  <div class="custom-modal" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content alerts">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Error</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span class="x-button" aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body mess">
+          Unseccessful sending. An error occurred!
+          <img class="gifs" src="assets/images/Error.gif">
+        </div>
+      </div>
+    </div>
+  </div>
 </div>

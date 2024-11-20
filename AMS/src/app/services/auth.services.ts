@@ -252,4 +252,40 @@ export class AuthService {
     });
   }
 
+  assignTenantToApartment(data: any): Observable<any> {
+    const headers = {
+      'Content-Type': 'application/json'
+    };
+
+    return new Observable((observer) => {
+      axios
+        .post(this.apiUrl + 'assignTenant', data, { headers })
+        .then((res) => {
+          console.log(res.data);
+          observer.next(res.data);  // Send the response data to subscribers
+          observer.complete();  // Mark the observable as complete
+        })
+        .catch((err) => {
+          console.log(err);
+          observer.error(err);  // Notify observers of the error
+        });
+    });
+  }
+
+  getTenants(): Observable<any> {
+    return new Observable((observer) => {
+      axios
+        .get(this.apiUrl + 'getTenants')
+        .then((res) => {
+          console.log(res.data);
+          observer.next(res.data);  // Send the response data to subscribers
+          observer.complete();  // Mark the observable as complete
+        })
+        .catch((err) => {
+          console.log(err);
+          observer.error(err);  // Notify observers of the error
+        });
+    });
+  }
+
 }
