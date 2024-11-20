@@ -23,7 +23,7 @@
   <h2>Tenants</h2>
   <ul>
     <li *ngFor="let tenant of tenants">
-      <strong>{{ tenant.first_name }} {{ tenant.last_name }}</strong>
+      <strong>{{ tenant.tenant_firstname }} {{ tenant.tenant_lastname }}</strong>
       <br />
       <em>Email:</em> {{ tenant.tenant_email }}
       <br />
@@ -46,26 +46,20 @@
         name="tenant"
       >
         <option *ngFor="let tenant of tenants" [value]="tenant.tenant_id">
-          {{ tenant.first_name }} {{ tenant.last_name }}
+          {{ tenant.tenant_firstname }} {{ tenant.tenant_lastname }}
         </option>
       </select>
     </div>
 
     <!-- Submit Button -->
     <div class="form-group">
-      <button class="btn btn-primary" type="submit">
-        Assign Tenant
-      </button>
+      <button type="submit" class="btn btn-primary">Submit</button>
     </div>
   </form>
 </div>
 
 
-<!-- Create Post Section -->
-<div class="create-post-buttons-container">
-    <button>Create Post</button>
-    <p>Create a New Post</p>
-  </div>
+
   
   <div class="create-post-form-wrapper">
     <form class="create-post-form" (ngSubmit)="createPost()">
@@ -193,4 +187,3 @@
       <p>{{ apartment.description }}</p>
     </div>
   </div>
-  
