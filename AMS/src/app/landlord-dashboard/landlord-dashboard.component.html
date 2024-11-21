@@ -47,7 +47,7 @@
       </thead>
       <tbody>
         <tr *ngFor="let tenant of tenants">
-          <td>{{ tenant.tenant_firstname }} {{ tenant.tenant_lastname }}</td>
+          <td>{{ tenant.tenant_fullname }}</td>
           <td>₱{{ tenant.rent }}</td>
           <td>{{ tenant.due_date | date }}</td>
           <td>{{ tenant.room }}</td>

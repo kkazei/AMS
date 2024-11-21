@@ -46,7 +46,7 @@
         name="tenant"
       >
         <option *ngFor="let tenant of tenants" [value]="tenant.tenant_id">
-          {{ tenant.tenant_firstname }} {{ tenant.tenant_lastname }}
+          {{ tenant.tenant_fullname }} 
         </option>
       </select>
     </div>
