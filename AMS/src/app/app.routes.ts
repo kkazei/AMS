@@ -7,17 +7,19 @@ import { LandlordApartmentComponent } from './landlord-apartment/landlord-apartm
 import { ComposeMailComponent } from './compose-mail/compose-mail.component';
 import { TenantDashboardComponent } from './tenant-dashboard/tenant-dashboard.component';
 import { LandlordLoginComponent } from './landlord-login/landlord-login.component';
+import { RegisterComponent } from './register/register.component';
 
 
 export const routes: Routes = [
-  { path: '', redirectTo: 'login', pathMatch: 'full' },
+
   { path: 'login', component: LoginComponent },
   { path: 'landlord-dashboard', component: LandlordDashboardComponent },
   { path: 'tenant-management', component: TenantManagementComponent },
   { path: 'landlord-apartment', component: LandlordApartmentComponent },
   { path: 'compose-mail', component: ComposeMailComponent },
   { path: 'tenant-dashboard', component: TenantDashboardComponent },
-  {path: 'landlord-login', component: LandlordLoginComponent}
+  {path: 'landlord-login', component: LandlordLoginComponent},
+  {path: 'register', component: RegisterComponent}
 
  
 
