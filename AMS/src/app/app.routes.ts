@@ -12,7 +12,7 @@ import { TenantRegisterComponent } from './tenant-register/tenant-register.compo
 
 
 export const routes: Routes = [
-
+  { path: '', redirectTo: '/login', pathMatch: 'full' },
   { path: 'login', component: LoginComponent },
   { path: 'landlord-dashboard', component: LandlordDashboardComponent },
   { path: 'tenant-management', component: TenantManagementComponent },
