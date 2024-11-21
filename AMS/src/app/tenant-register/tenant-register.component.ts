@@ -5,20 +5,20 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
 @Component({
-  selector: 'app-register',
+  selector: 'app-tenant-register',
   standalone: true,
-  imports: [CommonModule, FormsModule],
-  templateUrl: './register.component.html',
-  styleUrls: ['./register.component.css']
+  imports: [FormsModule, CommonModule],
+  templateUrl: './tenant-register.component.html',
+  styleUrl: './tenant-register.component.css'
 })
-export class RegisterComponent {
+export class TenantRegisterComponent {
   // Registration fields
   user_email = '';
   confirmPassword = '';
   fullname = '';
   user_phone = '';
   password = '';
-  user_role = 'admin';
+  user_role = 'user';
 
   constructor(private authService: AuthService, private router: Router) {}
 
@@ -35,7 +35,7 @@ export class RegisterComponent {
       password: this.password,
       fullname: this.fullname,
       user_phone: this.user_phone,
-      user_role: 'admin', // Assign role as 'user' or 'admin' as needed
+      user_role: 'user', // Assign role as 'user' or 'admin' as needed
     };
 
     console.log(data); // Debugging line
@@ -58,3 +58,6 @@ export class RegisterComponent {
     );
   }
 }
+
+
+

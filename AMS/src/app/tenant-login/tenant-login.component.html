@@ -1,0 +1,43 @@
+<div class="container">
+    <!-- Left Panel -->
+    <div class="left-panel">
+      <h1 class="logo">UnitPay Solutions</h1>
+      <p class="tagline">Effortless Living, Seamless<br> Management</p>
+    </div>
+  
+    <!-- Right Panel -->
+    <div class="right-panel">
+      <div class="form-container">
+        <!-- Login Form -->
+        <form class="sign-in-form" (ngSubmit)="userLogin()">
+          <h2 class="form-title">Login to your account!</h2>
+          <div class="input-field">
+            <i class="fas fa-user"></i>
+            <input
+              type="text"
+              placeholder="Username"
+              [(ngModel)]="username"
+              name="username"
+              required
+            />
+          </div>
+          <div class="input-field">
+            <i class="fas fa-lock"></i>
+            <input
+              type="password"
+              placeholder="Password"
+              [(ngModel)]="password"
+              name="password"
+              required
+            />
+          </div>
+          <button type="submit" class="btn">Login</button>
+          <div class="form-links">
+            <a href="#">Register</a>
+            <a href="#">Forgot Password?</a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  

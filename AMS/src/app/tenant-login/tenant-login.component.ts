@@ -5,14 +5,13 @@ import { FormsModule } from '@angular/forms';
 import { AuthService } from '../services/auth.services';
 
 @Component({
-  selector: 'app-login',
+  selector: 'app-tenant-login',
   standalone: true,
   imports: [FormsModule, CommonModule],
-  templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css'],
+  templateUrl: './tenant-login.component.html',
+  styleUrl: './tenant-login.component.css'
 })
-export class LoginComponent {
-
+export class TenantLoginComponent {
 
   // Login fields
   username = '';
