@@ -1,67 +1,60 @@
+<main class="content">
+  <!-- Dashboard Header -->
+  <header class="header">
+    <h1>Welcome, {{ userProfile?.name || 'Landlord' }}</h1>
+    <span class="date">{{ currentDate }}</span>
+  </header>
 
+  <!-- Main Overview Section -->
+  <section class="main-overview">
+    <div class="overview-cards">
+      <div class="card">TENANTS: {{ tenants.length }}</div>
+      <div class="card">ROOMS: {{ apartments.length }}</div>
+      <div class="card">MAINTENANCE</div>
+      <div class="card">STAFFS</div>
+      <div class="card">CONCERNS</div>
+      <div class="card">ANNOUNCEMENTS: {{ posts.length }}</div>
+    </div>
 
-  <main class="content">
-    <header class="header">
-      <h1>Welcome, Juan Dela Cruz</h1>
-      <span class="date">November 08, 2024</span>
-    </header>
-
-    <section class="main-overview">
-      <div class="overview-cards">
-        <div class="card">TENANTS</div>
-        <div class="card">ROOMS</div>
-        <div class="card">MAINTENANCE</div>
-        <div class="card">STAFFS</div>
-        <div class="card">CONCERNS</div>
-        <div class="card">ANNOUNCEMENTS</div>
+    <!-- Income and Expense Chart -->
+    <div class="chart-section">
+      <div class="chart-container">
+        <h3>Overview of 2024</h3>
+        <canvas id="income-expense-chart"></canvas>
       </div>
-
-      <div class="chart-section">
-        <div class="chart-container">
-          <h3>Overview of 2024</h3>
-          <canvas id="income-expense-chart"></canvas>
-        </div>
-        <div class="summary">
-          <div class="summary-item">8 Vacant</div>
-          <div class="summary-item">8 Acquired</div>
-          <div class="summary-item">Php1.2M Income</div>
-          <div class="summary-item">Php300k Expenses</div>
-        </div>
+      <div class="summary">
+        <div class="summary-item">8 Vacant</div>
+        <div class="summary-item">8 Acquired</div>
+        <div class="summary-item">Php1.2M Income</div>
+        <div class="summary-item">Php300k Expenses</div>
       </div>
-    </section>
+    </div>
+  </section>
 
-    <section class="invoices">
-      <h3>Invoices</h3>
-      <table>
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>Amount</th>
-            <th>Date</th>
-            <th>Room</th>
-            <th>Transaction</th>
-            <th>Status</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>Juan Dela Cruz</td>
-            <td>₱450</td>
-            <td>24/10/2024</td>
-            <td>Room 2</td>
-            <td>xxxx-xxxx-xxxx</td>
-            <td class="pending">Pending</td>
-          </tr>
-          <tr>
-            <td>Juan Dela Cruz</td>
-            <td>₱650</td>
-            <td>24/10/2024</td>
-            <td>Room 1</td>
-            <td>xxxx-xxxx-xxxx</td>
-            <td class="paid">Paid</td>
-          </tr>
-        </tbody>
-      </table>
-    </section>
-  </main>
-
+  <!-- Invoices Section -->
+  <section class="invoices">
+    <h3>Invoices</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Amount</th>
+          <th>Date</th>
+          <th>Room</th>
+          <th>Transaction</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let tenant of tenants">
+          <td>{{ tenant.tenant_firstname }} {{ tenant.tenant_lastname }}</td>
+          <td>₱{{ tenant.rent }}</td>
+          <td>{{ tenant.due_date | date }}</td>
+          <td>{{ tenant.room }}</td>
+          <td>{{ tenant.transaction || 'N/A' }}</td>
+          <td [class]="tenant.status">{{ tenant.status }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+</main>
