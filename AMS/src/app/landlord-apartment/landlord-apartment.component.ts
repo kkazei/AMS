@@ -23,6 +23,8 @@ export class LandlordApartmentComponent implements OnInit {
   tenants: any[] = [];
   selectedApartmentId: number | null = null;
   selectedTenantId: number | null = null;
+  selectedFile: File | null = null; // Add this line
+
 
   constructor(private authService: AuthService) {}
 
@@ -85,25 +87,33 @@ export class LandlordApartmentComponent implements OnInit {
     );
   }
 
-  createPost() {
-    const postData = {
-      title: this.title.trim() || 'Untitled Post',
-      content: this.content.trim(),
-      landlord_id: this.userProfile.id,
-    };
-
-    this.authService.createAnnouncement(postData).subscribe(
-      (response) => {
-        console.log('Post created successfully:', response);
-        this.message = 'Post created successfully!';
-        this.getPosts();
-      },
-      (error) => {
-        console.error('Error creating post:', error);
-        this.message = 'Failed to create post.';
-      }
-    );
+  onFileSelected(event: any) {
+    this.selectedFile = event.target.files[0];
   }
+
+ createPost() {
+  const postData = new FormData();
+  postData.append('title', this.title.trim() || 'Untitled Post');
+  postData.append('content', this.content.trim());
+  postData.append('landlord_id', this.userProfile.id.toString());
+
+  if (this.selectedFile) {
+    postData.append('image', this.selectedFile, this.selectedFile.name);
+  }
+
+  this.authService.createAnnouncement(postData).subscribe(
+    (response) => {
+      console.log('Post created successfully:', response);
+      this.message = 'Post created successfully!';
+      this.getPosts();
+    },
+    (error) => {
+      console.error('Error creating post:', error);
+      this.message = 'Failed to create post.';
+    }
+  );
+}
+
 
   createApartment() {
     const apartmentData = {

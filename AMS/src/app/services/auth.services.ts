@@ -181,13 +181,9 @@ export class AuthService {
     });
   }
 
-  createAnnouncement(data: any): Observable<any> {
-    const headers = {
-      'Content-Type': 'application/json'
-    };
-
+  createAnnouncement(data: FormData): Observable<any> {
     return new Observable((observer) => {
-      axios.post(this.apiUrl + "announcement", data, { headers })
+      axios.post(this.apiUrl + 'announcement', data)
         .then(res => {
           console.log(res.data);
           observer.next(res.data);
