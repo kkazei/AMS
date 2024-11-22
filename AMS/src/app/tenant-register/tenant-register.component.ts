@@ -43,7 +43,7 @@ export class TenantRegisterComponent {
     this.authService.registerData(data).subscribe(
       (response) => {
         console.log('Registration successful:', response);
-        this.router.navigate(['/login']); // Redirect to login page after registration
+        this.router.navigate(['/tenant-login']); // Redirect to login page after registration
 
         // Reset the registration fields
         this.user_email = '';

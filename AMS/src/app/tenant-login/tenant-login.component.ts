@@ -30,7 +30,7 @@ export class TenantLoginComponent {
         localStorage.setItem('jwt', data.jwt); // Store JWT token for later requests
         
         // Navigate to the landlord dashboard or another route after successful login
-        this.router.navigate(['/landlord-dashboard']);
+        this.router.navigate(['/tenant-dashboard']);
       },
       (error) => {
         console.log('Login failed:', error);

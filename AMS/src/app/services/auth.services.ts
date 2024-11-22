@@ -288,4 +288,24 @@ export class AuthService {
     });
   }
 
+  updateApartmentAndTenant(data: any): Observable<any> {
+    const headers = {
+      'Content-Type': 'application/json'
+    };
+
+    return new Observable((observer) => {
+      axios
+        .put(this.apiUrl + 'updateApartment', data, { headers })
+        .then((res) => {
+          console.log(res.data);
+          observer.next(res.data);  // Send the response data to subscribers
+          observer.complete();  // Mark the observable as complete
+        })
+        .catch((err) => {
+          console.log(err);
+          observer.error(err);  // Notify observers of the error
+        });
+    });
+  }
+
 }

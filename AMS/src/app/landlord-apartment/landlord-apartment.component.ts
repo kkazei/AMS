@@ -69,7 +69,6 @@ export class LandlordApartmentComponent implements OnInit {
     this.authService.getTenants().subscribe(
       (response) => {
         console.log('Tenants fetched:', response);
-        
         // Directly assign response to tenants if it's an array
         if (Array.isArray(response)) {
           this.tenants = response;  // No need for a 'data' check here
@@ -77,7 +76,6 @@ export class LandlordApartmentComponent implements OnInit {
           console.error('Unexpected response format:', response);
           this.tenants = [];  // Reset to empty array in case of error
         }
-        
         console.log('Tenants array:', this.tenants); // Log to verify
       },
       (error) => {
@@ -86,10 +84,6 @@ export class LandlordApartmentComponent implements OnInit {
       }
     );
   }
-  
-  
-  
-  
 
   createPost() {
     const postData = {
@@ -156,4 +150,71 @@ export class LandlordApartmentComponent implements OnInit {
       }
     );
   }
+
+  // Updated method to handle only 'remove_tenant'
+  updateApartmentAndTenant(action: string) {
+    if (!this.selectedApartmentId) {
+      console.error('Apartment selection is required');
+      this.message = 'Please select an apartment.';
+      return;
+    }
+  
+    // Handle 'remove_tenant' action
+    if (action === 'remove_tenant') {
+      if (!this.selectedTenantId) {
+        console.error('Tenant selection is required for removal');
+        this.message = 'Please select a tenant for removal.';
+        return;
+      }
+  
+      const updateData: any = {
+        apartment_id: this.selectedApartmentId,
+        action: action,
+        tenant_id: this.selectedTenantId,  // Include tenant_id for removal
+      };
+  
+      this.authService.updateApartmentAndTenant(updateData).subscribe(
+        (response) => {
+          console.log('Tenant removed successfully:', response);
+          this.message = 'Tenant removed successfully!';
+          this.getApartments(); // Refresh the apartments after removal
+          this.getTenants(); // Refresh tenants to reflect changes
+        },
+        (error) => {
+          console.error('Error removing tenant:', error);
+          this.message = 'Failed to remove tenant.';
+        }
+      );
+    }
+    // Handle 'assign_tenant' action
+    else if (action === 'assign_tenant') {
+      if (!this.selectedTenantId) {
+        console.error('Tenant selection is required for assignment');
+        this.message = 'Please select a tenant for assignment.';
+        return;
+      }
+  
+      const assignmentData: any = {
+        apartment_id: this.selectedApartmentId,
+        tenant_id: this.selectedTenantId,  // Include tenant_id for assignment
+      };
+  
+      this.authService.assignTenantToApartment(assignmentData).subscribe(
+        (response) => {
+          console.log('Tenant assigned successfully:', response);
+          this.message = 'Tenant assigned successfully!';
+          this.getApartments(); // Refresh the apartments after assignment
+          this.getTenants(); // Refresh tenants to reflect changes
+        },
+        (error) => {
+          console.error('Error assigning tenant:', error);
+          this.message = 'Failed to assign tenant.';
+        }
+      );
+    } else {
+      console.error('Invalid action:', action);
+      this.message = 'Invalid action specified.';
+    }
+  }
+  
 }
