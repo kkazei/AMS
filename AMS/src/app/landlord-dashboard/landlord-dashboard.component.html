@@ -1,60 +1,78 @@
-<main class="content">
-  <!-- Dashboard Header -->
-  <header class="header">
-    <h1>Welcome, {{ userProfile?.name || 'Landlord' }}</h1>
-    <span class="date">{{ currentDate }}</span>
-  </header>
-
-  <!-- Main Overview Section -->
-  <section class="main-overview">
-    <div class="overview-cards">
-      <div class="card">TENANTS: {{ tenants.length }}</div>
-      <div class="card">ROOMS: {{ apartments.length }}</div>
-      <div class="card">MAINTENANCE</div>
-      <div class="card">STAFFS</div>
-      <div class="card">CONCERNS</div>
-      <div class="card">ANNOUNCEMENTS: {{ posts.length }}</div>
+<div class="dashboard-container">
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <h2>UnitPay Solutions</h2>
     </div>
+    <nav class="sidebar-menu">
+      <ul>
+        <li class="active"><a href="#">Dashboard</a></li>
+        <li><a href="#">Tenant Profile</a></li>
+        <li><a href="#">Lease Agreement</a></li>
+      </ul>
+    </nav>
+  </aside>
 
-    <!-- Income and Expense Chart -->
-    <div class="chart-section">
-      <div class="chart-container">
-        <h3>Overview of 2024</h3>
-        <canvas id="income-expense-chart"></canvas>
-      </div>
-      <div class="summary">
-        <div class="summary-item">8 Vacant</div>
-        <div class="summary-item">8 Acquired</div>
-        <div class="summary-item">Php1.2M Income</div>
-        <div class="summary-item">Php300k Expenses</div>
-      </div>
-    </div>
-  </section>
+  <!-- Main Content -->
+  <main class="content">
+    <!-- Dashboard Header -->
+    <header class="header">
+      <h1>Welcome, {{ userProfile?.name || 'Landlord' }}</h1>
+      <span class="date">{{ currentDate }}</span>
+    </header>
 
-  <!-- Invoices Section -->
-  <section class="invoices">
-    <h3>Invoices</h3>
-    <table>
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Amount</th>
-          <th>Date</th>
-          <th>Room</th>
-          <th>Transaction</th>
-          <th>Status</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let tenant of tenants">
-          <td>{{ tenant.tenant_fullname }}</td>
-          <td>₱{{ tenant.rent }}</td>
-          <td>{{ tenant.due_date | date }}</td>
-          <td>{{ tenant.room }}</td>
-          <td>{{ tenant.transaction || 'N/A' }}</td>
-          <td [class]="tenant.status">{{ tenant.status }}</td>
-        </tr>
-      </tbody>
-    </table>
-  </section>
-</main>
+    <!-- Main Overview Section -->
+    <section class="main-overview">
+      <div class="overview-grid">
+        <div class="overview-card">TENANTS</div>
+        <div class="overview-card">ROOMS</div>
+        <div class="overview-card">CONCERNS</div>
+        <div class="overview-card">ANNOUNCEMENTS</div>
+      </div>
+
+      <!-- Income and Expense Chart -->
+      <div class="chart-section">
+        <div class="chart-container">
+          <h3>Overview of 2024</h3>
+          <canvas id="income-expense-chart"></canvas>
+        </div>
+        <div class="summary">
+          <div class="summary-item vacant">8<br>Vacant</div>
+          <div class="summary-item acquired">8<br>Acquired</div>
+          <div class="summary-item income">Php1.2M<br>Income</div>
+          <div class="summary-item expenses">Php300k<br>Expenses</div>
+        </div>
+      </div>
+      
+      
+      
+    </section>
+
+    <!-- Invoices Section -->
+    <section class="invoices">
+      <h3>Invoices</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Amount</th>
+            <th>Date</th>
+            <th>Room</th>
+            <th>Transaction</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let tenant of tenants">
+            <td>{{ tenant.tenant_fullname }}</td>
+            <td>₱{{ tenant.rent }}</td>
+            <td>{{ tenant.due_date | date }}</td>
+            <td>{{ tenant.room }}</td>
+            <td>{{ tenant.transaction || 'N/A' }}</td>
+            <td [class]="tenant.status">{{ tenant.status }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+  </main>
+</div>
