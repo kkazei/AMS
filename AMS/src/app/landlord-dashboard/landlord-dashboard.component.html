@@ -24,13 +24,209 @@
     <!-- Main Overview Section -->
     <section class="main-overview">
       <div class="overview-grid">
-        <button class="overview-card">TENANTS</button>
-        <button class="overview-card">ROOMS</button>
-        <button class="overview-card">CONCERNS</button>
-        <button class="overview-card">ANNOUNCEMENTS</button>
+        <button class="overview-card" (click)="openTenantModal()">TENANTS</button>
+        <button class="overview-card" (click)="openRoomModal()">ROOMS</button>
+        <button class="overview-card" (click)="openConcernsModal()">CONCERNS</button>
+        <button class="overview-card" (click)="openAnnouncementsModal()">ANNOUNCEMENTS</button>
       </div>
 
-      
+      <!--Modal For Tenant-->
+      <div class="modal" id="TenantModal">
+        <div class="modal-dialog">
+          <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+              <h4 class="modal-title">Assign Tenant to a Room</h4>
+              <button type="button" class="btn-close" (click)="closeTenantModal()"></button>
+            </div>
+
+            <!-- Modal body -->
+            <div class="modal-body">
+              <form class="assign-tenant-form" (ngSubmit)="assignTenantToApartment()">
+                <!-- Select Apartment -->
+                <div class="form-group">
+                  <label for="apartment">Select Apartment</label>
+                  <select id="apartment" required class="form-control" [(ngModel)]="selectedApartmentId"
+                    name="apartment">
+                    <option *ngFor="let apartment of apartments" [value]="apartment.apartment_id">
+                      {{ apartment.room }} ({{ apartment.description }})
+                    </option>
+                  </select>
+                </div>
+
+                <!-- Select Tenant -->
+                <div class="form-group">
+                  <label for="tenant">Select Tenant</label>
+                  <select id="tenant" required class="form-control" [(ngModel)]="selectedTenantId" name="tenant">
+                    <option *ngFor="let tenant of tenants" [value]="tenant.tenant_id">
+                      {{ tenant.tenant_fullname }}
+                    </option>
+                  </select>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="form-group">
+                  <button type="button" class="btn btn-primary" (click)="updateApartmentAndTenant('assign_tenant')">
+                    Assign Tenant
+                  </button>
+                  <button type="button" class="btn btn-warning" (click)="updateApartmentAndTenant('remove_tenant')">
+                    Remove Tenant
+                  </button>
+                </div>
+              </form>
+            </div>
+
+            <!-- Modal footer -->
+            <div class="modal-footer">
+
+            </div>
+
+          </div>
+        </div>
+      </div>
+      <!--End of Tenant Modal-->
+
+      <!--Modal For Room-->
+      <div class="modal" id="RoomModal">
+        <div class="modal-dialog">
+          <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+              <h4 class="modal-title">Assign Tenant to a Room</h4>
+              <button type="button" class="btn-close" (click)="closeRoomModal()"></button>
+            </div>
+
+            <!-- Modal body -->
+            <div class="modal-body">
+              <form (ngSubmit)="createApartment()">
+                <!-- Apartment Room -->
+                <div class="form-group">
+                  <input type="text" id="room" required class="form-control" placeholder="Apartment Room"
+                    [(ngModel)]="room" name="room" #roomInput="ngModel" />
+                  <div *ngIf="roomInput.invalid && roomInput.touched" class="error-message">
+                    Room is required.
+                  </div>
+                </div>
+
+                <!-- Rent Amount -->
+                <div class="form-group">
+                  <input type="number" id="rent" required class="form-control" placeholder="Rent Amount"
+                    [(ngModel)]="rent" name="rent" #rentInput="ngModel" />
+                  <div *ngIf="rentInput.invalid && rentInput.touched" class="error-message">
+                    Rent is required.
+                  </div>
+                </div>
+
+                <!-- Apartment Description -->
+                <div class="form-group">
+                  <textarea id="description" required class="form-control" placeholder="Apartment Description"
+                    [(ngModel)]="description" name="description" #descriptionInput="ngModel"></textarea>
+                  <div *ngIf="descriptionInput.invalid && descriptionInput.touched" class="error-message">
+                    Description is required.
+                  </div>
+                </div>
+
+                <!-- Submit Button -->
+                <div class="form-group">
+                  <button class="btn btn-primary" type="submit"
+                    [disabled]="roomInput.invalid || rentInput.invalid || descriptionInput.invalid">
+                    Create Apartment
+                  </button>
+                </div>
+              </form>
+            </div>
+
+            <!-- Modal footer -->
+            <div class="modal-footer">
+
+            </div>
+
+          </div>
+        </div>
+      </div>
+      <!--End of Room Modal-->
+
+      <!--Modal For Announcements-->
+      <div class="modal" id="AnnouncementsModal">
+        <div class="modal-dialog">
+          <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+              <h4 class="modal-title">Create an Announcement</h4>
+              <button type="button" class="btn-close" (click)="closeAnnouncementsModal()"></button>
+            </div>
+
+            <!-- Modal body -->
+            <div class="modal-body">
+              <form class="create-post-form" (ngSubmit)="createPost()">
+                <!-- Post Title -->
+                <div class="form-group">
+                  <input
+                    type="text"
+                    id="posttitle"
+                    required
+                    class="form-control"
+                    placeholder="Enter Post Title"
+                    [(ngModel)]="title"
+                    name="posttitle"
+                    #titleInput="ngModel"
+                  />
+                  <div *ngIf="titleInput.invalid && titleInput.touched" class="error-message">
+                    Title is required.
+                  </div>
+                </div>
+          
+                <!-- Post Content -->
+                <div class="form-group">
+                  <textarea
+                    id="postcontent"
+                    required
+                    class="form-control"
+                    placeholder="Enter Post Content"
+                    [(ngModel)]="content"
+                    name="postcontent"
+                    #contentInput="ngModel"
+                  ></textarea>
+                  <div *ngIf="contentInput.invalid && contentInput.touched" class="error-message">
+                    Content is required.
+                  </div>
+                </div>
+          
+                <!-- Image Upload -->
+                <div class="form-group">
+                  <input
+                    type="file"
+                    id="postimage"
+                    class="form-control"
+                    (change)="onFileSelected($event)"
+                  />
+                </div>
+          
+                <!-- Submit Button -->
+                <div class="form-group">
+                  <button
+                    class="btn btn-primary"
+                    type="submit"
+                    [disabled]="titleInput.invalid || contentInput.invalid"
+                  >
+                    Create Post
+                  </button>
+                </div>
+              </form>
+            </div>
+
+            <!-- Modal footer -->
+            <div class="modal-footer">
+
+            </div>
+
+          </div>
+        </div>
+      </div>
+      <!--End of Announcements Modal-->
 
       <!-- Income and Expense Chart -->
       <div class="chart-section">
@@ -45,9 +241,9 @@
           <div class="summary-item expenses">Php300k<br>Expenses</div>
         </div>
       </div>
-      
-      
-      
+
+
+
     </section>
 
     <!-- Invoices Section -->

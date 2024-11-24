@@ -4,6 +4,7 @@ import { AuthService } from '../services/auth.services';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 
+
 Chart.register(...registerables); // Register Chart.js components
 
 @Component({
@@ -15,10 +16,21 @@ Chart.register(...registerables); // Register Chart.js components
 })
 export class LandlordDashboardComponent implements OnInit {
   userProfile: any;
-  tenants: any[] = [];
-  apartments: any[] = [];
-  posts: any[] = [];
+  title: string ='';
+  content: string ='';
   room: string = '';
+  rent: number = 0;
+  description: string = '';
+  message: string = '';
+  posts: any[] = [];
+  apartments: any[] = [];
+  tenants: any[] = [];
+  selectedApartmentId: number | null = null;
+  selectedTenantId: number | null = null;
+  selectedFile: File | null = null;
+  
+  
+  
   currentDate: string = new Date().toLocaleDateString();
 
   constructor(private authService: AuthService) {}
@@ -28,6 +40,12 @@ export class LandlordDashboardComponent implements OnInit {
     if (token) {
       this.userProfile = this.authService.getUserProfileFromToken();
       this.fetchData();
+      console.log('Token:', token);
+      console.log('User profile:', this.userProfile);
+
+      this.getPosts();
+      this.getApartments();
+      this.getTenants();
     } else {
       console.error('User not logged in. JWT token missing.');
     }
@@ -39,6 +57,58 @@ export class LandlordDashboardComponent implements OnInit {
     this.getTenants();
     this.getApartments();
     this.getPosts();
+  }
+
+  openTenantModal(){
+    const modal = document.getElementById("TenantModal")
+    if(modal != null){
+      modal.style.display = "block";
+    }
+  }
+  closeTenantModal(){
+    const modal = document.getElementById("TenantModal")
+    if(modal != null){
+      modal.style.display = "none";
+    }
+  }
+//Room Modal
+  openRoomModal(){
+    const modal = document.getElementById("RoomModal")
+    if(modal != null){
+      modal.style.display = "block";
+    }
+  }
+  closeRoomModal(){
+    const modal = document.getElementById("RoomModal")
+    if(modal != null){
+      modal.style.display = "none";
+    }
+  }
+  
+  openConcernsModal(){
+    const modal = document.getElementById("ConcernsModal")
+    if(modal != null){
+      modal.style.display = "block";
+    }
+  }
+  closeConcersModal(){
+    const modal = document.getElementById("ConcernModal")
+    if(modal != null){
+      modal.style.display = "none";
+    }
+  }
+
+  openAnnouncementsModal(){
+    const modal = document.getElementById("AnnouncementsModal")
+    if(modal != null){
+      modal.style.display = "block";
+    }
+  }
+  closeAnnouncementsModal(){
+    const modal = document.getElementById("AnnouncementsModal")
+    if(modal != null){
+      modal.style.display = "none";
+    }
   }
 
   getTenants(): void {
@@ -102,4 +172,145 @@ export class LandlordDashboardComponent implements OnInit {
       },
     });
   }
+
+  onFileSelected(event: any) {
+    this.selectedFile = event.target.files[0];
+  }
+
+ createPost() {
+  const postData = new FormData();
+  postData.append('title', this.title.trim() || 'Untitled Post');
+  postData.append('content', this.content.trim());
+  postData.append('landlord_id', this.userProfile.id.toString());
+
+  if (this.selectedFile) {
+    postData.append('image', this.selectedFile, this.selectedFile.name);
+  }
+
+  this.authService.createAnnouncement(postData).subscribe(
+    (response) => {
+      console.log('Post created successfully:', response);
+      this.message = 'Post created successfully!';
+      this.getPosts();
+    },
+    (error) => {
+      console.error('Error creating post:', error);
+      this.message = 'Failed to create post.';
+    }
+  );
+}
+
+
+  createApartment() {
+    const apartmentData = {
+      room: this.room.trim(),
+      rent: this.rent,
+      description: this.description.trim(),
+      landlord_id: this.userProfile.id,
+    };
+
+    this.authService.createApartment(apartmentData).subscribe(
+      (response) => {
+        console.log('Apartment created successfully:', response);
+        this.message = 'Apartment created successfully!';
+        this.getApartments();
+      },
+      (error) => {
+        console.error('Error creating apartment:', error);
+        this.message = 'Failed to create apartment.';
+      }
+    );
+  }
+
+  assignTenantToApartment() {
+    if (!this.selectedApartmentId || !this.selectedTenantId) {
+      console.error('Apartment and Tenant selection is required');
+      this.message = 'Please select both an apartment and a tenant.';
+      return;
+    }
+
+    const assignmentData = {
+      apartment_id: this.selectedApartmentId,
+      tenant_id: this.selectedTenantId,
+    };
+
+    this.authService.assignTenantToApartment(assignmentData).subscribe(
+      (response) => {
+        console.log('Tenant assigned successfully:', response);
+        this.message = 'Tenant assigned successfully!';
+        this.getApartments(); // Refresh the apartments after assignment
+      },
+      (error) => {
+        console.error('Error assigning tenant:', error);
+        this.message = 'Failed to assign tenant.';
+      }
+    );
+  }
+
+  // Updated method to handle only 'remove_tenant'
+  updateApartmentAndTenant(action: string) {
+    if (!this.selectedApartmentId) {
+      console.error('Apartment selection is required');
+      this.message = 'Please select an apartment.';
+      return;
+    }
+  
+    // Handle 'remove_tenant' action
+    if (action === 'remove_tenant') {
+      if (!this.selectedTenantId) {
+        console.error('Tenant selection is required for removal');
+        this.message = 'Please select a tenant for removal.';
+        return;
+      }
+  
+      const updateData: any = {
+        apartment_id: this.selectedApartmentId,
+        action: action,
+        tenant_id: this.selectedTenantId,  // Include tenant_id for removal
+      };
+  
+      this.authService.updateApartmentAndTenant(updateData).subscribe(
+        (response) => {
+          console.log('Tenant removed successfully:', response);
+          this.message = 'Tenant removed successfully!';
+          this.getApartments(); // Refresh the apartments after removal
+          this.getTenants(); // Refresh tenants to reflect changes
+        },
+        (error) => {
+          console.error('Error removing tenant:', error);
+          this.message = 'Failed to remove tenant.';
+        }
+      );
+    }
+    // Handle 'assign_tenant' action
+    else if (action === 'assign_tenant') {
+      if (!this.selectedTenantId) {
+        console.error('Tenant selection is required for assignment');
+        this.message = 'Please select a tenant for assignment.';
+        return;
+      }
+  
+      const assignmentData: any = {
+        apartment_id: this.selectedApartmentId,
+        tenant_id: this.selectedTenantId,  // Include tenant_id for assignment
+      };
+  
+      this.authService.assignTenantToApartment(assignmentData).subscribe(
+        (response) => {
+          console.log('Tenant assigned successfully:', response);
+          this.message = 'Tenant assigned successfully!';
+          this.getApartments(); // Refresh the apartments after assignment
+          this.getTenants(); // Refresh tenants to reflect changes
+        },
+        (error) => {
+          console.error('Error assigning tenant:', error);
+          this.message = 'Failed to assign tenant.';
+        }
+      );
+    } else {
+      console.error('Invalid action:', action);
+      this.message = 'Invalid action specified.';
+    }
+  }
+
 }

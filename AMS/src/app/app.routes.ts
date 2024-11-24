@@ -9,10 +9,8 @@ import { TenantDashboardComponent } from './tenant-dashboard/tenant-dashboard.co
 import { RegisterComponent } from './register/register.component';
 import { TenantLoginComponent } from './tenant-login/tenant-login.component';
 import { TenantRegisterComponent } from './tenant-register/tenant-register.component';
-import { LandlordAnouncementComponent } from './landlord-anouncement/landlord-anouncement.component';
 import { LandlordConcernsComponent } from './landlord-concerns/landlord-concerns.component';
-import { LandlordRoomComponent } from './landlord-room/landlord-room.component';
-import { LandlordTenantComponent } from './landlord-tenant/landlord-tenant.component';
+
 
 
 export const routes: Routes = [
@@ -26,10 +24,8 @@ export const routes: Routes = [
   {path: 'register', component: RegisterComponent},
   {path: 'tenant-login', component: TenantLoginComponent},
   {path: 'tenant-register', component: TenantRegisterComponent},
-  { path: 'landlord-anouncement', component: LandlordAnouncementComponent},
   { path: 'landlord-concerns', component: LandlordConcernsComponent},
-  { path: 'landlord-tenant', component: LandlordTenantComponent},
-  { path: 'landlord-room', component: LandlordRoomComponent},
+ 
 
 
  
