@@ -24,6 +24,8 @@ export class LandlordApartmentComponent implements OnInit {
   selectedApartmentId: number | null = null;
   selectedTenantId: number | null = null;
   selectedFile: File | null = null; // Add this line
+  preview: string = '';
+  imageInfos: any[] = [];
 
 
   constructor(private authService: AuthService) {}
@@ -38,6 +40,7 @@ export class LandlordApartmentComponent implements OnInit {
       this.getPosts();
       this.getApartments();
       this.getTenants();
+      this.loadImages(); // Call the new method to load images
     } else {
       console.warn('Token not found, user is not logged in');
     }
@@ -87,8 +90,58 @@ export class LandlordApartmentComponent implements OnInit {
     );
   }
 
+  loadImages() {
+    this.authService.loadImage().subscribe(
+      (response: any) => {
+        if (response.status === 'success') {
+          this.imageInfos = response.data.map((image: any) => {
+            return {
+              ...image,
+              img: `http://localhost/amsAPI/api/${image.img}` // Adjust path as needed
+            };
+          });
+        } else {
+          console.error('Failed to retrieve images:', response.message);
+          // Handle error message or fallback as needed
+        }
+      },
+      (error) => {
+        console.error('Error fetching images:', error);
+        // Handle error as needed
+      }
+    );
+  }  
+
   onFileSelected(event: any) {
-    this.selectedFile = event.target.files[0];
+    const file = event.target.files[0];
+    if (file) {
+      this.selectedFile = file;
+      const reader = new FileReader();
+      reader.onload = (e: any) => {
+        this.preview = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+  }
+
+  upload() {
+    if (this.selectedFile) {
+      this.authService.addImage(this.selectedFile).subscribe(
+        (response) => {
+          console.log(response);
+          this.message = 'File uploaded successfully!';
+          this.loadImages(); // Refresh the list of images
+        },
+        (error) => {
+          console.error(error);
+          this.message = 'File upload failed!';
+        }
+      );
+    }
+  }
+
+  trackByFn(index: number, item: any) {
+    return item.imgName; // Use a unique identifier for each item
   }
 
  createPost() {
