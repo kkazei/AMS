@@ -228,19 +228,21 @@
       </div>
       <!--End of Announcements Modal-->
 
-      <!-- Income and Expense Chart -->
-      <div class="chart-section">
-        <div class="chart-container">
-          <h3>Overview of 2024</h3>
-          <canvas id="income-expense-chart"></canvas>
-        </div>
-        <div class="summary">
-          <div class="summary-item vacant">8<br>Vacant</div>
-          <div class="summary-item acquired">8<br>Acquired</div>
-          <div class="summary-item income">Php1.2M<br>Income</div>
-          <div class="summary-item expenses">Php300k<br>Expenses</div>
-        </div>
-      </div>
+   <!-- Income and Expense Chart -->
+<div class="chart-section">
+  <div class="chart-container">
+    <h3>Overview of 2024</h3>
+    <canvas id="income-expense-chart"></canvas>
+  </div>
+  <div class="summary">
+    <div class="summary-item vacant">{{ vacantCount }}<br>Vacant</div>
+    <div class="summary-item acquired">{{ acquiredCount }}<br>Acquired</div>
+    <div class="summary-item income">Php{{ totalIncome }}<br>Income</div>  <!-- Dynamic Income -->
+    <div class="summary-item expenses">Php300k<br>Expenses</div>
+  </div>
+  
+</div>
+
 
 
 

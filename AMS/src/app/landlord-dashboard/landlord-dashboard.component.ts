@@ -25,6 +25,7 @@ export class LandlordDashboardComponent implements OnInit {
   posts: any[] = [];
   apartments: any[] = [];
   tenants: any[] = [];
+  totalIncome: number = 0;
   selectedApartmentId: number | null = null;
   selectedTenantId: number | null = null;
   selectedFile: File | null = null;
@@ -32,6 +33,10 @@ export class LandlordDashboardComponent implements OnInit {
   
   
   currentDate: string = new Date().toLocaleDateString();
+
+  income: number = 0;
+  vacantCount: number = 0;
+  acquiredCount: number = 0;
 
   constructor(private authService: AuthService) {}
 
@@ -114,23 +119,35 @@ export class LandlordDashboardComponent implements OnInit {
   getTenants(): void {
     this.authService.getTenants().subscribe(
       (response) => {
-        if (Array.isArray(response)) {
-          this.tenants = response.map((tenant) => ({
-            ...tenant,
-            amount: tenant.amount, // Bind dynamic amount
-            date: new Date(tenant.date), // Bind dynamic date
-            status: tenant.status, // Bind dynamic status
-            transaction: tenant.transaction || 'N/A', // Bind dynamic transaction or default to 'N/A'
-          }));
-        }
+        this.tenants = response;
+  
+        // Debugging: Log all tenants
+        console.log('Fetched tenants:', this.tenants);
+  
+        // Calculate the total income
+        this.totalIncome = this.tenants.reduce((total, tenant) => {
+          if (tenant.rent && tenant.status === 'paid') {
+            console.log(`Adding rent from tenant:`, tenant);
+            return total + parseFloat(tenant.rent); // Ensure rent is treated as a number
+          }
+          return total;
+        }, 0);
+  
+        // Debugging: Log the calculated total income
+        console.log('Total Income:', this.totalIncome);
       },
       (error) => console.error('Error fetching tenants:', error)
     );
   }
+  
+
 
   getApartments(): void {
     this.authService.getApartments().subscribe(
-      (response) => (this.apartments = response),
+      (response) => {
+        this.apartments = response;
+        this.updateSummaryStats();  // Update stats after fetching apartments
+      },
       (error) => console.error('Error fetching apartments:', error)
     );
   }
@@ -141,6 +158,14 @@ export class LandlordDashboardComponent implements OnInit {
       (error) => console.error('Error fetching posts:', error)
     );
   }
+
+  updateSummaryStats(): void {
+    this.vacantCount = this.apartments.filter(a => !a.tenant_id).length;
+    this.acquiredCount = this.apartments.length - this.vacantCount;
+
+    this.income = this.tenants.reduce((total, tenant) => total + tenant.amount, 0);
+  }
+
 
   renderChart(): void {
     const ctx = document.getElementById('income-expense-chart') as HTMLCanvasElement;
