@@ -2,13 +2,14 @@
     <!-- Top Header -->
     <div class="header">
       <div class="user-info">
-        <h2>JUAN DELA CRUZ</h2>
-        <p>1-A</p>
-        <p>As of November 08, 2024</p>
+        <h1>Welcome, {{ userProfile?.fullname }} </h1>
+        <p>Room: {{ tenant.room || 'Not Assigned' }}</p>
+      <p>As of {{ currentDate | date:'MMMM dd, yyyy' }}</p>
       </div>
       <div class="balance-info">
         <p>Outstanding Balance</p>
-        <h1>PHP 15,000.00</h1>
+        <h1>₱{{ tenant.rent || 0 }}</h1>
+        <p>Due Date: {{ tenant.due_date | date:'MMMM dd, yyyy' }}</p>
         <button class="pay-now-btn">Pay Now</button>
       </div>
     </div>
