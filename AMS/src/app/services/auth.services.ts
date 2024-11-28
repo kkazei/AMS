@@ -219,15 +219,14 @@ export class AuthService {
   getPosts(): Observable<any> {
     return new Observable((observer) => {
       axios
-        .get(this.apiUrl + 'getPosts')
+        .get(`${this.apiUrl}/getPosts`)
         .then((res) => {
-          console.log(res.data);
-          observer.next(res.data);  // Send the response data to subscribers
-          observer.complete();  // Mark the observable as complete
+          observer.next(res.data);
+          observer.complete();
         })
         .catch((err) => {
-          console.log(err);
-          observer.error(err);  // Notify observers of the error
+          console.error('Error fetching posts:', err);
+          observer.error(err);
         });
     });
   }

@@ -48,15 +48,22 @@ export class LandlordApartmentComponent implements OnInit {
 
   getPosts() {
     this.authService.getPosts().subscribe(
-      (response) => {
+      (response: any[]) => {
         console.log('Posts fetched:', response);
-        this.posts = response;
+        this.posts = response.map(post => {
+          return {
+            ...post,
+            image_path: `http://localhost/amsAPI/api/${post.image_path}` // Adjust the base URL as needed
+          };
+        });
+        console.log('Posts with updated image paths:', this.posts);
       },
       (error) => {
         console.error('Error fetching posts:', error);
       }
     );
   }
+  
 
   getApartments() {
     this.authService.getApartments().subscribe(
