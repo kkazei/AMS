@@ -368,6 +368,20 @@ export class AuthService {
   });
 }
 
+getPaymentDetails(): Observable<any> {
+  return new Observable((observer) => {
+    axios
+      .get(`${this.apiUrl}/getPaymentDetails`)
+      .then((res) => {
+        observer.next(res.data);
+        observer.complete();
+      })
+      .catch((err) => {
+        console.error('Error fetching posts:', err);
+        observer.error(err);
+      });
+  });
+}
   
 
 }

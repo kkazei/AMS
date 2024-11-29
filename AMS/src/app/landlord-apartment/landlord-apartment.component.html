@@ -336,3 +336,42 @@
 
 
 
+<div class="payment-details-wrapper">
+  <h2>Payment Details</h2>
+
+  <!-- Check if payment details are available -->
+  <div *ngIf="paymentDetails && paymentDetails.length; else noPayments">
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Tenant Name</th>
+          <th>Room</th>
+          <th>Amount</th>
+          <th>Reference Number</th>
+          <th>Proof of Payment</th>
+          <th>Payment Date</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let payment of paymentDetails">
+          <td>{{ payment.tenant_fullname }}</td>
+          <td>{{ payment.room || 'N/A' }}</td>
+          <td>{{ payment.amount | currency }}</td>
+          <td>{{ payment.reference_number || 'N/A' }}</td>
+          <td>
+            <a *ngIf="payment.proof_of_payment" [href]="payment.proof_of_payment" target="_blank">
+              View Proof
+            </a>
+            <span *ngIf="!payment.proof_of_payment">No Proof</span>
+          </td>
+          <td>{{ payment.payment_date | date: 'short' }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- No Payments Placeholder -->
+  <ng-template #noPayments>
+    <p>No payment records available.</p>
+  </ng-template>
+</div>

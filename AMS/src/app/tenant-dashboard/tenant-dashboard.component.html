@@ -10,8 +10,31 @@
         <p>Outstanding Balance</p>
         <h1>₱{{ tenant.rent || 0 }}</h1>
         <p>Due Date: {{ tenant.due_date | date:'MMMM dd, yyyy' }}</p>
-        <button class="pay-now-btn">Pay Now</button>
+        <button class="pay-now-btn" (click)="isPaymentFormVisible = true">Pay Now</button>
       </div>
+    </div>
+  
+    <!-- Payment Form (Hidden until Pay Now is clicked) -->
+    <div *ngIf="isPaymentFormVisible" class="payment-details-wrapper">
+      <h2>Payment Details</h2>
+    
+      <form (ngSubmit)="onPayInvoice()">
+        <div>
+          <label for="amount">Amount</label>
+          <input type="number" id="amount" [(ngModel)]="paymentAmount" name="amount" [readonly]="true" />
+        </div>
+        <div>
+          <label for="referenceNumber">Reference Number</label>
+          <input type="text" id="referenceNumber" [(ngModel)]="paymentReferenceNumber" name="referenceNumber" />
+        </div>
+        <div>
+          <label for="proofOfPayment">Proof of Payment</label>
+          <input type="file" (change)="onFileSelected($event)" id="proofOfPayment" name="proofOfPayment" />
+        </div>
+        <button type="submit">Submit Payment</button>
+      </form>
+    
+      <p *ngIf="paymentMessage">{{ paymentMessage }}</p>
     </div>
   
     <!-- Grid Section -->
@@ -34,4 +57,3 @@
       </div>
     </div>
   </div>
-  
