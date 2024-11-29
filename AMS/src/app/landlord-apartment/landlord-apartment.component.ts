@@ -27,12 +27,11 @@ export class LandlordApartmentComponent implements OnInit {
   preview: string = '';
   imageInfos: any[] = [];
   paymentTenantId: string | null = null;
-paymentAmount: number | null = null;
-paymentReferenceNumber: string = '';
-paymentProofOfPayment: File | null = null;
-paymentMessage: string = '';
-
-
+  paymentAmount: number | null = null;
+  paymentReferenceNumber: string = '';
+  paymentProofOfPayment: File | null = null;
+  paymentMessage: string = '';
+  paymentDetails: any = null; // Add this line
 
   constructor(private authService: AuthService) {}
 
@@ -47,6 +46,7 @@ paymentMessage: string = '';
       this.getApartments();
       this.getTenants();
       this.loadImages(); // Call the new method to load images
+      this.loadPaymentDetails(); // Call the new method to load payment details
     } else {
       console.warn('Token not found, user is not logged in');
     }
@@ -319,5 +319,24 @@ paymentMessage: string = '';
       this.message = 'Invalid action specified.';
     }
   }
+  
+  loadPaymentDetails(): void {
+    this.authService.getPaymentDetails().subscribe(
+      (response: any[]) => {
+        console.log('Payment details fetched:', response);
+        this.paymentDetails = response.map(payment => {
+          return {
+            ...payment,
+            proof_of_payment: `http://localhost/amsAPI/api/${payment.proof_of_payment}` // Adjust the base URL as needed
+          };
+        });
+        console.log('Payment details with updated proof of payment image paths:', this.paymentDetails);
+      },
+      (error) => {
+        console.error('Error fetching payment details:', error);
+      }
+    );
+  }
+  
   
 }
