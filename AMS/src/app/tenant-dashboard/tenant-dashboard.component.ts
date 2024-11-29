@@ -20,6 +20,11 @@ export class TenantDashboardComponent implements OnInit {
   paymentProofOfPayment: File | null = null;
   paymentMessage: string = '';
   isPaymentFormVisible: boolean = false;
+  concerns: any[] = [];
+  concerntitle: string = '';
+  concerncontent: string = '';
+  selectedImage: File | null = null;
+  message: string = '';
 
   constructor(private authService: AuthService) {}
 
@@ -56,11 +61,44 @@ export class TenantDashboardComponent implements OnInit {
   }
 
   // Handle file selection
-  onFileSelected(event: any): void {
-    const file = event.target.files[0];
-    if (file) {
-      this.paymentProofOfPayment = file;
+  onPaymentProofFileSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (input?.files?.[0]) {
+      this.paymentProofOfPayment = input.files[0]; // Store the payment proof file
     }
+  }
+  
+  onImageFileSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (input?.files?.[0]) {
+      this.selectedImage = input.files[0]; // Store the selected image
+    }
+  }
+  
+  
+
+  // Create a new concern
+  createConcern() {
+    const concernData = new FormData();
+    concernData.append('title', this.concerntitle.trim() || 'No Subject');
+    concernData.append('content', this.concerncontent.trim());
+    concernData.append('tenant_id', this.userProfile.id.toString());
+
+    // If a file is selected, append it to the FormData
+    if (this.selectedImage) {
+      concernData.append('attachment', this.selectedImage, this.selectedImage.name);
+    }
+
+    this.authService.createConcerns(concernData).subscribe(
+      (response) => {
+        console.log('Concern submitted successfully:', response);
+        this.message = 'Concern submitted successfully!';
+      },
+      (error) => {
+        console.error('Error submitting concern:', error);
+        this.message = 'Failed to submit concern.';
+      }
+    );
   }
 
   // Handle form submission for payment

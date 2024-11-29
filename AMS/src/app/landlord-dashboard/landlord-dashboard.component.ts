@@ -29,6 +29,9 @@ export class LandlordDashboardComponent implements OnInit {
   selectedApartmentId: number | null = null;
   selectedTenantId: number | null = null;
   selectedFile: File | null = null;
+  concerns: any[] = [];
+  concerntitle: string = '';
+  concerncontent: string = '';
   
   
   
@@ -51,6 +54,7 @@ export class LandlordDashboardComponent implements OnInit {
       this.getPosts();
       this.getApartments();
       this.getTenants();
+      this.getConcerns();
     } else {
       console.error('User not logged in. JWT token missing.');
     }
@@ -152,10 +156,39 @@ export class LandlordDashboardComponent implements OnInit {
     );
   }
 
-  getPosts(): void {
+  getConcerns() {
+    this.authService.getConcerns().subscribe(
+      (response: any[]) => {
+        console.log('Concerns fetched:', response);
+        this.concerns = response.map(concern => {
+          return {
+            ...concern,
+            image_path: `http://localhost/amsAPI/api/${concern.image_path}` // Adjust the base URL as needed
+          };
+        });
+        console.log('Concerns with updated image paths:', this.concerns);
+      },
+      (error) => {
+        console.error('Error fetching concerns:', error);
+      }
+    );
+  }
+
+  getPosts() {
     this.authService.getPosts().subscribe(
-      (response) => (this.posts = response),
-      (error) => console.error('Error fetching posts:', error)
+      (response: any[]) => {
+        console.log('Posts fetched:', response);
+        this.posts = response.map(post => {
+          return {
+            ...post,
+            image_path: `http://localhost/amsAPI/api/${post.image_path}` // Adjust the base URL as needed
+          };
+        });
+        console.log('Posts with updated image paths:', this.posts);
+      },
+      (error) => {
+        console.error('Error fetching posts:', error);
+      }
     );
   }
 

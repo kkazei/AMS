@@ -299,7 +299,6 @@
 
 
 
-
     </section>
 
     <!-- Invoices Section -->
@@ -310,7 +309,7 @@
           <tr>
             <th>Name</th>
             <th>Amount</th>
-            <th>Date</th>
+            <th>Due Date</th>
             <th>Room</th>
             <th>Transaction</th>
             <th>Status</th>
@@ -329,4 +328,19 @@
       </table>
     </section>
   </main>
+</div>
+
+<!-- Display Concerns -->
+<div *ngIf="concerns && concerns.length" class="concerns-list">
+  <h2>Concerns</h2>
+  <div *ngFor="let concern of concerns" class="concern-item">
+    <h3>{{ concern.title }}</h3>
+    <p>{{ concern.content }}</p>
+    <div *ngIf="concern.image_path">
+      <img [src]="concern.image_path" alt="Concern Image" class="concern-image" />
+    </div>
+  </div>
+</div>
+<div *ngIf="!concerns || !concerns.length" class="no-concerns">
+  <p>No concerns available.</p>
 </div>

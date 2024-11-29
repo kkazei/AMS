@@ -382,6 +382,35 @@ getPaymentDetails(): Observable<any> {
       });
   });
 }
-  
+
+createConcerns(data: FormData): Observable<any> {
+  return new Observable((observer) => {
+    axios.post(this.apiUrl + 'concern', data)
+      .then(res => {
+        console.log(res.data);
+        observer.next(res.data);
+        observer.complete();
+      })
+      .catch(err => {
+        console.log(err);
+        observer.error(err);
+      });
+  });
+}
+   // Fetch Concerns
+   getConcerns(): Observable<any> {
+    return new Observable((observer) => {
+      axios
+        .get(this.apiUrl + 'getConcerns')
+        .then((res) => {
+          observer.next(res.data);
+          observer.complete();
+        })
+        .catch((error) => {
+          console.error('Error fetching concerns:', error);
+          observer.error(error);
+        });
+    });
+  }
 
 }
