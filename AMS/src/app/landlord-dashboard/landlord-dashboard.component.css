@@ -239,38 +239,41 @@ td.paid {
 
 @media (max-width: 992px) {
   /* Stack sidebar on top for smaller screens */
-  .dashboard-container {
-    flex-direction: column;
-  }
-
-  .sidebar {
-    width: 100%;
-    text-align: center;
-  }
-
-  .content {
-    padding: 10px;
-  }
-
-  .overview-grid {
-    grid-template-columns: 1fr;
-    gap: 15px;
-  }
-
-  .chart-section {
-    max-width: 100%;
-    margin: 10px auto;
-  }
-
   .summary {
-    flex-direction: column;
-    gap: 10px;
+    flex-direction: row;
+    gap: 5px;
   }
 
   .summary-item {
-    font-size: 0.9rem;
-    padding: 15px;
+    font-size: 0.8rem;
+    padding: 8px;
   }
+
+  table th,
+  table td {
+    font-size: 0.8rem;
+    padding: 5px;
+  }
+
+  .overview-grid {
+    display: grid;
+  grid-template-columns: repeat(2, 1fr); /* Two cards per row */
+  gap: 20px; /* Space between cards */
+  }
+
+  .overview-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-width: 100px;
+  padding: 20px;
+  }
+
+  .overview-card i {
+    font-size: 1.8rem;
+  }
+
 }
 
 @media (max-width: 768px) {
