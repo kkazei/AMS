@@ -30,62 +30,75 @@
         <button class="overview-card" (click)="openAnnouncementsModal()"><i class="fa-solid fa-bullhorn"></i><br>ANNOUNCEMENTS</button>
       </div>
 
-      <!--Modal For Tenant-->
-      <div class="modal" id="TenantModal">
-        <div class="modal-dialog">
-          <div class="modal-content">
+      <!-- Modal For Tenant -->
+<div class="modal" id="TenantModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-scrollable">
+    <div class="modal-content">
 
-            <!-- Modal Header -->
-            <div class="modal-header">
-              <h4 class="modal-title">Assign Tenant to a Room</h4>
-              <button type="button" class="btn-close" (click)="closeTenantModal()"></button>
-            </div>
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h4 class="modal-title">Assign Tenant to a Room</h4>
+        <button type="button" class="btn-close" (click)="closeTenantModal()"></button>
+      </div>
 
-            <!-- Modal body -->
-            <div class="modal-body">
-              <form class="assign-tenant-form" (ngSubmit)="assignTenantToApartment()">
-                <!-- Select Apartment -->
-                <div class="form-group">
-                  <label for="apartment">Select Apartment</label>
-                  <select id="apartment" required class="form-control" [(ngModel)]="selectedApartmentId"
-                    name="apartment">
-                    <option *ngFor="let apartment of apartments" [value]="apartment.apartment_id">
-                      {{ apartment.room }} ({{ apartment.description }})
-                    </option>
-                  </select>
-                </div>
-
-                <!-- Select Tenant -->
-                <div class="form-group">
-                  <label for="tenant">Select Tenant</label>
-                  <select id="tenant" required class="form-control" [(ngModel)]="selectedTenantId" name="tenant">
-                    <option *ngFor="let tenant of tenants" [value]="tenant.tenant_id">
-                      {{ tenant.tenant_fullname }}
-                    </option>
-                  </select>
-                </div>
-
-                <!-- Action Buttons -->
-                <div class="form-group">
-                  <button type="button" class="btn btn-primary" (click)="updateApartmentAndTenant('assign_tenant')">
-                    Assign Tenant
-                  </button>
-                  <button type="button" class="btn btn-warning" (click)="updateApartmentAndTenant('remove_tenant')">
-                    Remove Tenant
-                  </button>
-                </div>
-              </form>
-            </div>
-
-            <!-- Modal footer -->
-            <div class="modal-footer">
-
-            </div>
-
+      <!-- Modal body -->
+      <div class="modal-body">
+        <form class="assign-tenant-form" (ngSubmit)="assignTenantToApartment()">
+          <!-- Select Apartment -->
+          <div class="form-group">
+            <label for="apartment">Select Apartment</label>
+            <select id="apartment" required class="form-control" [(ngModel)]="selectedApartmentId" name="apartment">
+              <option *ngFor="let apartment of apartments" [value]="apartment.apartment_id">
+                {{ apartment.room }} ({{ apartment.description }})
+              </option>
+            </select>
           </div>
+
+          <!-- Select Tenant -->
+          <div class="form-group">
+            <label for="tenant">Select Tenant</label>
+            <select id="tenant" required class="form-control" [(ngModel)]="selectedTenantId" name="tenant">
+              <option *ngFor="let tenant of tenants" [value]="tenant.tenant_id">
+                {{ tenant.tenant_fullname }}
+              </option>
+            </select>
+          </div>
+
+          <!-- Action Buttons -->
+          <div class="form-group">
+            <button type="button" class="btn btn-primary" (click)="updateApartmentAndTenant('assign_tenant')">
+              Assign Tenant
+            </button>
+            <button type="button" class="btn btn-warning" (click)="updateApartmentAndTenant('remove_tenant')">
+              Remove Tenant
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="modal-footer">
+        <div class="tenants-list">
+          <h2>Tenant List</h2>
+          <div *ngIf="tenants && tenants.length; else noTenants">
+            <ul>
+              <li *ngFor="let tenant of tenants">
+                <strong>{{ tenant.tenant_fullname }}</strong><br />
+                <em>Email:</em> {{ tenant.tenant_email }}<br />
+                <em>Tenant ID:</em> {{ tenant.tenant_id }}<br />
+                <em>Room:</em> {{ tenant.room ? tenant.room : 'Not Assigned' }}
+              </li>
+            </ul>
+          </div>
+          <ng-template #noTenants>
+            <p>No tenants found.</p>
+          </ng-template>
         </div>
       </div>
-      <!--End of Tenant Modal-->
+    </div>
+  </div>
+</div>
+
 
       <!--Modal For Room-->
       <div class="modal" id="RoomModal">
@@ -140,7 +153,27 @@
 
             <!-- Modal footer -->
             <div class="modal-footer">
-
+              <div class="apartments-list-container">
+                <h2 class="text-center my-4">Apartment List</h2>
+                <div *ngIf="apartments && apartments.length; else noApartments" class="apartments-list">
+                  <div *ngFor="let apartment of apartments" class="card shadow-sm mb-3">
+                    <div class="card-body">
+                      <h3 class="card-title text-primary">{{ apartment.room }}</h3>
+                      <p class="card-text">Rent: ${{ apartment.rent }}</p>
+                      <p class="card-text">{{ apartment.description }}</p>
+                      <p class="card-text">
+                        <strong>Status:</strong>
+                        <span class="{{ apartment.tenant_id ? 'text-danger' : 'text-success' }}">
+                          {{ apartment.tenant_id ? 'Occupied' : 'Available' }}
+                        </span>
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <ng-template #noApartments>
+                  <p class="text-center text-muted">No apartments available.</p>
+                </ng-template>
+              </div>
             </div>
 
           </div>

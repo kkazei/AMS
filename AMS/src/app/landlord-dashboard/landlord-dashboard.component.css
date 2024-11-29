@@ -202,3 +202,112 @@ td.paid {
 }
 
 
+/* tenant section */
+.apartments-list {
+  font-family: Arial, sans-serif;
+  margin: 20px;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.apartments-list h2 {
+  color: #333;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.apartment-item {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  padding: 20px;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.apartment-item:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.apartment-item h3 {
+  color: #007bff;
+  margin-bottom: 10px;
+}
+
+.apartment-item p {
+  color: #555;
+  margin: 5px 0;
+}
+
+.apartment-item strong {
+  color: #333;
+}
+
+.no-apartments {
+  text-align: center;
+  color: #888;
+}
+
+
+/* Modal Customizations */
+.modal-header {
+  border-bottom: 2px solid #dee2e6;
+}
+
+.modal-body {
+  padding: 1.5rem;
+  background-color: #f8f9fa;
+}
+
+.modal-footer {
+  border-top: 2px solid #dee2e6;
+}
+
+/* Card Hover Effect */
+.card {
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+}
+
+/* Apartment List */
+.apartments-list h2 {
+  color: #333;
+}
+
+.text-danger {
+  font-weight: bold;
+}
+
+.text-success {
+  font-weight: bold;
+}
+
+/* Ensure the modal dialog stays fixed */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Make the apartment list scrollable */
+.apartments-list-container {
+  max-height: 300px; /* Set a height limit */
+  overflow-y: auto; /* Enable vertical scrolling */
+}
+
+/* Prevent modal from affecting the page's scroll */
+.modal-dialog-scrollable .modal-body {
+  overflow: hidden; /* Prevent body scrolling */
+}
