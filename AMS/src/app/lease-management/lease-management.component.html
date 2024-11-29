@@ -1,0 +1,71 @@
+<div class="row">
+    <!-- Tenant Selection -->
+    <div class="col-6">
+      <label for="tenantId">Select Tenant</label>
+      <select id="tenantId" [(ngModel)]="tenantId" class="form-control" (change)="onTenantSelect()">
+        <option value="" disabled selected>Select Tenant</option>
+        <option *ngFor="let tenant of tenants" [value]="tenant.tenant_id">
+          {{ tenant.tenant_fullname }}
+        </option>
+      </select>
+    </div>
+  
+    <!-- Room Selection -->
+    <div class="col-6">
+      <label for="room">Select Room</label>
+      <select id="room" [(ngModel)]="room" class="form-control" [disabled]="!tenantId">
+        <option value="" disabled selected>Select Room</option>
+        <option *ngFor="let apartment of apartments" [value]="apartment.room">
+          {{ apartment.room }}
+        </option>
+      </select>
+    </div>
+  </div>
+  
+  <!-- Display Selected Tenant and Room -->
+  <div *ngIf="tenantId && room" class="mt-3">
+    <p><strong>Selected Tenant:</strong> {{ selectedTenant?.tenant_fullname }}</p>
+    <p><strong>Assigned Room:</strong> {{ room }}</p>
+  </div>
+  
+  <!-- File Upload Section -->
+  <div class="row">
+    <div class="col-8">
+      <label class="btn btn-default p-0">
+        <input type="file" (change)="onFileSelected($event)" />
+      </label>
+    </div>
+  
+    <div class="col-4">
+      <button (click)="upload()">Upload</button>
+    </div>
+  </div>
+  
+  <!-- File Preview -->
+  <div>
+    <img [src]="preview" class="preview" *ngIf="preview" />
+  </div>
+  
+  <!-- Status Message -->
+  <div *ngIf="message" class="alert alert-secondary" role="alert">
+    {{ message }}
+  </div>
+  
+  <!-- Display List of Lease Images -->
+  <div class="card" *ngIf="imageInfos && imageInfos.length > 0">
+    <div class="card-header">List of Lease Images</div>
+    <ul class="list-group list-group-flush">
+      <li class="list-group-item" *ngFor="let image of imageInfos; trackBy: trackByFn">
+        <p><strong>Tenant:</strong> {{ image.tenant_fullname }}</p>
+        <p><strong>Room:</strong> {{ image.room }}</p>
+        <p><a [href]="image.img" target="_blank">{{ image.imgName }}</a></p>
+        <img [src]="image.img" [alt]="image.imgName" height="80px" />
+      </li>
+    </ul>
+  </div>
+  
+  <!-- No Images Message -->
+  <div *ngIf="!imageInfos || imageInfos.length === 0">
+    No lease images found.
+  </div>
+  

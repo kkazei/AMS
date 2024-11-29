@@ -303,13 +303,15 @@ export class AuthService {
     });
   }
 
-  addImage(file: File): Observable<any> {
+  addLease(file: File, tenantId: number, room: string): Observable<any> {
     const formData = new FormData();
     formData.append('image', file, file.name);
-
+    formData.append('tenant_id', tenantId.toString());
+    formData.append('room', room);
+  
     return new Observable((observer) => {
       axios
-        .post(`${this.apiUrl}/uploadImage`, formData, {
+        .post(`${this.apiUrl}/uploadLease`, formData, {
           headers: {
             'Content-Type': 'multipart/form-data'
           }
@@ -325,11 +327,12 @@ export class AuthService {
         });
     });
   }
+  
 
-  loadImage(): Observable<any> {
+  loadLease(): Observable<any> {
     return new Observable((observer) => {
       axios
-        .get(`${this.apiUrl}/loadImage`)
+        .get(`${this.apiUrl}/loadLeases`)
         .then((res) => {
           observer.next(res.data);
           observer.complete();

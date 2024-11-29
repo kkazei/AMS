@@ -232,39 +232,7 @@
   </div>
 </div>
 
-<div class="row">
-  <div class="col-8">
-    <label class="btn btn-default p-0">
-      <input type="file" (change)="onFileSelected($event)" />
-    </label>
-  </div>
 
-  <div class="col-4">
-    <button (click)="upload()">Upload</button>
-  </div>
-</div>
-
-<div>
-  <img [src]="preview" class="preview" *ngIf="preview" />
-</div>
-
-<div *ngIf="message" class="alert alert-secondary" role="alert">
-  {{ message }}
-</div>
-
-<div class="card" *ngIf="imageInfos && imageInfos.length > 0">
-  <div class="card-header">List of Images</div>
-  <ul class="list-group list-group-flush">
-    <li class="list-group-item" *ngFor="let image of imageInfos; trackBy: trackByFn">
-      <p><a [href]="image.img">{{ image.imgName }}</a></p>
-      <img [src]="image.img" [alt]="image.imgName" height="80px" />
-    </li>
-  </ul>
-</div>
-
-<div *ngIf="!imageInfos || imageInfos.length === 0">
-  No images found.
-</div>
 
 <div class="pay-invoice-form-wrapper">
   <h2>Pay Invoice</h2>
