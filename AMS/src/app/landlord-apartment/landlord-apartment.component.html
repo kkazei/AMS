@@ -266,4 +266,73 @@
   No images found.
 </div>
 
+<div class="pay-invoice-form-wrapper">
+  <h2>Pay Invoice</h2>
+  <form (ngSubmit)="onPayInvoice()">
+    <!-- Tenant Selection -->
+    <div class="form-group">
+      <label for="tenant">Select Tenant</label>
+      <select
+        id="tenant"
+        required
+        class="form-control"
+        [(ngModel)]="paymentTenantId"
+        name="paymentTenantId"
+      >
+        <option *ngFor="let tenant of tenants" [value]="tenant.tenant_id">
+          {{ tenant.tenant_fullname }}
+        </option>
+      </select>
+    </div>
+
+    <!-- Payment Amount -->
+    <div class="form-group">
+      <label for="amount">Amount</label>
+      <input
+        type="number"
+        id="amount"
+        required
+        class="form-control"
+        [(ngModel)]="paymentAmount"
+        name="amount"
+      />
+    </div>
+
+    <!-- Reference Number -->
+    <div class="form-group">
+      <label for="referenceNumber">Reference Number</label>
+      <input
+        type="text"
+        id="referenceNumber"
+        class="form-control"
+        [(ngModel)]="paymentReferenceNumber"
+        name="referenceNumber"
+      />
+    </div>
+
+    <!-- Proof of Payment -->
+    <div class="form-group">
+      <label for="proofOfPayment">Upload Proof of Payment</label>
+      <input
+        type="file"
+        id="proofOfPayment"
+        class="form-control"
+        (change)="onFileSelected($event)"
+      />
+    </div>
+
+    <!-- Submit Button -->
+    <div class="form-group">
+      <button type="submit" class="btn btn-primary" [disabled]="!paymentTenantId || !paymentAmount">
+        Submit Payment
+      </button>
+    </div>
+  </form>
+
+  <div *ngIf="paymentMessage" class="alert alert-secondary">
+    {{ paymentMessage }}
+  </div>
+</div>
+
+
 

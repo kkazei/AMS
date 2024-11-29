@@ -26,6 +26,12 @@ export class LandlordApartmentComponent implements OnInit {
   selectedFile: File | null = null; // Add this line
   preview: string = '';
   imageInfos: any[] = [];
+  paymentTenantId: string | null = null;
+paymentAmount: number | null = null;
+paymentReferenceNumber: string = '';
+paymentProofOfPayment: File | null = null;
+paymentMessage: string = '';
+
 
 
   constructor(private authService: AuthService) {}
@@ -122,14 +128,41 @@ export class LandlordApartmentComponent implements OnInit {
   onFileSelected(event: any) {
     const file = event.target.files[0];
     if (file) {
-      this.selectedFile = file;
-      const reader = new FileReader();
-      reader.onload = (e: any) => {
-        this.preview = e.target.result;
-      };
-      reader.readAsDataURL(file);
+      this.paymentProofOfPayment = file;
     }
   }
+
+  
+
+  onPayInvoice() {
+    if (!this.paymentTenantId || !this.paymentAmount) {
+      this.paymentMessage = 'Tenant and amount are required.';
+      return;
+    }
+  
+    this.authService
+      .payInvoice(
+        this.paymentTenantId,
+        this.paymentAmount,
+        this.paymentReferenceNumber,
+        this.paymentProofOfPayment
+      )
+      .subscribe(
+        (response) => {
+          console.log('Payment successful:', response);
+          this.paymentMessage = 'Payment successfully submitted!';
+          // Optionally refresh data
+          this.getApartments();
+          this.getTenants();
+        },
+        (error) => {
+          console.error('Error making payment:', error);
+          this.paymentMessage = 'Failed to submit payment.';
+        }
+      );
+  }
+  
+  
 
   upload() {
     if (this.selectedFile) {

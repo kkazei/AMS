@@ -340,4 +340,34 @@ export class AuthService {
     });
   }
 
+ payInvoice(tenantId: string, amount: number, referenceNumber: string, proofOfPaymentFile: File | null): Observable<any> {
+  const formData = new FormData();
+  formData.append('tenantId', tenantId);
+  formData.append('amount', amount.toString());
+  formData.append('referenceNumber', referenceNumber);
+
+  // Conditionally append the proofOfPaymentFile
+  if (proofOfPaymentFile) {
+    formData.append('proofOfPayment', proofOfPaymentFile);
+  }
+
+  return new Observable((observer) => {
+    axios
+      .post(`${this.apiUrl}/payInvoice`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      })
+      .then((res) => {
+        observer.next(res.data);
+        observer.complete();
+      })
+      .catch((err) => {
+        observer.error(err);
+      });
+  });
+}
+
+  
+
 }
