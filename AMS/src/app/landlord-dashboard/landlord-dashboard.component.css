@@ -202,107 +202,319 @@ td.paid {
 }
 
 
-/* tenant section */
+/* Responsive Styles */
+@media (max-width: 1200px) {
+  /* Reduce sidebar width */
+  .sidebar {
+    width: 200px;
+    padding: 15px;
+  }
+
+  .sidebar-header {
+    font-size: 1.2rem;
+  }
+
+  .sidebar-menu ul li a {
+    font-size: 0.9rem;
+    padding: 8px;
+  }
+
+  .content {
+    padding: 15px;
+  }
+
+  .header h1 {
+    font-size: 1.3rem;
+  }
+
+  .overview-card {
+    font-size: 1rem;
+    padding: 15px;
+  }
+
+  .overview-card i {
+    font-size: 2.5rem;
+  }
+}
+
+@media (max-width: 992px) {
+  /* Stack sidebar on top for smaller screens */
+  .dashboard-container {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    width: 100%;
+    text-align: center;
+  }
+
+  .content {
+    padding: 10px;
+  }
+
+  .overview-grid {
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
+
+  .chart-section {
+    max-width: 100%;
+    margin: 10px auto;
+  }
+
+  .summary {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .summary-item {
+    font-size: 0.9rem;
+    padding: 15px;
+  }
+}
+
+@media (max-width: 768px) {
+  .summary {
+    flex-direction: row;
+    gap: 5px;
+  }
+
+  .summary-item {
+    font-size: 0.8rem;
+    padding: 8px;
+  }
+
+  table th,
+  table td {
+    font-size: 0.8rem;
+    padding: 5px;
+  }
+
+  .overview-grid {
+    display: grid;
+  grid-template-columns: repeat(2, 1fr); /* Two cards per row */
+  gap: 20px; /* Space between cards */
+  }
+
+  .overview-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-width: 100px;
+  padding: 50px;
+  }
+
+  .overview-card i {
+    font-size: 1.8rem;
+  }
+
+}
+
+@media (max-width: 576px) {
+  .summary {
+    flex-direction: row;
+    gap: 5px;
+  }
+
+  .summary-item {
+    font-size: 0.8rem;
+    padding: 8px;
+  }
+
+  table th,
+  table td {
+    font-size: 0.8rem;
+    padding: 5px;
+  }
+
+  .overview-grid {
+    display: grid;
+  grid-template-columns: repeat(2, 1fr); /* Two cards per row */
+  gap: 20px; /* Space between cards */
+  }
+
+  .overview-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-width: 100px;
+  padding: 20px;
+  }
+
+  .overview-card i {
+    font-size: 1.8rem;
+  }
+}
+
+
+/* General Apartment List Styles */
+.apartments-list-container {
+  margin-top: 20px;
+  padding: 0 20px;
+}
+
+.apartments-list-container h2 {
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: #2c3e50;
+  margin-bottom: 30px;
+}
+
 .apartments-list {
-  font-family: Arial, sans-serif;
-  margin: 20px;
-  padding: 20px;
-  background-color: #f9f9f9;
-  border-radius: 8px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 30px;
+  justify-content: space-between;
 }
 
-.apartments-list h2 {
-  color: #333;
-  text-align: center;
-  margin-bottom: 20px;
-}
-
-.apartment-item {
-  background-color: #fff;
+/* Card Styles */
+.apartments-list .card {
+  flex: 0 1 calc(50% - 30px);
+  box-sizing: border-box;
+  border-radius: 12px;
   border: 1px solid #ddd;
-  border-radius: 8px;
-  margin-bottom: 20px;
-  padding: 20px;
-  transition: transform 0.2s, box-shadow 0.2s;
+  background-color: #ffffff;
+  transition: all 0.3s ease-in-out;
+  overflow: hidden;
 }
 
-.apartment-item:hover {
+.apartments-list .card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
 }
 
-.apartment-item h3 {
-  color: #007bff;
+/* Card Body */
+.apartments-list .card-body {
+  padding: 20px;
+  color: #2c3e50;
+}
+
+.apartments-list .card-body h3 {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: #2980b9;
+  margin-bottom: 15px;
+}
+
+.apartments-list .card-body p {
+  font-size: 1rem;
+  line-height: 1.6;
   margin-bottom: 10px;
 }
 
-.apartment-item p {
-  color: #555;
-  margin: 5px 0;
+/* Rent Text */
+.apartments-list .card-body .card-text {
+  font-weight: 500;
+  color: #16a085;
 }
 
-.apartment-item strong {
-  color: #333;
+.apartments-list .card-body .card-text .text-success {
+  color: #27ae60;
+  font-weight: bold;
 }
 
-.no-apartments {
-  text-align: center;
-  color: #888;
+.apartments-list .card-body .card-text .text-danger {
+  color: #e74c3c;
+  font-weight: bold;
+}
+
+/* Status Label */
+.apartments-list .card-body .card-text span {
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .apartments-list .card {
+    flex: 0 1 calc(100% - 30px); /* Full-width on small screens */
+  }
+
+  .apartments-list-container {
+    padding: 0 10px;
+  }
 }
 
 
-/* Modal Customizations */
-.modal-header {
-  border-bottom: 2px solid #dee2e6;
+/* General Posts List Styles */
+.posts-list {
+  margin-top: 30px;
+  padding: 0 20px;
 }
 
-.modal-body {
-  padding: 1.5rem;
-  background-color: #f8f9fa;
+
+.posts-list h2 {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #0b85ff;
+  margin-bottom: 30px;
 }
 
-.modal-footer {
-  border-top: 2px solid #dee2e6;
+.post-card {
+  background-color: #ffffff;
+  border-radius: 12px;
+  border: 1px solid #ddd;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+  padding: 65px;
+  transition: all 0.3s ease-in-out;
 }
 
-/* Card Hover Effect */
-.card {
-  transition: transform 0.2s, box-shadow 0.2s;
-}
-
-.card:hover {
+.post-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
 }
 
-/* Apartment List */
-.apartments-list h2 {
-  color: #333;
+/* Post Title */
+.post-title {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #2980b9;
+  margin-bottom: 15px;
 }
 
-.text-danger {
-  font-weight: bold;
+/* Post Content */
+.post-content {
+  font-size: 1rem;
+  color: #34495e;
+  line-height: 1.6;
+  margin-bottom: 20px;
 }
 
-.text-success {
-  font-weight: bold;
+/* Post Image */
+.post-image {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+  margin-top: 20px;
 }
 
-/* Ensure the modal dialog stays fixed */
-.modal {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+/* Responsive Design */
+@media (max-width: 768px) {
+  .posts-list {
+    padding: 0 10px;
+  }
+
+  .post-card {
+    padding: 15px;
+  }
+
+  .post-title {
+    font-size: 1.5rem;
+  }
+
+  .post-content {
+    font-size: 0.9rem;
+  }
 }
+
+
+
 
 /* Make the apartment list scrollable */
-.apartments-list-container {
+.apartments-list-container, .posts-list, .tenants-list {
   max-height: 300px; /* Set a height limit */
   overflow-y: auto; /* Enable vertical scrolling */
 }
@@ -310,4 +522,170 @@ td.paid {
 /* Prevent modal from affecting the page's scroll */
 .modal-dialog-scrollable .modal-body {
   overflow: hidden; /* Prevent body scrolling */
+}
+
+/* General Modal Styling */
+.modal {
+
+  background-color: rgba(0, 0, 0, 0.6); /* Add a subtle backdrop */
+  overflow: auto;
+  z-index: 1050;
+}
+
+.modal-dialog {
+
+  max-width: 520px;
+  border-radius: 8px;
+
+}
+
+.modal-content {
+  background-color: #ffffff;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Header */
+.modal-header {
+  background-color: #2c3e50;
+  color: #ffffff;
+  padding: 15px;
+  border-bottom: 2px solid #34495e;
+}
+
+.modal-header .modal-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.modal-header .btn-close {
+  background: none;
+  border: none;
+  color: #ffffff;
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+
+.modal-header .btn-close:hover {
+  color: #f39c12;
+}
+
+/* Body */
+.modal-body {
+  padding: 20px;
+  font-family: 'Arial', sans-serif;
+  color: #34495e;
+  line-height: 1.5;
+}
+
+.modal-body .form-group {
+  margin-bottom: 20px;
+}
+
+.modal-body label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 5px;
+}
+
+.modal-body select {
+  width: 100%;
+  padding: 10px;
+  font-size: 1rem;
+  border: 1px solid #bdc3c7;
+  border-radius: 4px;
+  transition: border-color 0.3s;
+}
+
+.modal-body select:focus {
+  border-color: #3498db;
+  outline: none;
+  box-shadow: 0 0 5px rgba(52, 152, 219, 0.5);
+}
+
+/* Buttons */
+.modal-body .btn {
+  padding: 10px 20px;
+  font-size: 1rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.2s;
+}
+
+.modal-body .btn-primary {
+  background-color: #3498db;
+  color: #ffffff;
+}
+
+.modal-body .btn-primary:hover {
+  background-color: #2980b9;
+  transform: scale(1.05);
+}
+
+.modal-body .btn-warning {
+  background-color: #f39c12;
+  color: #ffffff;
+}
+
+.modal-body .btn-warning:hover {
+  background-color: #e67e22;
+  transform: scale(1.05);
+}
+
+/* Footer */
+.modal-footer {
+  padding: 0px;
+  background-color: #ecf0f1;
+  border-top: 1px solid #bdc3c7;
+}
+
+.modal-footer .tenants-list {
+  font-family: 'Arial', sans-serif;
+  color: #2c3e50;
+}
+
+.modal-footer .tenants-list h2 {
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.modal-footer .tenants-list {
+  list-style-type: none;
+  padding: 0;
+}
+
+.modal-footer .tenants-list {
+  padding: 10px;
+  border-bottom: 1px solid #bdc3c7;
+}
+
+.modal-footer .tenants-list {
+  border-bottom: none;
+}
+
+.modal-footer .tenants-list {
+  font-size: 1rem;
+  color: #3498db;
+}
+
+.modal-footer .tenants-list{
+  color: #7f8c8d;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .modal-dialog {
+    margin: 20px auto;
+    max-width: 100%;
+  }
+
+  .modal-header,
+  .modal-body,
+  .modal-footer {
+    padding: 15px;
+  }
 }

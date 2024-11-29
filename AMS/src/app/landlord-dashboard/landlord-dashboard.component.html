@@ -38,7 +38,7 @@
       <!-- Modal Header -->
       <div class="modal-header">
         <h4 class="modal-title">Assign Tenant to a Room</h4>
-        <button type="button" class="btn-close" (click)="closeTenantModal()"></button>
+        <button type="button" class="btn-close" (click)="closeTenantModal()">X</button>
       </div>
 
       <!-- Modal body -->
@@ -81,14 +81,24 @@
         <div class="tenants-list">
           <h2>Tenant List</h2>
           <div *ngIf="tenants && tenants.length; else noTenants">
-            <ul>
-              <li *ngFor="let tenant of tenants">
-                <strong>{{ tenant.tenant_fullname }}</strong><br />
-                <em>Email:</em> {{ tenant.tenant_email }}<br />
-                <em>Tenant ID:</em> {{ tenant.tenant_id }}<br />
-                <em>Room:</em> {{ tenant.room ? tenant.room : 'Not Assigned' }}
-              </li>
-            </ul>
+            <table>
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Email</th>
+                  <th>Tenant ID</th>
+                  <th>Room</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let tenant of tenants">
+                  <td>{{ tenant.tenant_fullname }}</td>
+                  <td>{{ tenant.tenant_email }}</td>
+                  <td>{{ tenant.tenant_id }}</td>
+                  <td>{{ tenant.room ? tenant.room : 'Not Assigned' }}</td>
+                </tr>
+              </tbody>
+            </table>
           </div>
           <ng-template #noTenants>
             <p>No tenants found.</p>
@@ -98,7 +108,7 @@
     </div>
   </div>
 </div>
-
+<!--End of Tenant Modal-->
 
       <!--Modal For Room-->
       <div class="modal" id="RoomModal">
@@ -108,7 +118,7 @@
             <!-- Modal Header -->
             <div class="modal-header">
               <h4 class="modal-title">Assign Tenant to a Room</h4>
-              <button type="button" class="btn-close" (click)="closeRoomModal()"></button>
+              <button type="button" class="btn-close" (click)="closeRoomModal()">X</button>
             </div>
 
             <!-- Modal body -->
@@ -156,7 +166,7 @@
               <div class="apartments-list-container">
                 <h2 class="text-center my-4">Apartment List</h2>
                 <div *ngIf="apartments && apartments.length; else noApartments" class="apartments-list">
-                  <div *ngFor="let apartment of apartments" class="card shadow-sm mb-3">
+                  <div *ngFor="let apartment of apartments" class="card shadow-sm">
                     <div class="card-body">
                       <h3 class="card-title text-primary">{{ apartment.room }}</h3>
                       <p class="card-text">Rent: ${{ apartment.rent }}</p>
@@ -174,6 +184,7 @@
                   <p class="text-center text-muted">No apartments available.</p>
                 </ng-template>
               </div>
+              
             </div>
 
           </div>
@@ -189,7 +200,7 @@
             <!-- Modal Header -->
             <div class="modal-header">
               <h4 class="modal-title">Create an Announcement</h4>
-              <button type="button" class="btn-close" (click)="closeAnnouncementsModal()"></button>
+              <button type="button" class="btn-close" (click)="closeAnnouncementsModal()">X</button>
             </div>
 
             <!-- Modal body -->
@@ -253,12 +264,22 @@
 
             <!-- Modal footer -->
             <div class="modal-footer">
-
+              <div *ngIf="posts && posts.length" class="posts-list">
+                <h2>Posts</h2>
+                <div *ngFor="let post of posts" class="post-card">
+                  <h3 class="post-title">{{ post.title }}</h3>
+                  <p class="post-content">{{ post.content }}</p>
+                  <div *ngIf="post.image_path">
+                    <img [src]="post.image_path" alt="Post Image" class="post-image" />
+                  </div>
+                </div>
+              </div>
+              
+            </div>
             </div>
 
           </div>
         </div>
-      </div>
       <!--End of Announcements Modal-->
 
    <!-- Income and Expense Chart -->
