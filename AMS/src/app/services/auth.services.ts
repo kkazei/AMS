@@ -436,5 +436,30 @@ createConcerns(data: FormData): Observable<any> {
     });
   }
 
+  addImage(file: File): Observable<any> {
+      const formData = new FormData();
+      formData.append('image', file, file.name);
+      return new Observable((observer) => {
+        axios
+          .post(`${this.apiUrl}/uploadImage`, formData, {
+            headers: {
+              'Content-Type': 'multipart/form-data'
+            }
+          });
+      });
+    }
 
+    loadImage(): Observable<any> {
+        return new Observable((observer) => {
+          axios
+            .get(`${this.apiUrl}/loadImage`)
+            .then((res) => {
+              observer.next(res.data);
+              observer.complete();
+            })
+            .catch((err) => {
+              observer.error(err);
+            });
+        });
+      }
 }

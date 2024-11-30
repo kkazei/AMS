@@ -13,29 +13,49 @@
         <button class="pay-now-btn" (click)="isPaymentFormVisible = true">Pay Now</button>
       </div>
     </div>
-  
-    <!-- Payment Form (Hidden until Pay Now is clicked) -->
-    <div *ngIf="isPaymentFormVisible" class="payment-details-wrapper">
-      <h2>Payment Details</h2>
-    
-      <form (ngSubmit)="onPayInvoice()">
-        <div>
-          <label for="amount">Amount</label>
-          <input type="number" id="amount" [(ngModel)]="paymentAmount" name="amount" [readonly]="true" />
-        </div>
-        <div>
-          <label for="referenceNumber">Reference Number</label>
-          <input type="text" id="referenceNumber" [(ngModel)]="paymentReferenceNumber" name="referenceNumber" />
-        </div>
-        <div>
-          <label for="proofOfPayment">Proof of Payment</label>
-          <input type="file" (change)="onPaymentProofFileSelected($event)" id="proofOfPayment" name="proofOfPayment" />
-        </div>
-        <button type="submit">Submit Payment</button>
-      </form>
-    
-      <p *ngIf="paymentMessage">{{ paymentMessage }}</p>
+<!-- Payment Form (Hidden until Pay Now is clicked) -->
+<div *ngIf="isPaymentFormVisible" class="payment-details-wrapper">
+  <h2>Payment Details</h2>
+
+  <form (ngSubmit)="onPayInvoice()">
+    <div>
+      <label for="paymentMethod">Payment Method</label>
+      <select id="paymentMethod" [(ngModel)]="selectedPaymentMethod" name="paymentMethod">
+        <option value="onhand">Pay On-Hand</option>
+        <option value="qr">Pay via QR</option>
+      </select>
     </div>
+
+    <!-- Show QR image if Pay via QR is selected -->
+    <div *ngIf="selectedPaymentMethod === 'qr'">
+      <h3>Scan this QR Code to Pay</h3>
+      <div *ngIf="imageInfos && imageInfos.length > 0">
+        <img *ngFor="let image of imageInfos" [src]="image.img" alt="QR Code" class="img-thumbnail" height="150px" />
+      </div>
+    </div>
+
+    <div>
+      <label for="amount">Amount</label>
+      <input type="number" id="amount" [(ngModel)]="paymentAmount" name="amount" [readonly]="true" />
+    </div>
+
+    <div *ngIf="selectedPaymentMethod === 'onhand'">
+      <label for="referenceNumber">Reference Number</label>
+      <input type="text" id="referenceNumber" [(ngModel)]="paymentReferenceNumber" name="referenceNumber" />
+    </div>
+
+    <div>
+      <label for="proofOfPayment">Proof of Payment</label>
+      <input type="file" (change)="onPaymentProofFileSelected($event)" id="proofOfPayment" name="proofOfPayment" />
+    </div>
+
+    <button type="submit">Submit Payment</button>
+  </form>
+
+  <p *ngIf="paymentMessage">{{ paymentMessage }}</p>
+</div>
+
+
   
     <!-- Grid Section -->
     <div class="grid-container">

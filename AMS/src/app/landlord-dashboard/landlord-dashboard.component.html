@@ -297,7 +297,6 @@
             <th>Amount</th>
             <th>Due Date</th>
             <th>Room</th>
-            <th>Transaction</th>
             <th>Status</th>
           </tr>
         </thead>
@@ -307,7 +306,6 @@
             <td>₱{{ tenant.rent }}</td>
             <td>{{ tenant.due_date | date }}</td>
             <td>{{ tenant.room }}</td>
-            <td>{{ tenant.transaction || 'N/A' }}</td>
             <td [class]="tenant.status">{{ tenant.status }}</td>
           </tr>
         </tbody>

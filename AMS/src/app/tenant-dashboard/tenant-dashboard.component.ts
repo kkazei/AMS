@@ -25,6 +25,10 @@ export class TenantDashboardComponent implements OnInit {
   concerncontent: string = '';
   selectedImage: File | null = null;
   message: string = '';
+  preview: string = '';
+  imageInfos: any[] = [];
+  selectedPaymentMethod: string = 'onhand'; // Default to 'onhand'
+
 
   constructor(private authService: AuthService) {}
 
@@ -33,6 +37,7 @@ export class TenantDashboardComponent implements OnInit {
     if (token) {
       this.userProfile = this.authService.getUserProfileFromToken();
       this.fetchTenantDetails();
+      this.loadImages();
     } else {
       console.warn('Token not found, user is not logged in');
     }
@@ -134,6 +139,31 @@ export class TenantDashboardComponent implements OnInit {
       );
   }
 
+  loadImages() {
+    this.authService.loadImage().subscribe(
+      (response: any) => {
+        if (response.status === 'success') {
+          this.imageInfos = response.data.map((image: any) => {
+            return {
+              ...image,
+              img: `http://localhost/amsAPI/api/${image.img}` // Adjust path as needed
+            };
+          });
+        } else {
+          console.error('Failed to retrieve images:', response.message);
+          // Handle error message or fallback as needed
+        }
+      },
+      (error) => {
+        console.error('Error fetching images:', error);
+        // Handle error as needed
+      }
+    );
+  }  
+
+  trackByFn(index: number, item: any) {
+    return item.imgName; // Use a unique identifier for each item
+  }
 
   //Concerns Modal
   openConcernsModal(){
