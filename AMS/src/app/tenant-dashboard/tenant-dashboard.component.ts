@@ -133,5 +133,62 @@ export class TenantDashboardComponent implements OnInit {
         }
       );
   }
-  
+
+
+  //Concerns Modal
+  openConcernsModal(){
+    const modal = document.getElementById("ConcernsModal")
+    if(modal != null){
+      modal.style.display = "block";
+    }
+  }
+  closeConcernsModal(){
+    const modal = document.getElementById("ConcernsModal")
+    if(modal != null){
+      modal.style.display = "none";
+    }
+  }
+
+   //Lease Modal
+   openLeaseModal(){
+    const modal = document.getElementById("LeaseModal")
+    if(modal != null){
+      modal.style.display = "block";
+    }
+  }
+  closeLeaseModal(){
+    const modal = document.getElementById("LeaseModal")
+    if(modal != null){
+      modal.style.display = "none";
+    }
+  }
+
+
+  //Profile Modal
+  openProfileModal(){
+    const modal = document.getElementById("ProfileModal")
+    if(modal != null){
+      modal.style.display = "block";
+    }
+  }
+  closeProfileModal(){
+    const modal = document.getElementById("ProfileModal")
+    if(modal != null){
+      modal.style.display = "none";
+    }
+  }
+
+  //Pay History Modal
+  openPayHistoryModal(){
+    const modal = document.getElementById("PayHistoryModal")
+    if(modal != null){
+      modal.style.display = "block";
+    }
+  }
+  closePayHistoryModal(){
+    const modal = document.getElementById("PayHistoryModal")
+    if(modal != null){
+      modal.style.display = "none";
+    }
+  }
 }

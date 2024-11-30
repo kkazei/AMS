@@ -39,72 +39,161 @@
   
     <!-- Grid Section -->
     <div class="grid-container">
-      <div class="grid-item">
+      <button class="grid-item" (click)="openProfileModal()">
         <i class="material-icons">person</i>
         <p>Profile</p>
-      </div>
-      <div class="grid-item">
+      </button>
+      <button class="grid-item" (click)="openPayHistoryModal()">
         <i class="material-icons">receipt</i>
         <p>Payment History</p>
-      </div>
-      <div class="grid-item">
+      </button>
+      <button class="grid-item" (click)="openLeaseModal()">
         <i class="material-icons">home</i>
         <p>Lease Agreement</p>
-      </div>
-      <div class="grid-item">
+      </button>
+      <button class="grid-item" (click)="openConcernsModal()">
         <i class="material-icons">mail</i>
         <p>Inquiries</p>
+      </button>
+    </div>
+
+<!-- Modal For Concerns -->
+<div class="modal" id="ConcernsModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-scrollable">
+    <div class="modal-content">
+
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h2>Create a New Concern</h2>
+        <button type="button" class="btn-close" (click)="closeConcernsModal()"></button>
+      </div>
+
+      <!-- Modal body -->
+      <div class="modal-body">
+        <form (ngSubmit)="createConcern()">
+          <div class="form-group">
+            <label for="subject">Subject</label>
+            <input
+              type="text"
+              id="subject"
+              required
+              class="form-control"
+              placeholder="Subject"
+              [(ngModel)]="concerntitle"
+              name="subject"
+              #subjectInput="ngModel"
+            />
+            <div *ngIf="subjectInput.invalid && subjectInput.touched" class="error-message">
+              Subject is required.
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="description">Description</label>
+            <textarea
+              id="description"
+              required
+              class="form-control"
+              placeholder="Description"
+              [(ngModel)]="concerncontent"
+              name="description"
+              #descriptionInput="ngModel"
+            ></textarea>
+            <div *ngIf="descriptionInput.invalid && descriptionInput.touched" class="error-message">
+              Description is required.
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="attachment">Attachment</label>
+            <input
+              type="file"
+              id="attachment"
+              class="form-control"
+              (change)=" onImageFileSelected($event)"
+            />
+          </div>
+          <button type="submit" class="btn btn-primary" [disabled]="!concerntitle || !concerncontent">
+            Submit Concern
+          </button>
+        </form>
+        <p *ngIf="message">{{ message }}</p>
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="modal-footer">
       </div>
     </div>
-<!-- Create Concern Form -->
-<div class="create-concern-form-wrapper">
-  <h2>Create a New Concern</h2>
-  <form (ngSubmit)="createConcern()">
-    <div class="form-group">
-      <label for="subject">Subject</label>
-      <input
-        type="text"
-        id="subject"
-        required
-        class="form-control"
-        placeholder="Subject"
-        [(ngModel)]="concerntitle"
-        name="subject"
-        #subjectInput="ngModel"
-      />
-      <div *ngIf="subjectInput.invalid && subjectInput.touched" class="error-message">
-        Subject is required.
-      </div>
-    </div>
-    <div class="form-group">
-      <label for="description">Description</label>
-      <textarea
-        id="description"
-        required
-        class="form-control"
-        placeholder="Description"
-        [(ngModel)]="concerncontent"
-        name="description"
-        #descriptionInput="ngModel"
-      ></textarea>
-      <div *ngIf="descriptionInput.invalid && descriptionInput.touched" class="error-message">
-        Description is required.
-      </div>
-    </div>
-    <div class="form-group">
-      <label for="attachment">Attachment</label>
-      <input
-        type="file"
-        id="attachment"
-        class="form-control"
-        (change)=" onImageFileSelected($event)"
-      />
-    </div>
-    <button type="submit" class="btn btn-primary" [disabled]="!concerntitle || !concerncontent">
-      Submit Concern
-    </button>
-  </form>
-  <p *ngIf="message">{{ message }}</p>
-</div>
-    
   </div>
+</div>
+<!--End of Concerns Modal-->
+
+<!-- Modal For Profile -->
+<div class="modal" id="ProfileModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-scrollable">
+    <div class="modal-content">
+
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h2>Create a New Concern</h2>
+        <button type="button" class="btn-close" (click)="closeProfileModal()"></button>
+      </div>
+
+      <!-- Modal body -->
+      <div class="modal-body">
+        
+      <!-- Modal Footer -->
+      <div class="modal-footer">
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+<!--End of Lease Modal-->
+
+<!-- Modal For Lease -->
+<div class="modal" id="LeaseModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-scrollable">
+    <div class="modal-content">
+
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h2>Create a New Concern</h2>
+        <button type="button" class="btn-close" (click)="closeLeaseModal()"></button>
+      </div>
+
+      <!-- Modal body -->
+      <div class="modal-body">
+        
+      <!-- Modal Footer -->
+      <div class="modal-footer">
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+<!--End of Lease Modal-->
+
+
+<!-- Modal For Pay History -->
+<div class="modal" id="PayHistoryModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-scrollable">
+    <div class="modal-content">
+
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h2>Create a New Concern</h2>
+        <button type="button" class="btn-close" (click)="closePayHistoryModal()"></button>
+      </div>
+
+      <!-- Modal body -->
+      <div class="modal-body">
+        
+      <!-- Modal Footer -->
+      <div class="modal-footer">
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+<!--End of Lease Modal-->
+
+    </div>
