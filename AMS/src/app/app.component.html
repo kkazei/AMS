@@ -1,7 +1,8 @@
-<div *ngIf="shouldShowNav()">
-  <app-sidenav></app-sidenav>
-</div>
-<div class="body">
-  
-  <router-outlet></router-outlet>
+<div class="app-container">
+  <div *ngIf="shouldShowNav()" class="sidenav-container">
+    <app-sidenav></app-sidenav>
+  </div>
+  <div class="content-container">
+    <router-outlet></router-outlet>
+  </div>
 </div>
