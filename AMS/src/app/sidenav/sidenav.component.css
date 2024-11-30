@@ -1,0 +1,101 @@
+/* Basic styling for sidenav */
+.sidenav {
+    width: 250px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    background-color: #1e1e2f;
+    color: white;
+    font-family: Arial, sans-serif;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.3);
+    overflow-x: hidden;
+    transition: width 0.3s ease-in-out;
+}
+
+.sidenav.collapsed {
+    width: 60px;
+}
+
+.sidenav-header {
+    text-align: center;
+    margin: 20px 0;
+}
+
+.sidenav-header h2 {
+    color: white;
+    font-size: 20px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    transition: opacity 0.3s ease-in-out;
+}
+
+.sidenav.collapsed .sidenav-header h2 {
+    opacity: 0;
+}
+
+.sidenav-links {
+    list-style-type: none;
+    padding: 0;
+}
+
+.sidenav-links li {
+    padding: 10px 16px;
+    transition: background-color 0.3s ease, padding-left 0.3s ease;
+    display: flex;
+    align-items: center;
+}
+
+.sidenav-links li.active {
+    background-color: #575757;
+}
+
+.sidenav-links li a {
+    color: white;
+    text-decoration: none;
+    font-size: 18px;
+    display: block;
+    flex-grow: 1;
+}
+
+.sidenav-links li a:hover {
+    background-color: #424242;
+}
+
+.sidenav-links li .icon {
+    margin-right: 10px;
+    font-size: 20px;
+}
+
+.sidenav.collapsed .sidenav-links li {
+    padding-left: 10px;
+}
+
+.sidenav.collapsed .sidenav-links li a {
+    display: none;
+}
+
+.sidenav.collapsed .sidenav-links li .icon {
+    margin-right: 0;
+}
+
+.toggle-button {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #575757;
+    border: none;
+    color: white;
+    font-size: 20px;
+    padding: 10px;
+    border-radius: 50%;
+    cursor: pointer;
+    outline: none;
+    transition: background-color 0.3s ease-in-out;
+}
+
+.toggle-button:hover {
+    background-color: #424242;
+}
