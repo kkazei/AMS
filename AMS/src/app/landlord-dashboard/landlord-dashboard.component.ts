@@ -55,6 +55,7 @@ export class LandlordDashboardComponent implements OnInit {
       this.getApartments();
       this.getTenants();
       this.getConcerns();
+      this.fetchTotalIncomeSinceStartOfYear(); // Fetch monthly income data
     } else {
       console.error('User not logged in. JWT token missing.');
     }
@@ -201,35 +202,57 @@ export class LandlordDashboardComponent implements OnInit {
 
 
   renderChart(): void {
-    const ctx = document.getElementById('income-expense-chart') as HTMLCanvasElement;
-
-    new Chart(ctx, {
-      type: 'bar',
-      data: {
-        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-        datasets: [
-          {
-            label: 'Income',
-            data: [150000, 170000, 140000, 160000, 180000, 200000, 190000, 175000, 185000, 195000, 210000, 220000],
-            backgroundColor: '#3eb06e',
-          },
-          {
-            label: 'Expenses',
-            data: [30000, 40000, 35000, 38000, 50000, 45000, 47000, 48000, 50000, 52000, 55000, 58000],
-            backgroundColor: '#2b305e',
-          },
-        ],
-      },
-      options: {
-        responsive: true,
-        plugins: {
-          legend: { position: 'top' },
-          title: { display: true, text: 'Income and Expenses Overview of 2024' },
+    // Define the months of the year
+    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  
+    // Initialize an array to hold the income data for each month
+    const incomeData = new Array(12).fill(0);
+    const expenseData = new Array(12).fill(0);  // Assuming you want to track expenses too
+  
+    // Loop through each month to fetch monthly income
+    const fetchIncomePromises = months.map((month, index) => {
+      const currentMonth = index + 1;  // Convert index to month number (1-based)
+      const currentYear = new Date().getFullYear();
+  
+      // Fetch the monthly income data for this month
+      return this.authService.getMonthlyIncome(currentMonth, currentYear).toPromise().then((response) => {
+        incomeData[index] = response.total_income;
+        // You can adjust the expense data as needed. Below is just a placeholder.
+        expenseData[index] = Math.round(incomeData[index] * 0.2); // Assuming expenses are 20% of income
+      }).catch((error) => {
+        console.error(`Error fetching income for ${month}:`, error);
+      });
+    });
+  
+    // Wait for all monthly income data to be fetched
+    Promise.all(fetchIncomePromises).then(() => {
+      // Render the chart after all data has been fetched
+      const ctx = document.getElementById('income-expense-chart') as HTMLCanvasElement;
+  
+      new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: months,  // Use the month names
+          datasets: [
+            {
+              label: 'Income',
+              data: incomeData,  // Monthly income data
+              backgroundColor: '#3eb06e',
+            },
+          ],
         },
-        scales: { y: { beginAtZero: true } },
-      },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: { position: 'top' },
+            title: { display: true, text: 'Income and Expenses Overview of 2024' },
+          },
+          scales: { y: { beginAtZero: true } },
+        },
+      });
     });
   }
+  
 
   onFileSelected(event: any) {
     this.selectedFile = event.target.files[0];
@@ -305,6 +328,37 @@ export class LandlordDashboardComponent implements OnInit {
     );
   }
 
+  fetchTotalIncomeSinceStartOfYear(): void {
+    const currentYear = new Date().getFullYear();
+  
+    // Initialize total income accumulator
+    let totalIncomeSinceStartOfYear = 0;
+  
+    // Loop through each month of the year (January = 1, December = 12)
+    for (let month = 1; month <= new Date().getMonth() + 1; month++) {
+      this.authService.getMonthlyIncome(month, currentYear).subscribe(
+        (response) => {
+          // Ensure that the total_income is treated as a number and handle possible parsing issues
+          const monthlyIncome = parseFloat(response.total_income.replace(/[^0-9.-]+/g, "")); // Remove non-numeric characters
+          if (!isNaN(monthlyIncome)) {
+            totalIncomeSinceStartOfYear += monthlyIncome;  // Add income from this month
+          } else {
+            console.error(`Invalid income data for month ${month}:`, response.total_income);
+          }
+        },
+        (error) => {
+          console.error(`Error fetching income for month ${month}:`, error);
+        },
+        () => {
+          // This will run once all months' income have been fetched (optional)
+          console.log('Total income from January to today:', totalIncomeSinceStartOfYear);
+          this.totalIncome = totalIncomeSinceStartOfYear;  // Update the total income
+        }
+      );
+    }
+  }
+  
+  
   // Updated method to handle only 'remove_tenant'
   updateApartmentAndTenant(action: string) {
     if (!this.selectedApartmentId) {

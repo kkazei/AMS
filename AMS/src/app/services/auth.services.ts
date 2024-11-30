@@ -416,4 +416,25 @@ createConcerns(data: FormData): Observable<any> {
     });
   }
 
+  getMonthlyIncome(month: number, year: number): Observable<any> {
+    return new Observable((observer) => {
+      axios
+        .get(`${this.apiUrl}getMonthlyIncome`, {
+          params: {
+            month: month,
+            year: year
+          }
+        })
+        .then((res) => {
+          observer.next(res.data);
+          observer.complete();
+        })
+        .catch((error) => {
+          console.error('Error fetching monthly income:', error);
+          observer.error(error);
+        });
+    });
+  }
+
+
 }
