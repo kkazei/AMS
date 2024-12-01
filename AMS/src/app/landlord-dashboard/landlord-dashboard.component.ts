@@ -10,7 +10,7 @@ Chart.register(...registerables); // Register Chart.js components
 @Component({
   selector: 'app-landlord-dashboard',
   standalone: true,
-  imports: [FormsModule, CommonModule],
+  imports: [FormsModule, CommonModule,],
   templateUrl: './landlord-dashboard.component.html',
   styleUrls: ['./landlord-dashboard.component.css']
 })
@@ -32,6 +32,7 @@ export class LandlordDashboardComponent implements OnInit {
   concerns: any[] = [];
   concerntitle: string = '';
   concerncontent: string = '';
+  isCollapsed = false;
   
   
   
@@ -424,5 +425,6 @@ export class LandlordDashboardComponent implements OnInit {
       this.message = 'Invalid action specified.';
     }
   }
+
 
 }

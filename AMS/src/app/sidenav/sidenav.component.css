@@ -98,3 +98,26 @@
   .toggle-button:hover {
     background-color: #424242;
   }
+
+  /* Responsive Design */
+@media screen and (max-width: 768px) {
+  .sidenav {
+      width: 60px;
+  }
+
+  .sidenav.collapsed {
+      width: 0;
+  }
+
+  .sidenav-header h2 {
+      display: none;
+  }
+
+  .sidenav-links li a {
+      display: none;
+  }
+
+  .sidenav-links li {
+      justify-content: center;
+  }
+}
