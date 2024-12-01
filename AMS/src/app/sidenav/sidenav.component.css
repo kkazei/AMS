@@ -1,6 +1,6 @@
 /* Basic styling for sidenav */
 .sidenav {
-    width: 250px;
+    width: 200px;
     height: 100%;
     background-color: #3c5a97;
     color: white;
@@ -11,6 +11,7 @@
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    margin-right: 20px;
   }
   
   .sidenav.collapsed {
