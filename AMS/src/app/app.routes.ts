@@ -12,6 +12,7 @@ import { TenantRegisterComponent } from './tenant-register/tenant-register.compo
 import { LandlordConcernsComponent } from './landlord-concerns/landlord-concerns.component';
 import { LeaseManagementComponent } from './lease-management/lease-management.component';
 import { InvoicesListComponent } from './invoices-list/invoices-list.component';
+import { MaintenanceComponent } from './maintenance/maintenance.component';
 
 
 
@@ -29,6 +30,7 @@ export const routes: Routes = [
   { path: 'landlord-concerns', component: LandlordConcernsComponent},
   {path: 'lease-management', component: LeaseManagementComponent},
   {path: 'invoices-list', component: InvoicesListComponent},
+  {path: 'maintenance', component: MaintenanceComponent},
  
 
 
