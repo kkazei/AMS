@@ -4,7 +4,7 @@
     height: 100%;
     background-color: #3c5a97;
     color: white;
-    font-family: Arial, sans-serif;
+    font-family: Roboto, sans-serif;
     box-shadow: 2px 0 5px rgba(0, 0, 0, 0.3);
     overflow-x: hidden;
     transition: width 0.3s ease-in-out;

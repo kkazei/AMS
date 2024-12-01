@@ -2,7 +2,7 @@
 .dashboard-container {
   display: flex;
   height: 100vh;
-  font-family: Arial, sans-serif;
+  font-family: Roboto, sans-serif;
 }
 
 /* Main Content */
@@ -541,7 +541,7 @@ td.paid {
 /* Body */
 .modal-body {
   padding: 20px;
-  font-family: 'Arial', sans-serif;
+  font-family: 'Roboto', sans-serif;
   color: #34495e;
   line-height: 1.5;
 }
@@ -610,7 +610,7 @@ td.paid {
 }
 
 .modal-footer .tenants-list {
-  font-family: 'Arial', sans-serif;
+  font-family: 'Roboto', sans-serif;
   color: #2c3e50;
 }
 
