@@ -2,7 +2,7 @@
 .sidenav {
     width: 250px;
     height: 100%;
-    background-color: #1e1e2f;
+    background-color: #3c5a97;
     color: white;
     font-family: Arial, sans-serif;
     box-shadow: 2px 0 5px rgba(0, 0, 0, 0.3);
@@ -22,14 +22,63 @@
     margin: 20px 0;
   }
   
-  .sidenav-header h2 {
+/* Default styling for logo when sidenav is not collapsed */
+.sidenav-header .text-logo {
+  cursor: pointer;
+  display: inline-block;
+  transition: transform 0.5s cubic-bezier(0.25, 0.8, 0.25, 1), opacity 0.5s cubic-bezier(0.25, 0.8, 0.25, 1);  /* Smoother transition */
+  font-size: 1.2em;  /* Optional: Adjust the size for larger open state */
+}
+
+/* Styling for the logo when sidenav is collapsed */
+.sidenav-header .logo {
+  cursor: pointer;
+  display: inline-block;
+  transition: transform 0.7s cubic-bezier(0.25, 0.8, 0.25, 1), background-color 0.7s cubic-bezier(0.25, 0.8, 0.25, 1), border-radius 0.7s cubic-bezier(0.25, 0.8, 0.25, 1);  /* Smoother transition */
+  font-size: 1.5em;  /* Larger size for collapsed state */
+  opacity: 1;  /* Ensure it is visible when collapsed */
+  border-radius: 8px;  /* Smooth edges */
+}
+
+/* Hover effect on the logo */
+.sidenav-header .logo:hover {
+  transform: scale(1.1);  /* Slightly enlarge the logo when hovered */
+  background-color: #ffffff;  /* Change background color on hover */
+  border-radius: 8px;  /* Smooth edges */
+}
+
+/* When sidenav is collapsed, apply these changes to the logo */
+.sidenav.collapsed .logo {
+  transform: scale(1.2);  /* Scale up the collapsed logo */
+}
+
+/* When the sidenav is collapsed, hide the text logo smoothly */
+.sidenav.collapsed .text-logo {
+  opacity: 0;  /* Fade out the text logo */
+  visibility: hidden;  /* Ensure it's completely hidden */
+}
+
+/* When the sidenav is open, the text logo should fade in */
+.sidenav:not(.collapsed) .text-logo {
+  opacity: 1;  /* Fade in the text logo */
+  visibility: visible;  /* Ensure it's visible */
+}
+
+
+
+
+.sidenav-header h2 {
     color: white;
     font-size: 20px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
     transition: opacity 0.3s ease-in-out;
-  }
+    cursor: pointer;  /* Makes the text clickable as well */
+}
+
+
+
   
   .sidenav.collapsed .sidenav-header h2 {
     opacity: 0;
@@ -49,7 +98,7 @@
   }
   
   .sidenav-links li.active {
-    background-color: #575757;
+    background-color: #1b1929;
   }
   
   .sidenav-links li a {
@@ -60,9 +109,16 @@
     flex-grow: 1;
   }
   
-  .sidenav-links li a:hover {
-    background-color: #424242;
-  }
+ /* Hover effect on the entire list item */
+.sidenav-links li:hover {
+  background-color: #1b1929;
+}
+
+/* Remove hover effect on anchor tag since li is now controlling the hover */
+.sidenav-links li a:hover {
+  background-color: transparent;  /* Ensure only li gets the background color */
+}
+
   
   .sidenav-links li .icon {
     margin-right: 10px;
@@ -120,4 +176,39 @@
   .sidenav-links li {
       justify-content: center;
   }
+
+  .sidenav-links .active a {
+    color: #007bff;
+    font-weight: bold;
+}
+/* Styling for the logout button */
+/* Styling for the logout button */
+.logout-icon {
+  background-color: transparent;  /* Transparent background to match the sidenav */
+  border: 2px solid #ffffff;  /* White border to blend with the sidenav's theme */
+  color: white;  /* White icon color to maintain consistency */
+  font-size: 22px;  /* Slightly smaller icon for a balanced look */
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  padding: 8px;  /* Adjust padding for a compact, square button */
+  border-radius: 8px;  /* Rounded corners to match the design aesthetic */
+  align-self: center;  /* Align it to the center of the sidenav */
+  margin-top: auto;  /* Keep it at the bottom of the sidenav */
+  width: 40px;  /* Square size */
+  height: 40px;  /* Square size */
+}
+
+/* Hover effect for the logout button */
+.logout-icon:hover {
+  background-color: #3c5a97;  /* Matching the sidenav's background color on hover */
+  color: white;  /* Keep the icon white */
+  transform: scale(1.1);  /* Slightly enlarge on hover */
+}
+
+/* Focus effect */
+.logout-icon:focus {
+  outline: none;  /* Remove the outline on focus */
+}
+
+
 }

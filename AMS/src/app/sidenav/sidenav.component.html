@@ -1,24 +1,42 @@
 <div class="sidenav" [class.collapsed]="isCollapsed">
-    <div class="sidenav-header">
-        <h2>UnitPay Solutions</h2>
+    <div class="sidenav-header" (click)="toggleSidenav()">
+        <img *ngIf="!isCollapsed" src="TextLogo.png" alt="UnitPay Solutions" height="200px" class="text-logo">
+        <img *ngIf="isCollapsed" src="TextLogo.png" alt="UnitPay Solutions Logo" height="40px" class="logo">    
     </div>
     <ul class="sidenav-links">
-        <li class="active">
-            <span class="icon">&#128200;</span>
-            <a href="#">Dashboard</a>
+        <li routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+            <span class="icon">
+                <i class="fa-solid fa-house"></i>
+            </span>
+            <a routerLink="/landlord-dashboard">Dashboard</a>
         </li>
-        <li class="active">
-            <span class="icon">&#128202;</span>
-            <a href="#">Invoices</a>
+        <li routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+            <span class="icon">
+                <i class="fa-solid fa-file-invoice"></i>
+            </span>
+            <a routerLink="/invoices-list">Invoices</a>
         </li>
-        <li>
-            <span class="icon">&#128231;</span>
-            <a href="#">Mailing</a>
+        <li routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+            <span class="icon">
+                <i class="fa-solid fa-envelope"></i>
+            </span>
+            <a routerLink="/compose-mail">Mailing</a>
         </li>
-        <li>
-            <span class="icon">&#128221;</span>
-            <a href="#">Lease Agreement</a>
+        <li routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+            <span class="icon">
+                <i class="fa-solid fa-handshake"></i>
+            </span>
+            <a routerLink="/lease-management">Lease Agreement</a>
         </li>
-    </ul>
-    <button class="toggle-button" (click)="toggleSidenav()">&#9776;</button>
+        <li routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+            <span class="icon">
+                <i class="fa-solid fa-toolbox"></i>
+            </span>
+            <a routerLink="/maintenance">Maintenance</a>
+        </li>
+    </ul>    
+    <button class="logout-icon" (click)="logout()">
+        <i class="fa-solid fa-right-from-bracket"></i>
+    </button>
+    
 </div>
