@@ -12,16 +12,28 @@ import { Observable } from 'rxjs';
   styleUrls: ['./maintenance.component.css'],
 })
 export class MaintenanceComponent {
-  maintenanceData: any = {
+  newMaintenanceData: any = {
     apartment_id: '',
     landlord_id: '',
     start_date: '',
     end_date: '',
     description: '',
     expenses: 0,
+    status: 'pending' // Default status
+  };
+  editMaintenanceData: any = {
+    maintenance_id: null,
+    apartment_id: '',
+    landlord_id: '',
+    start_date: '',
+    end_date: '',
+    description: '',
+    expenses: 0,
+    status: 'pending' // Default status
   };
   apartments: any[] = [];
   maintenanceList: any[] = []; // Property to hold fetched maintenance tasks
+  editMode: boolean = false; // Flag to toggle edit mode
 
   constructor(private authService: AuthService) {}
 
@@ -42,7 +54,8 @@ export class MaintenanceComponent {
     if (userProfile) {
       console.log('User profile:', userProfile);
       // Assuming `id` is the user ID (landlord ID)
-      this.maintenanceData.landlord_id = userProfile.id;
+      this.newMaintenanceData.landlord_id = userProfile.id;
+      this.editMaintenanceData.landlord_id = userProfile.id;
     }
   }
 
@@ -58,38 +71,92 @@ export class MaintenanceComponent {
     );
   }
 
+  // Method to fetch maintenance tasks
+  getMaintenance(): void {
+    this.authService.getMaintenance().subscribe(
+      (response) => {
+        console.log('Maintenance tasks fetched:', response);
+        this.maintenanceList = response.data; // Access the 'data' property that contains the maintenance tasks
+      },
+      (error) => {
+        console.error('Error fetching maintenance tasks:', error);
+      }
+    );
+  }
 
- // Method to fetch maintenance tasks
-getMaintenance(): void {
-  this.authService.getMaintenance().subscribe(
-    (response) => {
-      console.log('Maintenance tasks fetched:', response);
-      this.maintenanceList = response.data; // Access the 'data' property that contains the maintenance tasks
-    },
-    (error) => {
-      console.error('Error fetching maintenance tasks:', error);
-    }
-  );
-}
-
-// Method to find apartment by ID
-getApartmentById(apartmentId: number) {
-  return this.apartments.find(apartment => apartment.apartment_id === apartmentId);
-}
-
+  // Method to find apartment by ID
+  getApartmentById(apartmentId: number) {
+    return this.apartments.find(apartment => apartment.apartment_id === apartmentId);
+  }
 
   // Method to submit new maintenance task
-  onSubmit(): void {
-    this.authService.addMaintenance(this.maintenanceData).subscribe(
+  onAddSubmit(): void {
+    this.authService.addMaintenance(this.newMaintenanceData).subscribe(
       (response) => {
         console.log('Maintenance added successfully:', response);
         alert('Maintenance task added successfully!');
         this.getMaintenance(); // Refresh the list of maintenance tasks after adding
+        this.resetNewMaintenanceData(); // Reset the form
       },
       (error) => {
         console.error('Error adding maintenance:', error);
         alert('Failed to add maintenance task. Please try again.');
       }
     );
+  }
+
+  // Method to submit updated maintenance task
+  onEditSubmit(): void {
+    this.authService.updateMaintenance(this.editMaintenanceData).subscribe(
+      (response) => {
+        console.log('Maintenance updated successfully:', response);
+        alert('Maintenance task updated successfully!');
+        this.getMaintenance(); // Refresh the list of maintenance tasks after updating
+        this.cancelEdit(); // Exit edit mode
+      },
+      (error) => {
+        console.error('Error updating maintenance:', error);
+        alert('Failed to update maintenance task. Please try again.');
+      }
+    );
+  }
+
+  // Method to edit a maintenance task
+  editMaintenance(maintenance: any): void {
+    this.editMaintenanceData = { ...maintenance }; // Copy the maintenance task data to the form
+    this.editMode = true; // Enable edit mode
+  }
+
+  // Method to cancel edit mode
+  cancelEdit(): void {
+    this.editMode = false; // Disable edit mode
+    this.resetEditMaintenanceData(); // Reset the edit form
+  }
+
+  // Method to reset new maintenance data form
+  resetNewMaintenanceData(): void {
+    this.newMaintenanceData = {
+      apartment_id: '',
+      landlord_id: this.newMaintenanceData.landlord_id, // Preserve landlord_id
+      start_date: '',
+      end_date: '',
+      description: '',
+      expenses: 0,
+      status: 'pending' // Default status
+    };
+  }
+
+  // Method to reset edit maintenance data form
+  resetEditMaintenanceData(): void {
+    this.editMaintenanceData = {
+      maintenance_id: null,
+      apartment_id: '',
+      landlord_id: this.editMaintenanceData.landlord_id, // Preserve landlord_id
+      start_date: '',
+      end_date: '',
+      description: '',
+      expenses: 0,
+      status: 'pending' // Default status
+    };
   }
 }

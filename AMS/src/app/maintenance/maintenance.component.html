@@ -1,59 +1,120 @@
-<form (submit)="onSubmit()">
+<!-- Add Maintenance Form -->
+<h3>Add Maintenance Task</h3>
+<form (submit)="onAddSubmit()">
+  <label>
+    Apartment:
+    <select [(ngModel)]="newMaintenanceData.apartment_id" name="apartment_id" required>
+      <option *ngFor="let apartment of apartments" [value]="apartment.apartment_id">
+        {{ apartment.room }} (ID: {{ apartment.apartment_id }})
+      </option>
+    </select>
+  </label>
+  <br />
+
+  <!-- Hidden input for landlord ID -->
+  <input type="hidden" [(ngModel)]="newMaintenanceData.landlord_id" name="landlord_id" />
+
+  <label>
+    Start Date:
+    <input type="date" [(ngModel)]="newMaintenanceData.start_date" name="start_date" required />
+  </label>
+  <br />
+  <label>
+    End Date (optional):
+    <input type="date" [(ngModel)]="newMaintenanceData.end_date" name="end_date" />
+  </label>
+  <br />
+  <label>
+    Description:
+    <textarea [(ngModel)]="newMaintenanceData.description" name="description" required></textarea>
+  </label>
+  <br />
+  <label>
+    Expenses:
+    <input type="number" [(ngModel)]="newMaintenanceData.expenses" name="expenses" step="0.01" />
+  </label>
+  <br />
+  <label>
+    Status:
+    <select [(ngModel)]="newMaintenanceData.status" name="status" required>
+      <option value="pending">Pending</option>
+      <option value="ongoing">Ongoing</option>
+      <option value="completed">Completed</option>
+    </select>
+  </label>
+  <br />
+  <button type="submit">Add Maintenance</button>
+</form>
+
+<!-- Edit Maintenance Form -->
+<div *ngIf="editMode">
+  <h3>Edit Maintenance Task</h3>
+  <form (submit)="onEditSubmit()">
     <label>
       Apartment:
-      <select [(ngModel)]="maintenanceData.apartment_id" name="apartment_id" required>
+      <select [(ngModel)]="editMaintenanceData.apartment_id" name="apartment_id" required>
         <option *ngFor="let apartment of apartments" [value]="apartment.apartment_id">
           {{ apartment.room }} (ID: {{ apartment.apartment_id }})
         </option>
       </select>
     </label>
     <br />
-  
+
     <!-- Hidden input for landlord ID -->
-    <input type="hidden" [(ngModel)]="maintenanceData.landlord_id" name="landlord_id" />
-  
+    <input type="hidden" [(ngModel)]="editMaintenanceData.landlord_id" name="landlord_id" />
+
     <label>
       Start Date:
-      <input type="date" [(ngModel)]="maintenanceData.start_date" name="start_date" required />
+      <input type="date" [(ngModel)]="editMaintenanceData.start_date" name="start_date" required />
     </label>
     <br />
     <label>
       End Date (optional):
-      <input type="date" [(ngModel)]="maintenanceData.end_date" name="end_date" />
+      <input type="date" [(ngModel)]="editMaintenanceData.end_date" name="end_date" />
     </label>
     <br />
     <label>
       Description:
-      <textarea [(ngModel)]="maintenanceData.description" name="description" required></textarea>
+      <textarea [(ngModel)]="editMaintenanceData.description" name="description" required></textarea>
     </label>
     <br />
     <label>
       Expenses:
-      <input type="number" [(ngModel)]="maintenanceData.expenses" name="expenses" step="0.01" />
+      <input type="number" [(ngModel)]="editMaintenanceData.expenses" name="expenses" step="0.01" />
     </label>
     <br />
-    <button type="submit">Add Maintenance</button>
+    <label>
+      Status:
+      <select [(ngModel)]="editMaintenanceData.status" name="status" required>
+        <option value="pending">Pending</option>
+        <option value="ongoing">Ongoing</option>
+        <option value="completed">Completed</option>
+      </select>
+    </label>
+    <br />
+    <button type="submit">Update Maintenance</button>
+    <button type="button" (click)="cancelEdit()">Cancel</button>
   </form>
+</div>
 
- <!-- Display Maintenance Tasks -->
+<!-- Display Maintenance Tasks -->
 <div *ngIf="maintenanceList.length > 0">
-    <h3>Maintenance Tasks</h3>
-    <ul>
-      <li *ngFor="let maintenance of maintenanceList">
-        <strong>Apartment:</strong> 
-        {{ getApartmentById(maintenance.apartment_id)?.room || 'Unknown Apartment' }} <br />
-        <strong>Start Date:</strong> {{ maintenance.start_date }} <br />
-        <strong>End Date:</strong> {{ maintenance.end_date || 'N/A' }} <br />
-        <strong>Description:</strong> {{ maintenance.description }} <br />
-        <strong>Expenses:</strong> {{ maintenance.expenses | currency }} <br />
-      </li>
-    </ul>
-  </div>
-  
-  <!-- If no maintenance tasks -->
-  <div *ngIf="maintenanceList.length === 0">
-    <p>No maintenance tasks found.</p>
-  </div>
-  
-  
-  
+  <h3>Maintenance Tasks</h3>
+  <ul>
+    <li *ngFor="let maintenance of maintenanceList">
+      <strong>Apartment:</strong> 
+      {{ getApartmentById(maintenance.apartment_id)?.room || 'Unknown Apartment' }} <br />
+      <strong>Start Date:</strong> {{ maintenance.start_date }} <br />
+      <strong>End Date:</strong> {{ maintenance.end_date || 'N/A' }} <br />
+      <strong>Description:</strong> {{ maintenance.description }} <br />
+      <strong>Expenses:</strong> {{ maintenance.expenses | currency }} <br />
+      <strong>Status:</strong> {{ maintenance.status }} <br />
+      <button (click)="editMaintenance(maintenance)">Edit</button>
+    </li>
+  </ul>
+</div>
+
+<!-- If no maintenance tasks -->
+<div *ngIf="maintenanceList.length === 0">
+  <p>No maintenance tasks found.</p>
+</div>

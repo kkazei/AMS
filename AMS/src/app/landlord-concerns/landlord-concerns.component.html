@@ -1,1 +1,37 @@
-<p>landlord-concerns works!</p>
+<!-- Display Concerns -->
+<div *ngIf="concerns && concerns.length" class="concerns-list">
+    <h2>Concerns</h2>
+    <div *ngFor="let concern of concerns" class="concern-item">
+      <h3>{{ concern.title }}</h3>
+      <p>{{ concern.content }}</p>
+      <p>Status: {{ concern.status }}</p> <!-- Display the status -->
+      <div *ngIf="concern.image_path">
+        <img [src]="concern.image_path" alt="Concern Image" class="concern-image" />
+      </div>
+      <button (click)="selectConcern(concern)">Edit</button>
+    </div>
+  </div>
+  <div *ngIf="!concerns || !concerns.length" class="no-concerns">
+    <p>No concerns available.</p>
+  </div>
+  
+  <!-- Update Concern Form -->
+  <div *ngIf="selectedConcern" class="update-concern-form">
+    <h2>Update Concern</h2>
+    <form (ngSubmit)="updateConcern()">
+      <label for="title">Title:</label>
+      <input id="title" [(ngModel)]="selectedConcern.title" name="title" required />
+  
+      <label for="content">Content:</label>
+      <textarea id="content" [(ngModel)]="selectedConcern.content" name="content" required></textarea>
+  
+      <label for="status">Status:</label>
+      <select id="status" [(ngModel)]="selectedConcern.status" name="status" required>
+        <option value="pending">Pending</option>
+        <option value="solved">Solved</option>
+      </select>
+  
+      <button type="submit">Update</button>
+      <button type="button" (click)="selectedConcern = null">Cancel</button>
+    </form>
+  </div>
