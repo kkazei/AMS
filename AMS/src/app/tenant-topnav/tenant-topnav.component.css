@@ -1,0 +1,123 @@
+/* Basic styling for topnav */
+.topnav {
+    width: 100%;
+    background-color: #3c5a97;
+    color: white;
+    font-family: Arial, sans-serif;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  
+  .topnav-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+  }
+  
+  .topnav-header .logo {
+    cursor: pointer;
+    transition: transform 0.5s cubic-bezier(0.25, 0.8, 0.25, 1), opacity 0.5s cubic-bezier(0.25, 0.8, 0.25, 1);
+    font-size: 1.2em;
+  }
+  
+  .topnav-header .logo:hover {
+    transform: scale(1.1);
+  }
+  
+  .menu-icon {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 24px;
+    cursor: pointer;
+  }
+  
+  .topnav-links {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .topnav-links.collapsed {
+    display: none;
+  }
+  
+  .topnav-links li {
+    padding: 10px 16px;
+    transition: background-color 0.3s ease, padding-left 0.3s ease;
+    display: flex;
+    align-items: center;
+  }
+  
+  .topnav-links li.active {
+    background-color: #1b1929;
+  }
+  
+  .topnav-links li a {
+    color: white;
+    text-decoration: none;
+    font-size: 18px;
+    display: block;
+    flex-grow: 1;
+  }
+  
+  /* Hover effect on the entire list item */
+  .topnav-links li:hover {
+    background-color: #1b1929;
+  }
+  
+  /* Remove hover effect on anchor tag since li is now controlling the hover */
+  .topnav-links li a:hover {
+    background-color: transparent;
+  }
+  
+  .topnav-links li .icon {
+    margin-right: 10px;
+    font-size: 20px;
+  }
+  
+ /* Styling for the logout button */
+/* Styling for the logout button */
+.logout-icon {
+    background-color: transparent;
+    border: none;
+    color: white;
+    font-size: 24px; /* Larger icon for better visibility */
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+    padding: 10px; /* Increased padding for better clickable area */
+    border-radius: 50%; /* Makes the button circular */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 50px; /* Larger button size */
+    height: 50px; /* Matching height for a perfect circle */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Subtle shadow effect */
+}
+
+/* Hover effect for the logout button */
+.logout-icon:hover {
+    background-color: #1b1929; /* Darker background on hover */
+    color: white;
+    transform: scale(1.1); /* Slightly enlarges the button */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4); /* More pronounced shadow on hover */
+}
+
+/* Additional hover effects */
+.logout-icon:hover {
+    background-color: #3c5a97; /* Change the background to match navbar */
+    color: white;
+    transform: scale(1.2); /* Bigger effect for the button */
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3); /* Stronger shadow on hover */
+}
+
+/* Focus effect */
+.logout-icon:focus {
+    outline: none;
+}
+

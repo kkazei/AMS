@@ -1,8 +1,10 @@
 <div class="app-container">
-  <div *ngIf="shouldShowNav()" class="sidenav-container">
+  <div *ngIf="shouldShowNav() && !isMobile()" class="sidenav-container">
     <app-sidenav></app-sidenav>
   </div>
   <div class="content-container">
+    <app-topnav *ngIf="shouldShowNav() && isMobile()"></app-topnav>
+    <app-tenant-topnav *ngIf="shouldShowTenantNav() && isMobile()"></app-tenant-topnav>
     <router-outlet></router-outlet>
   </div>
 </div>
