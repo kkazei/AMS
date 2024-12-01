@@ -423,7 +423,7 @@ td.paid {
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   margin-bottom: 20px;
   padding: 65px;
-  min-width: 65px;
+  width: 440px;
   transition: all 0.3s ease-in-out;
 }
 
@@ -431,6 +431,7 @@ td.paid {
   transform: translateY(-5px);
   box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
 }
+
 
 /* Post Title */
 .post-title {
@@ -464,6 +465,7 @@ td.paid {
 
   .post-card {
     padding: 15px;
+    width: 330px;
   }
 
   .post-title {
