@@ -1,3 +1,5 @@
+<h2>Lease Agreements</h2>
+
 <div class="grid-container">
   <!-- Display tenants in a grid -->
   <div
@@ -5,43 +7,51 @@
     *ngFor="let tenant of tenants; trackBy: trackByFn"
     (click)="selectTenant(tenant)"
   >
+    <i class="fa-solid fa-user"></i><br />
     <p><strong>Room:</strong> {{ tenant.room }}</p>
     <p><strong>Tenant:</strong> {{ tenant.tenant_fullname }}</p>
     <p *ngIf="!tenant.tenant_fullname"><em>No tenant assigned</em></p>
   </div>
 </div>
 
-<!-- Selected Tenant Details -->
-<div *ngIf="selectedTenant" class="details">
-  <h3>Details for Tenant: {{ selectedTenant.tenant_fullname || 'Not Assigned' }}</h3>
-  <p><strong>Room:</strong> {{ selectedTenant.room || 'N/A' }}</p>
-  <p><strong>Assigned Date:</strong> {{ selectedTenant.assigned_date || 'N/A' }}</p>
-  <p><strong>Rent:</strong> {{ selectedTenant.rent || 'N/A' }}</p>
-</div>
+<!-- Modal -->
+<div *ngIf="selectedTenant" class="modal-overlay">
+  <div class="modal-content">
+    <button class="close-btn" (click)="closeAll()">×</button>
 
-<!-- Lease Images Section -->
-<div *ngIf="leaseImages.length > 0" class="lease-images">
-  <h4>Uploaded Lease Agreements:</h4>
-  <div *ngFor="let image of leaseImages">
-    <img [src]="image.img" alt="Lease Image" class="lease-image" />
-  </div>
-</div>
+    <!-- Selected Tenant Details -->
+    <div class="details">
+      <h3>Details for Tenant: {{ selectedTenant.tenant_fullname || 'Not Assigned' }}</h3>
+      <p><strong>Room:</strong> {{ selectedTenant.room || 'N/A' }}</p>
+      <p><strong>Assigned Date:</strong> {{ selectedTenant.assigned_date || 'N/A' }}</p>
+      <p><strong>Rent:</strong> {{ selectedTenant.rent || 'N/A' }}</p>
+    </div>
 
-<!-- File Upload Section -->
-<div *ngIf="selectedTenant" class="upload-section">
-  <div>
-    <label class="btn btn-default p-0">
-      <input type="file" (change)="onFileSelected($event)" />
-    </label>
-    <button (click)="upload()">Upload Lease Agreement</button>
-  </div>
-  <div *ngIf="preview">
-    <h4>Preview:</h4>
-    <img [src]="preview" class="preview" />
-  </div>
-</div>
+    <!-- Lease Images Section -->
+    <div *ngIf="leaseImages.length > 0" class="lease-images">
+      <h4>Uploaded Lease Agreements:</h4>
+      <div *ngFor="let image of leaseImages">
+        <img [src]="image.img" alt="Lease Image" class="lease-image" />
+      </div>
+    </div>
 
-<!-- Status Message -->
-<div *ngIf="message" class="alert alert-secondary" role="alert">
-  {{ message }}
+    <!-- File Upload Section -->
+    <div class="upload-section">
+      <div>
+        <label class="btn btn-default p-0">
+          <input type="file" (change)="onFileSelected($event)" />
+        </label>
+        <button (click)="upload()">Upload Lease Agreement</button>
+      </div>
+      <div *ngIf="preview">
+        <h4>Preview:</h4>
+        <img [src]="preview" class="preview" />
+      </div>
+    </div>
+
+    <!-- Status Message -->
+    <div *ngIf="message" class="alert alert-secondary" role="alert">
+      {{ message }}
+    </div>
+  </div>
 </div>

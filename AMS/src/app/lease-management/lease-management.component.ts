@@ -120,4 +120,12 @@ export class LeaseManagementComponent {
   trackByFn(index: number, item: any) {
     return item.tenant_id;
   }
+
+  closeAll() {
+    this.selectedTenant = null; // Hide tenant details
+    this.leaseImages = [];     // Clear lease images
+    this.preview = "";       // Clear the file preview
+    this.message = "";       // Clear any status message
+  }
+
 }

@@ -55,9 +55,7 @@
             <button type="button" class="btn btn-primary" (click)="updateApartmentAndTenant('assign_tenant')">
               Assign Tenant
             </button>
-            <button type="button" class="btn btn-warning" (click)="updateApartmentAndTenant('remove_tenant')">
-              Remove Tenant
-            </button>
+            
           </div>
         </form>
       </div>
@@ -74,6 +72,8 @@
                   <th>Email</th>
                   <th>Tenant ID</th>
                   <th>Room</th>
+                  <th>Remove Tenant</th>
+                  <th></th>
                 </tr>
               </thead>
               <tbody>
@@ -82,6 +82,9 @@
                   <td>{{ tenant.tenant_email }}</td>
                   <td>{{ tenant.tenant_id }}</td>
                   <td>{{ tenant.room ? tenant.room : 'Not Assigned' }}</td>
+                  <td><button type="button" class="btn btn-warning" (click)="updateApartmentAndTenant('remove_tenant')">
+                    Remove
+                  </button><td>
                 </tr>
               </tbody>
             </table>
@@ -250,7 +253,6 @@
 
             <!-- Modal footer -->
             <div class="modal-footer">
-             
               <div *ngIf="posts && posts.length" class="posts-list">
                 <h2 class="post-h2">Announcements</h2>
                 <div *ngFor="let post of posts" class="post-card">
@@ -261,7 +263,6 @@
                   </div>
                 </div>
               </div>
-              
             </div>
             </div>
 

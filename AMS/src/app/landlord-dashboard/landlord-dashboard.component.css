@@ -238,7 +238,7 @@ td.paid {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  min-width: 100px;
+  min-width: 200px;
   padding: 20px;
   }
 
@@ -434,7 +434,7 @@ td.paid {
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   margin-bottom: 20px;
   padding: 65px;
-  width: 440px;
+  width: 740px;
   transition: all 0.3s ease-in-out;
 }
 
@@ -476,7 +476,7 @@ td.paid {
 
   .post-card {
     padding: 15px;
-    width: 330px;
+    width: 700px;
   }
 
   .post-title {
@@ -512,7 +512,7 @@ td.paid {
 
 .modal-dialog {
 
-  max-width: 520px;
+  max-width: 820px;
   border-radius: 8px;
 
 }
@@ -615,15 +615,12 @@ td.paid {
 
 /* Footer */
 .modal-footer {
-  padding: 0px;
+
   background-color: #ecf0f1;
   border-top: 1px solid #bdc3c7;
 }
 
-.modal-footer .tenants-list {
-  font-family: 'Roboto', sans-serif;
-  color: #2c3e50;
-}
+
 
 .modal-footer .tenants-list h2 {
   font-size: 1.2rem;
@@ -632,26 +629,18 @@ td.paid {
 }
 
 .modal-footer .tenants-list {
+  margin-right: 20px;
+  width: 770px;
   list-style-type: none;
   padding: 0;
-}
-
-.modal-footer .tenants-list {
-  padding: 10px;
-  border-bottom: 1px solid #bdc3c7;
-}
-
-.modal-footer .tenants-list {
-  border-bottom: none;
-}
-
-.modal-footer .tenants-list {
   font-size: 1rem;
   color: #3498db;
-}
-
-.modal-footer .tenants-list{
   color: #7f8c8d;
+  border-bottom: none;
+  padding: 10px;
+  border-bottom: 1px solid #bdc3c7;
+  font-family: 'Roboto', sans-serif;
+  color: #2c3e50;
 }
 
 /* Responsive Design */
