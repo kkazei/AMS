@@ -1,11 +1,12 @@
 import { Component } from '@angular/core';
 import { AuthService } from '../services/auth.services';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-invoices-list',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './invoices-list.component.html',
   styleUrl: './invoices-list.component.css'
 })
@@ -16,11 +17,12 @@ export class InvoicesListComponent {
   paymentReferenceNumber: string = '';
   paymentProofOfPayment: File | null = null;
   paymentMessage: string = '';
-  paymentDetails: any = null; // Add this line
-  selectedFile: File | null = null; // Add this line
+  paymentDetails: any = null;
+  selectedFile: File | null = null;
   preview: string = '';
   imageInfos: any[] = [];
   message: string = '';
+  description: string = ''; // Add a field for description
 
   constructor(private authService: AuthService) {}
 
@@ -30,8 +32,8 @@ export class InvoicesListComponent {
       this.userProfile = this.authService.getUserProfileFromToken();
       console.log('Token:', token);
       console.log('User profile:', this.userProfile);
-      this.loadImages(); // Call the new method to load images
-      this.loadPaymentDetails(); // Call the new method to load payment details
+      this.loadImages();
+      this.loadPaymentDetails();
     } else {
       console.warn('Token not found, user is not logged in');
     }
@@ -44,10 +46,9 @@ export class InvoicesListComponent {
         this.paymentDetails = response.map(payment => {
           return {
             ...payment,
-            proof_of_payment: `http://localhost/amsAPI/api/${payment.proof_of_payment}` // Adjust the base URL as needed
+            proof_of_payment: `http://localhost/amsAPI/api/${payment.proof_of_payment}`
           };
         });
-        console.log('Payment details with updated proof of payment image paths:', this.paymentDetails);
       },
       (error) => {
         console.error('Error fetching payment details:', error);
@@ -62,31 +63,35 @@ export class InvoicesListComponent {
           this.imageInfos = response.data.map((image: any) => {
             return {
               ...image,
-              img: `http://localhost/amsAPI/api/${image.img}` // Adjust path as needed
+              img: `http://localhost/amsAPI/api/${image.img}`
             };
           });
         } else {
           console.error('Failed to retrieve images:', response.message);
-          // Handle error message or fallback as needed
         }
       },
       (error) => {
         console.error('Error fetching images:', error);
-        // Handle error as needed
       }
     );
-  }  
+  }
 
   onFileSelected(event: any) {
     const file = event.target.files[0];
     if (file) {
       this.paymentProofOfPayment = file;
+      const reader = new FileReader();
+      reader.onload = (e: any) => {
+        this.preview = e.target.result;
+      };
+      reader.readAsDataURL(file);
     }
   }
 
   upload() {
-    if (this.paymentProofOfPayment) {
-      this.authService.addImage(this.paymentProofOfPayment).subscribe(
+    const landlordId = this.userProfile?.id; // Assuming the landlord_id is part of the user profile
+    if (this.paymentProofOfPayment && this.description && landlordId) {
+      this.authService.addImage(this.paymentProofOfPayment, this.description, landlordId).subscribe(
         (response) => {
           console.log(response);
           this.message = 'File uploaded successfully!';
@@ -98,14 +103,13 @@ export class InvoicesListComponent {
         }
       );
     } else {
-      console.warn('No file selected');
-      this.message = 'Please select a file to upload.';
+      console.warn('No file, description, or landlord ID provided');
+      this.message = 'Please select a file, provide a description, and ensure the landlord ID is available.';
     }
   }
   
 
   trackByFn(index: number, item: any) {
-    return item.imgName; // Use a unique identifier for each item
+    return item.imgName;
   }
-
 }

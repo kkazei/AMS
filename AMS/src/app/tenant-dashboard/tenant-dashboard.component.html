@@ -33,7 +33,10 @@
     <div *ngIf="selectedPaymentMethod === 'qr'">
       <h3>Scan this QR Code to Pay</h3>
       <div *ngIf="imageInfos && imageInfos.length > 0">
-        <img *ngFor="let image of imageInfos" [src]="image.img" alt="QR Code" class="img-thumbnail" height="150px" />
+        <div *ngFor="let image of imageInfos">
+          <h1>{{ image.description }}</h1>
+          <img [src]="image.img" alt="QR Code" class="img-thumbnail" height="150px" />
+        </div>
       </div>
     </div>
 

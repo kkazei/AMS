@@ -439,18 +439,28 @@ createConcerns(data: FormData): Observable<any> {
     });
   }
 
-  addImage(file: File): Observable<any> {
-      const formData = new FormData();
-      formData.append('image', file, file.name);
-      return new Observable((observer) => {
-        axios
-          .post(`${this.apiUrl}/uploadImage`, formData, {
-            headers: {
-              'Content-Type': 'multipart/form-data'
-            }
-          });
-      });
-    }
+  addImage(file: File, description: string, landlord_id: number): Observable<any> {
+    const formData = new FormData();
+    formData.append('image', file, file.name);
+    formData.append('description', description);
+    formData.append('landlord_id', landlord_id.toString());
+  
+    return new Observable((observer) => {
+      axios
+        .post(`${this.apiUrl}/uploadImage`, formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
+        })
+        .then(response => {
+          observer.next(response.data);
+          observer.complete();
+        })
+        .catch(error => {
+          observer.error(error);
+        });
+    });
+  }
 
     loadImage(): Observable<any> {
         return new Observable((observer) => {

@@ -1,85 +1,87 @@
 <div class="row my-4">
-    <div class="col-8">
-      <label class="btn btn-primary p-2 w-100 text-center">
-        <input type="file" (change)="onFileSelected($event)" class="d-none" />
-        <i class="bi bi-upload"></i> Choose File
-      </label>
-    </div>
-  
-    <div class="col-4 d-flex align-items-center">
-      <button (click)="upload()" class="btn btn-success w-100">
-        Upload <i class="bi bi-arrow-up-circle"></i>
-      </button>
-    </div>
+  <div class="col-8">
+    <label class="btn btn-primary p-2 w-100 text-center">
+      <input type="file" (change)="onFileSelected($event)" class="d-none" />
+      <i class="bi bi-upload"></i> Choose File
+    </label>
   </div>
-  
-  <div *ngIf="preview" class="my-3 text-center">
-    <h5>Image Preview</h5>
-    <img [src]="preview" class="preview rounded img-fluid shadow-lg" />
+  <div class="col-8 mt-2">
+    <input type="text" [(ngModel)]="description" class="form-control" placeholder="Enter description" />
   </div>
-  
-  <div *ngIf="message" class="alert alert-info" role="alert">
-    {{ message }}
+
+  <div class="col-4 d-flex align-items-center">
+    <button (click)="upload()" class="btn btn-success w-100">
+      Upload <i class="bi bi-arrow-up-circle"></i>
+    </button>
   </div>
-  
-  <!-- List of Images -->
-  <div class="card" *ngIf="imageInfos && imageInfos.length > 0">
-    <div class="card-header">
-      <h5 class="mb-0">List of Images</h5>
-    </div>
-    <ul class="list-group list-group-flush">
-      <li class="list-group-item" *ngFor="let image of imageInfos; trackBy: trackByFn">
-        <div class="d-flex justify-content-between align-items-center">
-          <p class="mb-0">
-            <a [href]="image.img" target="_blank" class="text-primary">{{ image.imgName }}</a>
-          </p>
-          <img [src]="image.img" [alt]="image.imgName" class="img-thumbnail" height="80px" />
-        </div>
-      </li>
-    </ul>
+</div>
+
+<div *ngIf="preview" class="my-3 text-center">
+  <h5>Image Preview</h5>
+  <img [src]="preview" class="preview rounded img-fluid shadow-lg" />
+</div>
+
+<div *ngIf="message" class="alert alert-info" role="alert">
+  {{ message }}
+</div>
+
+<!-- List of Images -->
+<div class="card" *ngIf="imageInfos && imageInfos.length > 0">
+  <div class="card-header">
+    <h5 class="mb-0">List of Images</h5>
   </div>
-  
-  <div *ngIf="!imageInfos || imageInfos.length === 0">
-    <p>No images found.</p>
+  <ul class="list-group list-group-flush">
+    <li class="list-group-item" *ngFor="let image of imageInfos; trackBy: trackByFn">
+      <div class="d-flex justify-content-between align-items-center">
+        <p class="mb-0">
+          <a [href]="image.img" target="_blank" class="text-primary">{{ image.imgName }} {{image.description }}</a>
+        </p>
+        <img [src]="image.img" [alt]="image.imgName" class="img-thumbnail" height="80px" />
+      </div>
+    </li>
+  </ul>
+</div>
+
+<div *ngIf="!imageInfos || imageInfos.length === 0">
+  <p>No images found.</p>
+</div>
+
+<!-- Payment Details Section -->
+<div class="payment-details-wrapper mt-5">
+  <h2 class="text-center">Payment Details</h2>
+
+  <div *ngIf="paymentDetails && paymentDetails.length; else noPayments">
+    <table class="table table-striped table-bordered mt-3">
+      <thead class="table-light">
+        <tr>
+          <th>Tenant Name</th>
+          <th>Room</th>
+          <th>Amount</th>
+          <th>Reference Number</th>
+          <th>Proof of Payment</th>
+          <th>Payment Date</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let payment of paymentDetails">
+          <td>{{ payment.tenant_fullname }}</td>
+          <td>{{ payment.room || 'N/A' }}</td>
+          <td>{{ payment.amount | currency }}</td>
+          <td>{{ payment.reference_number || 'N/A' }}</td>
+          <td>
+            <a *ngIf="payment.proof_of_payment" [href]="payment.proof_of_payment" target="_blank" class="btn btn-outline-primary btn-sm">
+              View Proof
+            </a>
+            <span *ngIf="!payment.proof_of_payment" class="text-danger">No Proof</span>
+          </td>
+          <td>{{ payment.payment_date | date: 'short' }}</td>
+        </tr>
+      </tbody>
+    </table>
   </div>
-  
-  <!-- Payment Details Section -->
-  <div class="payment-details-wrapper mt-5">
-    <h2 class="text-center">Payment Details</h2>
-  
-    <div *ngIf="paymentDetails && paymentDetails.length; else noPayments">
-      <table class="table table-striped table-bordered mt-3">
-        <thead class="table-light">
-          <tr>
-            <th>Tenant Name</th>
-            <th>Room</th>
-            <th>Amount</th>
-            <th>Reference Number</th>
-            <th>Proof of Payment</th>
-            <th>Payment Date</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let payment of paymentDetails">
-            <td>{{ payment.tenant_fullname }}</td>
-            <td>{{ payment.room || 'N/A' }}</td>
-            <td>{{ payment.amount | currency }}</td>
-            <td>{{ payment.reference_number || 'N/A' }}</td>
-            <td>
-              <a *ngIf="payment.proof_of_payment" [href]="payment.proof_of_payment" target="_blank" class="btn btn-outline-primary btn-sm">
-                View Proof
-              </a>
-              <span *ngIf="!payment.proof_of_payment" class="text-danger">No Proof</span>
-            </td>
-            <td>{{ payment.payment_date | date: 'short' }}</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  
-    <!-- No Payments Placeholder -->
-    <ng-template #noPayments>
-      <p class="text-center">No payment records available.</p>
-    </ng-template>
-  </div>
-  
+
+  <!-- No Payments Placeholder -->
+  <ng-template #noPayments>
+    <p class="text-center">No payment records available.</p>
+  </ng-template>
+</div>
