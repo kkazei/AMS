@@ -1,108 +1,69 @@
-/* General Styles */
-body {
-    font-family: 'Arial', sans-serif;
-    margin: 20px;
-    background-color: #f9f9f9;
-    color: #333;
-    line-height: 1.6;
-  }
-  
-  /* Form Container */
-  form {
-    background: #ffffff;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    max-width: 400px;
-    margin: 20px auto;
-  }
-  
-  h3 {
-    color: #444;
-    text-align: center;
-    margin-bottom: 20px;
-  }
-  
-  /* Form Fields */
-  label {
-    display: block;
-    margin-bottom: 10px;
-    font-weight: bold;
-    color: #555;
-  }
-  
-  input, select, textarea, button {
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 15px;
-    border: 1px solid #ddd;
-    border-radius: 6px;
-    box-sizing: border-box;
-    font-size: 1rem;
-  }
-  
-  /* Textarea Special Styling */
-  textarea {
-    resize: vertical;
-    min-height: 80px;
-  }
-  
-  /* Buttons */
-  button {
-    background-color: #4caf50;
-    color: white;
-    border: none;
-    cursor: pointer;
-    font-size: 1rem;
-    transition: background-color 0.3s ease;
-  }
-  
-  button:hover {
-    background-color: #45a049;
-  }
-  
-  button[type="button"] {
-    background-color: #f44336;
-  }
-  
-  button[type="button"]:hover {
-    background-color: #d32f2f;
-  }
-  
-  /* Task List */
-  ul {
-    list-style-type: none;
-    padding: 0;
-  }
-  
-  li {
-    background: #ffffff;
-    padding: 15px;
-    border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    margin: 10px 0;
-  }
-  
-  li strong {
-    color: #444;
-  }
-  
-  li button {
-    display: inline-block;
-    margin-top: 10px;
-    width: auto;
-    padding: 8px 12px;
-  }
-  
-  
-  /* Responsive Design */
-  @media (max-width: 600px) {
-    form {
-      padding: 15px;
-    }
-  
-    li {
-      padding: 10px;
-    }
-  }
-  
+.container {
+  display: flex;
+  gap: 20px;
+  height: 100vh;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.forms-section {
+  flex: 1;
+  background-color: #f9f9f9;
+  padding: 15px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  overflow-y: auto; /* Ensures the section itself doesn't cause scrolling */
+}
+
+.maintenance-section {
+  flex: 2;
+  background-color: #fff;
+  padding: 15px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  overflow-y: auto; /* Enables vertical scrolling */
+  height: calc(100vh - 40px); /* Matches the container height minus padding */
+}
+
+h3 {
+  margin-top: 0;
+}
+
+form label {
+  display: block;
+  margin-bottom: 10px;
+}
+
+form input, form select, form textarea {
+  width: 100%;
+  margin-top: 5px;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+button {
+  margin-top: 10px;
+  padding: 8px 12px;
+  background-color: #007bff;
+  color: #fff;
+  margin-right: 5px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+}
+
+ul li {
+  margin-bottom: 15px;
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+}

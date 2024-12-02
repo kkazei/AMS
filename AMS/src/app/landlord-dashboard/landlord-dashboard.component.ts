@@ -122,8 +122,8 @@ export class LandlordDashboardComponent implements OnInit {
       modal.style.display = "block";
     }
   }
-  closeConcersModal(){
-    const modal = document.getElementById("ConcernModal")
+  closeConcernsModal(){
+    const modal = document.getElementById("ConcernsModal")
     if(modal != null){
       modal.style.display = "none";
     }

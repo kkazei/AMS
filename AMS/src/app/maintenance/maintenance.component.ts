@@ -30,6 +30,7 @@ export class MaintenanceComponent {
     description: '',
     expenses: 0,
     status: 'pending' // Default status
+    
   };
   apartments: any[] = [];
   maintenanceList: any[] = []; // Property to hold fetched maintenance tasks
