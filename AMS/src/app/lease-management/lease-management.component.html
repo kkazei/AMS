@@ -1,26 +1,33 @@
-<div class="row">
-    <!-- Tenant Selection -->
-    <div class="col-6">
-      <label for="tenantId">Select Tenant</label>
-      <select id="tenantId" [(ngModel)]="tenantId" class="form-control" (change)="onTenantSelect()">
-        <option value="" disabled selected>Select Tenant</option>
-        <option *ngFor="let tenant of tenants" [value]="tenant.tenant_id">
-          {{ tenant.tenant_fullname }}
-        </option>
-      </select>
-    </div>
-  
-    <!-- Room Selection -->
-    <div class="col-6">
-      <label for="room">Select Room</label>
-      <select id="room" [(ngModel)]="room" class="form-control" [disabled]="!tenantId">
-        <option value="" disabled selected>Select Room</option>
-        <option *ngFor="let apartment of apartments" [value]="apartment.room">
-          {{ apartment.room }}
-        </option>
-      </select>
-    </div>
+<div class="grid-container">
+  <div 
+    class="grid-item" 
+    *ngFor="let image of imageInfos; trackBy: trackByFn">
+    <p><strong>Room:</strong> {{ image.room }}</p>
+    <p><strong>{{ image.tenant_fullname }}</strong></p>
   </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="row">
   
   <!-- Display Selected Tenant and Room -->
   <div *ngIf="tenantId && room" class="mt-3">

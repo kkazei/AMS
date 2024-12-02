@@ -2,9 +2,9 @@
     <!-- Top Header -->
     <div class="header">
       <div class="user-info">
-        <h1>Welcome, {{ userProfile?.fullname }} </h1>
+        <h1>{{ userProfile?.fullname }} </h1>
         <p>Room: {{ tenant.room || 'Not Assigned' }}</p>
-      <p>As of {{ currentDate | date:'MMMM dd, yyyy' }}</p>
+      
       </div>
       <div class="balance-info">
         <p>Outstanding Balance</p>
@@ -13,6 +13,9 @@
         <button class="pay-now-btn" (click)="isPaymentFormVisible = true">Pay Now</button>
       </div>
     </div>
+
+
+
 <!-- Payment Form (Hidden until Pay Now is clicked) -->
 <div *ngIf="isPaymentFormVisible" class="payment-details-wrapper">
   <h2>Payment Details</h2>
@@ -56,7 +59,7 @@
 </div>
 
 
-  
+<div class="tenant-grid-container">
     <!-- Grid Section -->
     <div class="grid-container">
       <button class="grid-item" (click)="openProfileModal()">
@@ -216,4 +219,5 @@
 </div>
 <!--End of Lease Modal-->
 
+    </div>
     </div>

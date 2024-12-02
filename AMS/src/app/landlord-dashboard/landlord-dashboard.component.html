@@ -1,12 +1,12 @@
-
+<!-- Dashboard Header -->
+<header class="header">
+  <h2>Welcome, {{ userProfile?.fullname }}</h2>
+  <span class="date">{{ currentDate }}</span>
+</header>
+<div class="tenant-grid-container">
   <!-- Main Content -->
   <main class="content">
-    <!-- Dashboard Header -->
-    <header class="header">
-      <h2>Welcome, {{ userProfile?.fullname }}</h2>
-      <span class="date">{{ currentDate }}</span>
-    </header>
-
+    
     <!-- Main Overview Section -->
     <section class="main-overview">
       <div class="overview-grid">
@@ -328,4 +328,5 @@
 </div>
 <div *ngIf="!concerns || !concerns.length" class="no-concerns">
   <p>No concerns available.</p>
+</div>
 </div>

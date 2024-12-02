@@ -1,0 +1,148 @@
+/* General Styles */
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f9fcff;
+    color: #333;
+    margin: 20px;
+  }
+  
+  /* Container for the Tenant Grid */
+  .tenant-grid-container {
+    padding: 20px;
+    background-color: #eaf8ff;
+    border-radius: 16px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-top: 20px;
+  }
+
+
+
+
+
+
+/* Add this CSS */
+.grid-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); /* Adjust button size */
+    gap: 15px;
+    padding: 20px;
+    background-color: #f5fbff; /* Light blue background similar to the picture */
+  }
+  
+  .grid-item {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+    background-color: #2e3c9e; /* Dark blue button background */
+    color: white;
+    border-radius: 8px;
+    cursor: pointer;
+    text-align: center;
+  }
+  
+  .grid-item:hover {
+    background-color: #4456cc; /* Lighter blue on hover */
+  }
+  
+  .grid-item p {
+    margin: 0;
+  }
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  /* Title Styling */
+  .tenant-grid-container h1 {
+    font-size: 1.8rem;
+    margin-bottom: 20px;
+    text-align: center;
+    font-weight: bold;
+  }
+  
+  /* Tenant Grid */
+  .tenant-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 20px;
+  }
+  
+  /* Tenant Card */
+  .tenant-card {
+    background-color: #1d235b;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 15px;
+    border-radius: 10px;
+    text-align: center;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    cursor: pointer;
+  }
+  
+  .tenant-card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+  }
+  
+  /* Tenant Icon */
+  .tenant-card i {
+    font-size: 3rem;
+    margin-bottom: 10px;
+    color: #ccc;
+  }
+  
+  /* Room and Name */
+  .tenant-card p {
+    margin: 0;
+    font-size: 0.9rem;
+  }
+  
+  .tenant-card .tenant-name {
+    font-weight: bold;
+    font-size: 1rem;
+    margin-top: 5px;
+  }
+  
+  /* Pagination (Optional) */
+  .pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+  }
+  
+  .pagination button {
+    background-color: #1d235b;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 50%;
+    margin: 0 5px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+  }
+  
+  .pagination button:hover {
+    background-color: #2c3178;
+  }
+  
