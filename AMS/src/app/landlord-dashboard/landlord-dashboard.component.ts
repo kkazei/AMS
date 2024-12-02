@@ -489,6 +489,7 @@ export class LandlordDashboardComponent implements OnInit {
           this.message = 'Tenant assigned successfully!';
           this.getApartments(); // Refresh the apartments after assignment
           this.getTenants(); // Refresh tenants to reflect changes
+          this.fetchTotalIncomeSinceStartOfYear(); // Recalculate total income
         },
         (error) => {
           console.error('Error assigning tenant:', error);
@@ -518,7 +519,14 @@ export class LandlordDashboardComponent implements OnInit {
       }
     );
   }
-
+  checkTenantAssignment(): void {
+    const selectedTenant = this.tenants.find(tenant => tenant.tenant_id === this.selectedTenantId);
+    if (selectedTenant && selectedTenant.room) {
+      this.message = `Tenant is already assigned to apartment: ${selectedTenant.room}`;
+    } else {
+      this.message = '';
+    }
+  }
   // Cancel the edit and reset the form
   cancelEdit(): void {
     this.selectedConcern = null;  // Clear the selected concern to hide the form
