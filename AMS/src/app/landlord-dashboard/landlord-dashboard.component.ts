@@ -33,6 +33,9 @@ export class LandlordDashboardComponent implements OnInit {
   concerntitle: string = '';
   concerncontent: string = '';
   isCollapsed = false;
+  maintenanceList: any[] = []; // Property to hold fetched maintenance tasks
+  totalExpenses: number = 0;
+
   
   
   
@@ -41,6 +44,7 @@ export class LandlordDashboardComponent implements OnInit {
   income: number = 0;
   vacantCount: number = 0;
   acquiredCount: number = 0;
+  monthlyExpenses: { [month: string]: number } = {};  // Store monthly expenses for maintenance
 
   constructor(private authService: AuthService) {}
 
@@ -57,6 +61,7 @@ export class LandlordDashboardComponent implements OnInit {
       this.getTenants();
       this.getConcerns();
       this.fetchTotalIncomeSinceStartOfYear(); // Fetch monthly income data
+      this.getMaintenance(); // Fetch maintenance tasks when component initializes
     } else {
       console.error('User not logged in. JWT token missing.');
     }
@@ -202,34 +207,81 @@ export class LandlordDashboardComponent implements OnInit {
   }
 
 
+  getMaintenance(): void {
+    this.authService.getMaintenance().subscribe(
+      (response) => {
+        console.log('Maintenance tasks fetched:', response);
+        this.maintenanceList = response.data; // Access the 'data' property that contains the maintenance tasks
+        
+        // Calculate the total expenses
+        this.totalExpenses = this.maintenanceList.reduce((total, task) => {
+          return total + parseFloat(task.expenses || '0'); // Ensure it's treated as a number
+        }, 0);
+        
+        // Group maintenance expenses by month (if needed)
+        this.groupMaintenanceExpensesByMonth();
+      },
+      (error) => {
+        console.error('Error fetching maintenance tasks:', error);
+      }
+    );
+  }
+  
+
+  // Group maintenance expenses by month
+  groupMaintenanceExpensesByMonth(): void {
+    // Reset the monthly expenses object
+    this.monthlyExpenses = {};
+
+    // Loop through the maintenance tasks and group them by month
+    this.maintenanceList.forEach((task) => {
+      const month = new Date(task.start_date).toLocaleString('default', { month: 'short' }) + ' ' + new Date(task.start_date).getFullYear();
+      
+      // If the month already exists, add to the total expenses, else initialize it
+      if (this.monthlyExpenses[month]) {
+        this.monthlyExpenses[month] += parseFloat(task.expenses || '0');
+      } else {
+        this.monthlyExpenses[month] = parseFloat(task.expenses || '0');
+      }
+    });
+
+    // Log monthly expenses for debugging
+    console.log('Monthly Expenses:', this.monthlyExpenses);
+
+    // After calculating the monthly expenses, render the chart
+    this.renderChart();
+  }
+
   renderChart(): void {
     // Define the months of the year
     const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-  
-    // Initialize an array to hold the income data for each month
+
+    // Initialize an array to hold the income and expense data for each month
     const incomeData = new Array(12).fill(0);
-    const expenseData = new Array(12).fill(0);  // Assuming you want to track expenses too
-  
+    const expenseData = new Array(12).fill(0);
+
     // Loop through each month to fetch monthly income
     const fetchIncomePromises = months.map((month, index) => {
       const currentMonth = index + 1;  // Convert index to month number (1-based)
       const currentYear = new Date().getFullYear();
-  
+
       // Fetch the monthly income data for this month
       return this.authService.getMonthlyIncome(currentMonth, currentYear).toPromise().then((response) => {
         incomeData[index] = response.total_income;
-        // You can adjust the expense data as needed. Below is just a placeholder.
-        expenseData[index] = Math.round(incomeData[index] * 0.2); // Assuming expenses are 20% of income
+        
+        // Set expense data using the grouped maintenance expenses (or 0 if no data for that month)
+        expenseData[index] = this.monthlyExpenses[`${month} ${currentYear}`] || 0;
+
       }).catch((error) => {
         console.error(`Error fetching income for ${month}:`, error);
       });
     });
-  
+
     // Wait for all monthly income data to be fetched
     Promise.all(fetchIncomePromises).then(() => {
       // Render the chart after all data has been fetched
       const ctx = document.getElementById('income-expense-chart') as HTMLCanvasElement;
-  
+
       new Chart(ctx, {
         type: 'bar',
         data: {
@@ -239,6 +291,11 @@ export class LandlordDashboardComponent implements OnInit {
               label: 'Income',
               data: incomeData,  // Monthly income data
               backgroundColor: '#3eb06e',
+            },
+            {
+              label: 'Expenses',
+              data: expenseData,  // Monthly expenses data
+              backgroundColor: '#f56c42',  // Example color for expenses
             },
           ],
         },
@@ -253,7 +310,7 @@ export class LandlordDashboardComponent implements OnInit {
       });
     });
   }
-  
+
 
   onFileSelected(event: any) {
     this.selectedFile = event.target.files[0];
