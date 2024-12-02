@@ -22,14 +22,17 @@ body {
 
 /* Add this CSS */
 .grid-container {
+    
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); /* Adjust button size */
     gap: 15px;
     padding: 20px;
+    
     background-color: #f5fbff; /* Light blue background similar to the picture */
   }
   
   .grid-item {
+    width: 150px;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -51,7 +54,9 @@ body {
   }
   
 
-
+  .grid-item i {
+    font-size: 3rem; /* Adjust size as needed */
+  }
 
 
 
