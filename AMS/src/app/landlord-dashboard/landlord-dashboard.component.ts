@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Chart, registerables } from 'chart.js';
 import { AuthService } from '../services/auth.services';
 import { FormsModule } from '@angular/forms';
+import { forkJoin } from 'rxjs';
 import { CommonModule } from '@angular/common';
 
 
@@ -52,28 +53,38 @@ export class LandlordDashboardComponent implements OnInit {
     const token = localStorage.getItem('jwt');
     if (token) {
       this.userProfile = this.authService.getUserProfileFromToken();
-      this.fetchData();
       console.log('Token:', token);
       console.log('User profile:', this.userProfile);
-
-      this.getPosts();
-      this.getApartments();
-      this.getTenants();
+  
+      this.fetchData();
       this.getConcerns();
-      this.fetchTotalIncomeSinceStartOfYear(); // Fetch monthly income data
-      this.getMaintenance(); // Fetch maintenance tasks when component initializes
+      this.getMaintenance();  // Fetch maintenance tasks when component initializes
+      this.getPosts();
     } else {
       console.error('User not logged in. JWT token missing.');
     }
-
+  
     this.renderChart();
   }
 
   fetchData(): void {
-    this.getTenants();
-    this.getApartments();
-    this.getPosts();
+    // Using forkJoin to wait for multiple data fetches
+    forkJoin([
+      this.authService.getTenants(),
+      this.authService.getApartments(),
+    ]).subscribe(
+      ([tenants, apartments]) => {
+        this.tenants = tenants;
+        this.apartments = apartments;
+        this.updateSummaryStats();  // Update stats after apartments and tenants are fetched
+        this.fetchTotalIncomeSinceStartOfYear();  // Recalculate total income after fetching tenants
+      },
+      (error) => {
+        console.error('Error fetching data:', error);
+      }
+    );
   }
+  
 
   openTenantModal(){
     const modal = document.getElementById("TenantModal")
@@ -205,6 +216,8 @@ export class LandlordDashboardComponent implements OnInit {
 
     this.income = this.tenants.reduce((total, tenant) => total + tenant.amount, 0);
   }
+  
+  
 
 
   getMaintenance(): void {
@@ -212,13 +225,18 @@ export class LandlordDashboardComponent implements OnInit {
       (response) => {
         console.log('Maintenance tasks fetched:', response);
         this.maintenanceList = response.data; // Access the 'data' property that contains the maintenance tasks
-        
-        // Calculate the total expenses
+  
+        // Calculate the total expenses for the year 2024
         this.totalExpenses = this.maintenanceList.reduce((total, task) => {
-          return total + parseFloat(task.expenses || '0'); // Ensure it's treated as a number
+          const taskYear = new Date(task.start_date).getFullYear(); // Get the year from the start date
+          if (taskYear === 2024) {
+            // Only sum expenses if the task is in 2024
+            return total + parseFloat(task.expenses || '0'); // Ensure it's treated as a number
+          }
+          return total; // Skip tasks not in 2024
         }, 0);
-        
-        // Group maintenance expenses by month (if needed)
+  
+        // Group maintenance expenses by month for 2024 (if needed)
         this.groupMaintenanceExpensesByMonth();
       },
       (error) => {
@@ -226,6 +244,7 @@ export class LandlordDashboardComponent implements OnInit {
       }
     );
   }
+  
   
 
   // Group maintenance expenses by month
@@ -388,18 +407,13 @@ export class LandlordDashboardComponent implements OnInit {
 
   fetchTotalIncomeSinceStartOfYear(): void {
     const currentYear = new Date().getFullYear();
-  
-    // Initialize total income accumulator
     let totalIncomeSinceStartOfYear = 0;
-  
-    // Loop through each month of the year (January = 1, December = 12)
     for (let month = 1; month <= new Date().getMonth() + 1; month++) {
       this.authService.getMonthlyIncome(month, currentYear).subscribe(
         (response) => {
-          // Ensure that the total_income is treated as a number and handle possible parsing issues
-          const monthlyIncome = parseFloat(response.total_income.replace(/[^0-9.-]+/g, "")); // Remove non-numeric characters
+          const monthlyIncome = parseFloat(response.total_income.replace(/[^0-9.-]+/g, ""));
           if (!isNaN(monthlyIncome)) {
-            totalIncomeSinceStartOfYear += monthlyIncome;  // Add income from this month
+            totalIncomeSinceStartOfYear += monthlyIncome;
           } else {
             console.error(`Invalid income data for month ${month}:`, response.total_income);
           }
@@ -408,13 +422,13 @@ export class LandlordDashboardComponent implements OnInit {
           console.error(`Error fetching income for month ${month}:`, error);
         },
         () => {
-          // This will run once all months' income have been fetched (optional)
-          console.log('Total income from January to today:', totalIncomeSinceStartOfYear);
-          this.totalIncome = totalIncomeSinceStartOfYear;  // Update the total income
+          this.totalIncome = totalIncomeSinceStartOfYear;
+          console.log('Total income from January to today:', this.totalIncome);
         }
       );
     }
   }
+  
   
   
   // Updated method to handle only 'remove_tenant'
