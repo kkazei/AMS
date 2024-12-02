@@ -14,13 +14,10 @@ export class LeaseManagementComponent {
   userProfile: any;
   selectedFile: File | null = null; // Store the selected file
   preview: string = ''; // For previewing the file
-  imageInfos: any[] = []; // Store the list of lease images
   message = ''; // Message to show the status of the upload
-  tenantId: number | null = null; // Store the selected tenant ID
-  room: string = ''; // Store the selected room
-  tenants: any[] = []; // Store the list of tenants from the API
-  apartments: any[] = []; // Store the list of apartments (rooms)
+  tenants: any[] = []; // Store the list of tenants
   selectedTenant: any = null; // Store the selected tenant's details
+  leaseImages: any[] = []; // Store the list of lease images for the selected tenant
 
   constructor(private authService: AuthService) {}
 
@@ -28,22 +25,16 @@ export class LeaseManagementComponent {
     const token = localStorage.getItem('jwt');
     if (token) {
       this.userProfile = this.authService.getUserProfileFromToken();
-      console.log('Token:', token);
-      console.log('User profile:', this.userProfile);
-
       this.getTenants(); // Fetch tenants from API
-      this.getApartments(); // Fetch apartments from API
-      this.loadImages(); // Load previously uploaded images
     } else {
       console.warn('Token not found, user is not logged in');
     }
   }
 
-  // Fetch the list of tenants from the API
+  // Fetch tenants with room details from the API
   getTenants() {
     this.authService.getTenants().subscribe(
       (response) => {
-        console.log('Tenants fetched:', response);
         if (Array.isArray(response)) {
           this.tenants = response;
         } else {
@@ -53,34 +44,44 @@ export class LeaseManagementComponent {
       },
       (error) => {
         console.error('Error fetching tenants:', error);
-        this.tenants = [];
       }
     );
   }
 
-  // Fetch the list of apartments (rooms) from the API
-  getApartments() {
-    this.authService.getApartments().subscribe(
-      (response) => {
-        console.log('Apartments fetched:', response);
-        if (Array.isArray(response)) {
-          this.apartments = response;
-        } else {
-          console.error('Unexpected response format:', response);
-          this.apartments = [];
+  // Select a tenant to view their details
+  selectTenant(tenant: any) {
+    this.selectedTenant = tenant;
+    this.loadLeaseImages(); // Load lease images for the selected tenant
+  }
+
+  // Fetch lease images for the selected tenant
+  loadLeaseImages() {
+    if (this.selectedTenant) {
+      const tenantId = this.selectedTenant.tenant_id; // Get the selected tenant's ID
+      this.authService.loadLease(tenantId).subscribe(
+        (response: any) => {
+          if (response.status === 'success') {
+            // Filter the images based on the tenant ID to make sure we only display images for the selected tenant
+            this.leaseImages = response.data
+              .filter((image: any) => image.tenant_id === tenantId) // Ensure the tenant_id matches
+              .map((image: any) => {
+                return {
+                  ...image,
+                  img: `http://localhost/amsAPI/api/${image.img}` // Adjust path as needed
+                };
+              });
+          } else {
+            console.error('Failed to retrieve images:', response.message);
+          }
+        },
+        (error) => {
+          console.error('Error fetching images:', error);
         }
-      },
-      (error) => {
-        console.error('Error fetching apartments:', error);
-        this.apartments = [];
-      }
-    );
+      );
+    }
   }
-
-  // Handle tenant selection
-  onTenantSelect() {
-    this.selectedTenant = this.tenants.find((tenant) => tenant.tenant_id === this.tenantId);
-  }
+  
+  
 
   // Handle file selection
   onFileSelected(event: any) {
@@ -95,48 +96,28 @@ export class LeaseManagementComponent {
     }
   }
 
-  // Fetch previously uploaded images (leases)
-  loadImages() {
-    this.authService.loadLease().subscribe(
-      (response: any) => {
-        if (response.status === 'success') {
-          this.imageInfos = response.data.map((image: any) => {
-            return {
-              ...image,
-              img: `http://localhost/amsAPI/api/${image.img}` // Adjust path as needed
-            };
-          });
-        } else {
-          console.error('Failed to retrieve images:', response.message);
-        }
-      },
-      (error) => {
-        console.error('Error fetching images:', error);
-      }
-    );
-  }
-
-  // Upload the selected file along with tenant ID and room
+  // Upload the selected file for the selected tenant
   upload() {
-    if (this.selectedFile && this.tenantId && this.room) {
-      this.authService.addLease(this.selectedFile, this.tenantId, this.room).subscribe(
+    if (this.selectedFile && this.selectedTenant) {
+      const tenantId = this.selectedTenant.tenant_id;
+      const room = this.selectedTenant.room;
+      this.authService.addLease(this.selectedFile, tenantId, room).subscribe(
         (response) => {
-          console.log(response);
           this.message = 'Lease uploaded successfully!';
-          this.loadImages(); // Refresh the list of images
+          this.loadLeaseImages(); // Reload the lease images after successful upload
         },
         (error) => {
-          console.error(error);
           this.message = 'Lease upload failed!';
+          console.error('Error uploading lease:', error);
         }
       );
     } else {
-      this.message = 'Please select a file and ensure tenant ID and room are set!';
+      this.message = 'Please select a tenant and file before uploading!';
     }
   }
 
-  // Track images in the list using a unique identifier
+  // Track tenants in the grid using a unique identifier
   trackByFn(index: number, item: any) {
-    return item.imgName;
+    return item.tenant_id;
   }
 }

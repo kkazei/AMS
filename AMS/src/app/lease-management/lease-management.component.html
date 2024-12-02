@@ -1,100 +1,47 @@
 <div class="grid-container">
-  <div 
-    class="grid-item" 
-    *ngFor="let image of imageInfos; trackBy: trackByFn"><i class="fa-solid fa-user"></i><br>
-    <p><strong>Room:</strong> {{ image.room }}</p>
-    <p><strong>{{ image.tenant_fullname }}</strong></p>
+  <!-- Display tenants in a grid -->
+  <div
+    class="grid-item"
+    *ngFor="let tenant of tenants; trackBy: trackByFn"
+    (click)="selectTenant(tenant)"
+  >
+    <p><strong>Room:</strong> {{ tenant.room }}</p>
+    <p><strong>Tenant:</strong> {{ tenant.tenant_fullname }}</p>
+    <p *ngIf="!tenant.tenant_fullname"><em>No tenant assigned</em></p>
   </div>
 </div>
 
+<!-- Selected Tenant Details -->
+<div *ngIf="selectedTenant" class="details">
+  <h3>Details for Tenant: {{ selectedTenant.tenant_fullname || 'Not Assigned' }}</h3>
+  <p><strong>Room:</strong> {{ selectedTenant.room || 'N/A' }}</p>
+  <p><strong>Assigned Date:</strong> {{ selectedTenant.assigned_date || 'N/A' }}</p>
+  <p><strong>Rent:</strong> {{ selectedTenant.rent || 'N/A' }}</p>
+</div>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div class="row">
-    <!-- Tenant Selection -->
-    <div class="col-6">
-      <label for="tenantId">Select Tenant</label>
-      <select id="tenantId" [(ngModel)]="tenantId" class="form-control" (change)="onTenantSelect()">
-        <option value="" disabled selected>Select Tenant</option>
-        <option *ngFor="let tenant of tenants" [value]="tenant.tenant_id">
-          {{ tenant.tenant_fullname }}
-        </option>
-      </select>
-    </div>
-  
-    <!-- Room Selection -->
-    <div class="col-6">
-      <label for="room">Select Room</label>
-      <select id="room" [(ngModel)]="room" class="form-control" [disabled]="!tenantId">
-        <option value="" disabled selected>Select Room</option>
-        <option *ngFor="let apartment of apartments" [value]="apartment.room">
-          {{ apartment.room }}
-        </option>
-      </select>
-    </div>
+<!-- Lease Images Section -->
+<div *ngIf="leaseImages.length > 0" class="lease-images">
+  <h4>Uploaded Lease Agreements:</h4>
+  <div *ngFor="let image of leaseImages">
+    <img [src]="image.img" alt="Lease Image" class="lease-image" />
   </div>
-  
-  <!-- Display Selected Tenant and Room -->
-  <div *ngIf="tenantId && room" class="mt-3">
-    <p><strong>Selected Tenant:</strong> {{ selectedTenant?.tenant_fullname }}</p>
-    <p><strong>Assigned Room:</strong> {{ room }}</p>
-  </div>
-  
-  <!-- File Upload Section -->
-  <div class="row">
-    <div class="col-8">
-      <label class="btn btn-default p-0">
-        <input type="file" (change)="onFileSelected($event)" />
-      </label>
-    </div>
-  
-    <div class="col-4">
-      <button (click)="upload()">Upload</button>
-    </div>
-  </div>
-  
-  <!-- File Preview -->
+</div>
+
+<!-- File Upload Section -->
+<div *ngIf="selectedTenant" class="upload-section">
   <div>
-    <img [src]="preview" class="preview" *ngIf="preview" />
+    <label class="btn btn-default p-0">
+      <input type="file" (change)="onFileSelected($event)" />
+    </label>
+    <button (click)="upload()">Upload Lease Agreement</button>
   </div>
-  
-  <!-- Status Message -->
-  <div *ngIf="message" class="alert alert-secondary" role="alert">
-    {{ message }}
+  <div *ngIf="preview">
+    <h4>Preview:</h4>
+    <img [src]="preview" class="preview" />
   </div>
-  
-  <!-- Display List of Lease Images -->
-  <div class="card" *ngIf="imageInfos && imageInfos.length > 0">
-    <div class="card-header">List of Lease Images</div>
-    <ul class="list-group list-group-flush">
-      <li class="list-group-item" *ngFor="let image of imageInfos; trackBy: trackByFn">
-        <p><strong>Tenant:</strong> {{ image.tenant_fullname }}</p>
-        <p><strong>Room:</strong> {{ image.room }}</p>
-        <p><a [href]="image.img" target="_blank">{{ image.imgName }}</a></p>
-        <img [src]="image.img" [alt]="image.imgName" height="80px" />
-      </li>
-    </ul>
-  </div>
-  
-  <!-- No Images Message -->
-  <div *ngIf="!imageInfos || imageInfos.length === 0">
-    No lease images found.
-  </div>
-  
+</div>
+
+<!-- Status Message -->
+<div *ngIf="message" class="alert alert-secondary" role="alert">
+  {{ message }}
+</div>

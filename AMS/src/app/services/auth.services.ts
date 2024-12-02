@@ -329,10 +329,12 @@ export class AuthService {
   }
   
 
-  loadLease(): Observable<any> {
+  loadLease(tenantId: number): Observable<any> {
     return new Observable((observer) => {
       axios
-        .get(`${this.apiUrl}/loadLeases`)
+        .get(`${this.apiUrl}/loadLeases`, {
+          params: { tenant_id: tenantId }  // Pass tenantId as a query parameter
+        })
         .then((res) => {
           observer.next(res.data);
           observer.complete();
@@ -342,6 +344,7 @@ export class AuthService {
         });
     });
   }
+  
 
  payInvoice(tenantId: string, amount: number, referenceNumber: string, proofOfPaymentFile: File | null): Observable<any> {
   const formData = new FormData();
