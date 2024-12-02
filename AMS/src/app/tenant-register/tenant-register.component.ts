@@ -57,6 +57,9 @@ export class TenantRegisterComponent {
       }
     );
   }
+  goToLogin() {
+    this.router.navigate(['/tenant-login']); // Navigate to the register page
+  }
 }
 
 

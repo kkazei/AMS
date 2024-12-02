@@ -41,4 +41,7 @@ export class TenantLoginComponent {
   }
 
   // Method for registration
+  goToRegister() {
+    this.router.navigate(['/tenant-register']); // Navigate to the register page
+  }
 }

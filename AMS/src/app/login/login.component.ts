@@ -41,5 +41,7 @@ export class LoginComponent {
     );
   }
 
-  // Method for registration
+  goToRegister() {
+    this.router.navigate(['/register']); // Navigate to the register page
+  }
 }
