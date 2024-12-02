@@ -169,6 +169,10 @@ td.pending {
   color: #e67e22;
 }
 
+.status-overdue {
+  color: #f80808;
+}
+
 td.paid {
   color: #2ecc71;
 }

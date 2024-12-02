@@ -434,43 +434,6 @@ export class LandlordDashboardComponent implements OnInit {
   }
   
 
-  onApartmentChange(): void {
-    const selectedApartment = this.apartments.find(
-      (apartment) => apartment.apartment_id === this.selectedApartmentId
-    );
-  
-    if (selectedApartment) {
-      // Auto-select the tenant associated with the selected apartment
-      this.selectedTenantId = selectedApartment.tenant_id || null;
-    } else {
-      // Clear the tenant selection if no apartment is selected
-      this.selectedTenantId = null;
-    }
-  }
-  
-  
-  onTenantChange(): void {
-    const selectedTenant = this.tenants.find(
-      (tenant) => tenant.tenant_id === this.selectedTenantId
-    );
-  
-    if (selectedTenant) {
-      // Auto-select the apartment associated with the selected tenant
-      const assignedApartment = this.apartments.find(
-        (apartment) => apartment.room === selectedTenant.room
-      );
-  
-      this.selectedApartmentId = assignedApartment?.apartment_id || null;
-    } else {
-      // Clear the apartment selection if no tenant is selected
-      this.selectedApartmentId = null;
-    }
-  }
-  
-  
-  
-
-  
   
   // Updated method to handle only 'remove_tenant'
   updateApartmentAndTenant(action: string) {

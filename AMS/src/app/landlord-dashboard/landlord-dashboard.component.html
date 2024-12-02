@@ -313,8 +313,13 @@
             <td>₱{{ tenant.rent }}</td>
             <td>{{ tenant.due_date | date }}</td>
             <td>{{ tenant.room }}</td>
-            <td [class]="tenant.status">{{ tenant.status }}</td>
-          </tr>
+            <td [ngClass]="{
+              'pending': tenant.status === 'pending',
+              'paid': tenant.status === 'paid',
+              'status-overdue': tenant.status === 'overdue'
+            }">
+              {{ tenant.status }}
+            </td>          </tr>
         </tbody>
       </table>
     </section>
