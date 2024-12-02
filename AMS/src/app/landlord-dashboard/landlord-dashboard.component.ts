@@ -36,6 +36,10 @@ export class LandlordDashboardComponent implements OnInit {
   isCollapsed = false;
   maintenanceList: any[] = []; // Property to hold fetched maintenance tasks
   totalExpenses: number = 0;
+  selectedConcern: { 
+    status: string; 
+  } | null = null;
+  
 
   
   
@@ -496,6 +500,31 @@ export class LandlordDashboardComponent implements OnInit {
       this.message = 'Invalid action specified.';
     }
   }
+  selectConcern(concern: any): void {
+    this.selectedConcern = { ...concern };  // Create a copy to avoid mutating original data
+  }
+
+  // Handle the form submission to update the concern
+  updateConcern(updatedConcern: any): void {
+    this.authService.updateConcerns(updatedConcern).subscribe(
+      (response) => {
+        console.log('Concern updated successfully:', response);
+        this.getConcerns();  // Reload concerns after successful update
+        this.selectedConcern = null;  // Reset selected concern
+      },
+      (error) => {
+        console.error('Error updating concern:', error);
+        // Show an error message if needed
+      }
+    );
+  }
+
+  // Cancel the edit and reset the form
+  cancelEdit(): void {
+    this.selectedConcern = null;  // Clear the selected concern to hide the form
+  }
+
+
 
 
 }
