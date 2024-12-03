@@ -28,6 +28,8 @@ export class TenantDashboardComponent implements OnInit {
   preview: string = '';
   imageInfos: any[] = [];
   selectedPaymentMethod: string = 'onhand'; // Default to 'onhand'
+  paymentDetails: any = null; // Payment details list
+
 
 
   constructor(private authService: AuthService) {}
@@ -36,12 +38,44 @@ export class TenantDashboardComponent implements OnInit {
     const token = localStorage.getItem('jwt');
     if (token) {
       this.userProfile = this.authService.getUserProfileFromToken();
+      console.log('User profile:', this.userProfile);
       this.fetchTenantDetails();
       this.loadImages();
+      this.loadPaymentDetails();
     } else {
       console.warn('Token not found, user is not logged in');
     }
   }
+
+  loadPaymentDetails(): void {
+    this.authService.getPaymentDetails().subscribe(
+      (response: any[]) => {
+        console.log('Payment details fetched:', response);
+  
+        const currentUserId = this.userProfile?.id; // Use the logged-in user's ID
+        if (!currentUserId) {
+          console.error('User ID not found. Unable to filter payments.');
+          return;
+        }
+  
+        // Filter payment details for the logged-in tenant
+        this.paymentDetails = response
+          .filter(payment => payment.tenant_id === currentUserId)
+          .map(payment => ({
+            ...payment,
+            proof_of_payment: payment.proof_of_payment
+              ? `http://localhost/amsAPI/api/${payment.proof_of_payment}`
+              : null
+          }));
+  
+        console.log('Filtered payment details for user:', this.paymentDetails);
+      },
+      (error) => {
+        console.error('Error fetching payment details:', error);
+      }
+    );
+  }
+  
 
   // Fetch tenant details including rent and due date
   fetchTenantDetails(): void {
