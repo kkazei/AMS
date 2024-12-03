@@ -67,7 +67,7 @@
     <div class="grid-container">
       <button class="grid-item" (click)="openProfileModal()">
         <i class="material-icons">person</i>
-        <p>Profile</p>
+        <p>Announcements</p>
       </button>
       <button class="grid-item" (click)="openPayHistoryModal()">
         <i class="material-icons">receipt</i>
@@ -159,13 +159,22 @@
 
       <!-- Modal Header -->
       <div class="modal-header">
-        <h2>Create a New Concern</h2>
+        <h2>Announcements</h2>
         <button type="button" class="btn-close" (click)="closeProfileModal()"></button>
       </div>
 
       <!-- Modal body -->
       <div class="modal-body">
-        
+        <div *ngIf="posts && posts.length" class="posts-list">
+          <h2 class="post-h2"></h2>
+          <div *ngFor="let post of posts" class="post-card">
+            <h3 class="post-title">{{ post.title }}</h3>
+            <p class="post-content">{{ post.content }}</p>
+            <div *ngIf="post.image_path">
+              <img [src]="post.image_path" alt="Post Image" class="post-image" />
+            </div>
+          </div>
+        </div>
       <!-- Modal Footer -->
       <div class="modal-footer">
       </div>
@@ -182,14 +191,40 @@
 
       <!-- Modal Header -->
       <div class="modal-header">
-        <h2>Create a New Concern</h2>
+        <h2>Lease Agreement</h2>
         <button type="button" class="btn-close" (click)="closeLeaseModal()"></button>
       </div>
 
-      <!-- Modal body -->
-      <div class="modal-body">
-        
-      <!-- Modal Footer -->
+<!-- Modal body -->
+<div class="modal-body">
+ <!-- Lease Images Section -->
+ <div class="card shadow">
+  <div class="card-header bg-gradient-dark text-white">
+    <h5 class="mb-0"><i class="bi bi-images"></i> Lease Images</h5>
+  </div>
+  <div class="card-body">
+    <div *ngIf="leaseImages?.length; else noImages">
+      <div class="row">
+        <div class="col-md-4" *ngFor="let image of leaseImages">
+          <div class="card mb-3">
+            <img [src]="image.img" class="card-img-top" alt="Lease Image">
+            <div class="card-body">
+              <p class="card-text">{{ image.description || 'No description' }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <ng-template #noImages>
+      <p class="text-center text-muted">No lease images available.</p>
+    </ng-template>
+  </div>
+</div>
+  <div class="details mb-3">
+  </div>
+<!-- Modal Footer -->
+<div class="modal-footer">
+</div>
       <div class="modal-footer">
       </div>
     </div>

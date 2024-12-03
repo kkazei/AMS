@@ -21,12 +21,17 @@
   .sidenav-header {
     text-align: center;
     margin: 5px;
-    background-color: #ffffff;
-    padding-top: 10px;
-    border-radius: 10px;
+    transition: background-color 0.3s ease-in-out, transform 0.3s ease-in-out; /* Add transition for smooth hover effect */
+    border-radius: 8px; /* Add border-radius for smooth edges */
 
-  }
-  
+}
+
+.sidenav-header:hover {
+    background-color: #f0f0f0; /* Change background color on hover */
+    cursor: pointer; /* Change cursor to pointer on hover */
+    transform: scale(1.05); /* Optional: Slightly scale up on hover */
+}
+
 /* Default styling for logo when sidenav is not collapsed */
 .sidenav-header .text-logo {
   cursor: pointer;

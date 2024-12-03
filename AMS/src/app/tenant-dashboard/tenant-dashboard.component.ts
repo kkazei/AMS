@@ -29,6 +29,9 @@ export class TenantDashboardComponent implements OnInit {
   imageInfos: any[] = [];
   selectedPaymentMethod: string = 'onhand'; // Default to 'onhand'
   paymentDetails: any = null; // Payment details list
+  leaseDetails: any = null; // Lease details list
+  leaseImages: any[] = []; // Lease images list
+  posts: any[] = [];
 
 
 
@@ -42,6 +45,8 @@ export class TenantDashboardComponent implements OnInit {
       this.fetchTenantDetails();
       this.loadImages();
       this.loadPaymentDetails();
+      this.loadLeaseImages();
+      this.getPosts();
     } else {
       console.warn('Token not found, user is not logged in');
     }
@@ -72,6 +77,54 @@ export class TenantDashboardComponent implements OnInit {
       },
       (error) => {
         console.error('Error fetching payment details:', error);
+      }
+    );
+  }
+
+  loadLeaseImages(): void {
+    const currentUserId = this.userProfile?.id; // Use the logged-in user's ID
+    if (!currentUserId) {
+      console.error('User ID not found. Unable to load lease images.');
+      return;
+    }
+  
+    this.authService.loadLease(currentUserId).subscribe(
+      (response: any) => {
+        if (response.status === 'success') {
+          // Filter the images based on the tenant ID to make sure we only display images for the current user
+          this.leaseImages = response.data
+            .filter((image: any) => image.tenant_id === currentUserId) // Ensure the tenant_id matches
+            .map((image: any) => {
+              return {
+                ...image,
+                img: `http://localhost/amsAPI/api/${image.img}` // Adjust path as needed
+              };
+            });
+          console.log('Filtered lease images for user:', this.leaseImages);
+        } else {
+          console.error('Failed to retrieve images:', response.message);
+        }
+      },
+      (error) => {
+        console.error('Error fetching images:', error);
+      }
+    );
+  }
+
+  getPosts() {
+    this.authService.getPosts().subscribe(
+      (response: any[]) => {
+        console.log('Posts fetched:', response);
+        this.posts = response.map(post => {
+          return {
+            ...post,
+            image_path: `http://localhost/amsAPI/api/${post.image_path}` // Adjust the base URL as needed
+          };
+        });
+        console.log('Posts with updated image paths:', this.posts);
+      },
+      (error) => {
+        console.error('Error fetching posts:', error);
       }
     );
   }
