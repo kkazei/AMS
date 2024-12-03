@@ -21,7 +21,7 @@ body {
 
   .left-panel {
     flex: 1;
-    background-color: #2c2d57;
+    background-color: #241e57;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -33,6 +33,16 @@ body {
       font-size: 24px;
       margin: 0;
       text-align: center;
+    }
+
+    .logo::after {
+      content: "";
+      display: block;
+      width: 100%;
+      height: 3px;
+      background-color: #32d677; /* Green color */
+      margin: 0 auto;
+      margin-top: 10px;
     }
 
     .tagline {
@@ -119,3 +129,64 @@ body {
     }
   }
 }
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  .container {
+    flex-direction: row;
+    width: 90%;
+    height: auto;
+    margin-top: 250px;
+  }
+
+  .left-panel,
+  .right-panel {
+    flex: none;
+    width: 100%;
+    padding: 10px;
+  }
+
+  .logo {
+    font-size: 20px;
+  }
+
+  .logo::after {
+    width: 60%;
+  }
+
+  .form-container {
+    max-width: 100%;
+    padding: 0 10px;
+  }
+
+
+@media (max-width: 480px) {
+  .container {
+    flex-direction: column;
+    width: 90%;
+    height: auto;
+    margin-top: 150px;
+  }
+
+  .logo {
+    font-size: 18px;
+  }
+
+  .logo::after {
+    width: 70%;
+  }
+
+  .input-field input {
+    font-size: 12px;
+  }
+
+  .btn {
+    font-size: 14px;
+  }
+
+  .form-links {
+    font-size: 12px;
+  }
+}
+}
+

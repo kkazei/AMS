@@ -14,6 +14,9 @@ body {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     margin-top: 20px;
     margin-right: 20px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); /* Adjust button size */
+    gap: 15px;
   }
 
 
@@ -23,17 +26,7 @@ h2 {
 }
 
 
-/* Add this CSS */
-.grid-container {
-    
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); /* Adjust button size */
-    gap: 15px;
-    padding: 20px;
-    
-    background-color: #f5fbff; /* Light blue background similar to the picture */
-  }
-  
+
   .grid-item {
     width: 150px;
     display: flex;
@@ -41,7 +34,7 @@ h2 {
     justify-content: center;
     align-items: center;
     padding: 10px;
-    background-color: #2e3c9e; /* Dark blue button background */
+    background-color: #241e57; /* Dark blue button background */
     color: white;
     border-radius: 8px;
     cursor: pointer;
@@ -49,7 +42,7 @@ h2 {
   }
   
   .grid-item:hover {
-    background-color: #4456cc; /* Lighter blue on hover */
+    background-color: #453ba4; /* Lighter blue on hover */
   }
   
   .grid-item p {
@@ -60,13 +53,6 @@ h2 {
   .grid-item i {
     font-size: 3rem; /* Adjust size as needed */
   }
-
-
-
-
-
-
-
 
 
 
@@ -93,10 +79,7 @@ h2 {
   background-color: #e74c3c;
 }
 
-/* Positioning for Details Section */
-.details {
-  position: relative;
-}
+
 
 
 
@@ -123,7 +106,7 @@ p {
   background-color: #ffffff;
   padding: 20px;
   border-radius: 10px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 10px rgba(47, 0, 255, 0.1);
   margin: 20px auto;
   max-width: 600px;
 }
@@ -215,6 +198,16 @@ p {
     padding: 8px 15px;
     font-size: 14px;
   }
+
+  h2 {
+    margin-top: 10px;
+    margin-left: 20px;
+  }
+
+  .grid-container {
+    padding: 20px;
+    margin: 15px;
+  }
 }
 
 
@@ -239,7 +232,7 @@ p {
 
 /* Modal Content */
 .modal-content {
-  background: #fff;
+  background: #ffffff;
   padding: 20px;
   width: 90%;
   max-width: 600px;

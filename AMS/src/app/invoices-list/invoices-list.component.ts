@@ -11,18 +11,18 @@ import { FormsModule } from '@angular/forms';
   styleUrl: './invoices-list.component.css'
 })
 export class InvoicesListComponent {
-  userProfile: any;
-  paymentTenantId: string | null = null;
-  paymentAmount: number | null = null;
-  paymentReferenceNumber: string = '';
-  paymentProofOfPayment: File | null = null;
-  paymentMessage: string = '';
-  paymentDetails: any = null;
-  selectedFile: File | null = null;
-  preview: string = '';
-  imageInfos: any[] = [];
-  message: string = '';
-  description: string = ''; // Add a field for description
+  userProfile: any; // Holds user profile information
+  paymentTenantId: string | null = null; // Tenant ID for payments
+  paymentAmount: number | null = null; // Amount for payments
+  paymentReferenceNumber: string = ''; // Reference number for payments
+  paymentProofOfPayment: File | null = null; // Proof of payment file
+  paymentMessage: string = ''; // Message for payment feedback
+  paymentDetails: any = null; // Payment details list
+  selectedFile: File | null = null; // Selected file for upload
+  preview: string = ''; // File preview URL
+  imageInfos: any[] = []; // List of images
+  message: string = ''; // Upload feedback message
+  description: string = ''; // Description for file uploads
 
   constructor(private authService: AuthService) {}
 
@@ -30,25 +30,23 @@ export class InvoicesListComponent {
     const token = localStorage.getItem('jwt');
     if (token) {
       this.userProfile = this.authService.getUserProfileFromToken();
-      console.log('Token:', token);
-      console.log('User profile:', this.userProfile);
+      console.log('User profile loaded:', this.userProfile);
       this.loadImages();
       this.loadPaymentDetails();
     } else {
-      console.warn('Token not found, user is not logged in');
+      console.warn('No token found. User is not logged in.');
     }
   }
 
+  // Load payment details
   loadPaymentDetails(): void {
     this.authService.getPaymentDetails().subscribe(
       (response: any[]) => {
         console.log('Payment details fetched:', response);
-        this.paymentDetails = response.map(payment => {
-          return {
-            ...payment,
-            proof_of_payment: `http://localhost/amsAPI/api/${payment.proof_of_payment}`
-          };
-        });
+        this.paymentDetails = response.map(payment => ({
+          ...payment,
+          proof_of_payment: `http://localhost/amsAPI/api/${payment.proof_of_payment}`
+        }));
       },
       (error) => {
         console.error('Error fetching payment details:', error);
@@ -56,16 +54,15 @@ export class InvoicesListComponent {
     );
   }
 
-  loadImages() {
+  // Load images
+  loadImages(): void {
     this.authService.loadImage().subscribe(
       (response: any) => {
         if (response.status === 'success') {
-          this.imageInfos = response.data.map((image: any) => {
-            return {
-              ...image,
-              img: `http://localhost/amsAPI/api/${image.img}`
-            };
-          });
+          this.imageInfos = response.data.map((image: any) => ({
+            ...image,
+            img: `http://localhost/amsAPI/api/${image.img}`
+          }));
         } else {
           console.error('Failed to retrieve images:', response.message);
         }
@@ -76,7 +73,8 @@ export class InvoicesListComponent {
     );
   }
 
-  onFileSelected(event: any) {
+  // Handle file selection and preview
+  onFileSelected(event: any): void {
     const file = event.target.files[0];
     if (file) {
       this.paymentProofOfPayment = file;
@@ -88,28 +86,37 @@ export class InvoicesListComponent {
     }
   }
 
-  upload() {
-    const landlordId = this.userProfile?.id; // Assuming the landlord_id is part of the user profile
+  // Upload file with description
+  upload(): void {
+    const landlordId = this.userProfile?.id; // Landlord ID from user profile
     if (this.paymentProofOfPayment && this.description && landlordId) {
       this.authService.addImage(this.paymentProofOfPayment, this.description, landlordId).subscribe(
         (response) => {
-          console.log(response);
+          console.log('Upload successful:', response);
           this.message = 'File uploaded successfully!';
           this.loadImages(); // Refresh the list of images
+          this.resetForm(); // Reset preview and description
         },
         (error) => {
-          console.error(error);
+          console.error('Upload failed:', error);
           this.message = 'File upload failed!';
         }
       );
     } else {
-      console.warn('No file, description, or landlord ID provided');
+      console.warn('Missing file, description, or landlord ID.');
       this.message = 'Please select a file, provide a description, and ensure the landlord ID is available.';
     }
   }
-  
 
-  trackByFn(index: number, item: any) {
+  // Reset form fields after successful upload
+  resetForm(): void {
+    this.preview = ''; // Clear the image preview
+    this.description = ''; // Clear the description
+    this.paymentProofOfPayment = null; // Clear the file selection
+  }
+
+  // Track images by name for rendering
+  trackByFn(index: number, item: any): string {
     return item.imgName;
   }
 }

@@ -31,8 +31,11 @@
   margin-right: 30px;
 }
 
-.header h1 {
+.header h2 {
   font-size: 1.5rem;
+    margin-left: 15px;
+    color: #241E57;
+    font-weight: bold;
 }
 
 .header .date {
@@ -54,7 +57,7 @@
 }
 
 .overview-card {
-  background-color: #3c5a97;
+  background-color: #241E57;
   color: #ffffff;
   text-align: center;
   padding: 20px;
@@ -114,7 +117,7 @@ canvas {
 }
 
 .summary-item.vacant {
-  background-color: #3c5a97;
+  background-color: #241E57;
   color: #ffffff;
 }
 
@@ -124,13 +127,17 @@ canvas {
 }
 
 .summary-item.income {
-  background-color: #eafaf1;
+  background-color: #ffffff;
+  border: 1px solid;
+  border-color: #27ae60;
   color: #27ae60;
 }
 
 .summary-item.expenses {
-  background-color: #fbecec;
-  color: #e74c3c;
+  background-color: #ffffff;
+  border: 1px solid;
+  border-color: #241E57;
+  color: #241E57;
 }
 
 
@@ -150,7 +157,7 @@ table {
 }
 
 thead {
-  background-color: #3c5a97;
+  background-color: #241E57;
   color: #ffffff;
 }
 
@@ -256,6 +263,11 @@ td.paid {
   .summary {
     flex-direction: row;
     gap: 5px;
+  }
+
+  h2 {
+    margin-left: 15px;
+    color: #241E57;
   }
 
   .summary-item {

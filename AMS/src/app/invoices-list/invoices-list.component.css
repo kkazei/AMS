@@ -1,155 +1,131 @@
-/* General Styles */
+/* Global Styles */
 body {
-  font-family: 'Roboto', sans-serif;
-  margin: 20px;
-  background-color: #f4f6f9;
+  font-family: 'Poppins', sans-serif;
+  background-color: #f7f9fc;
   color: #333;
 }
 
-/* File Upload Section */
-label.btn-primary {
-  font-size: 1rem;
-  font-weight: bold;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
+h1{
+  color: #241e57 !important;
+}
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
 }
 
-label i {
-  margin-right: 8px;
-  font-size: 1.2rem;
+/* Header Styling */
+.display-6 {
+  font-weight: 600;
 }
 
 button {
-  font-size: 1rem;
-  transition: background-color 0.3s ease;
+  border-radius: 50px;
 }
 
-button.btn-success:hover {
-  background-color: #28a745;
-}
-
-button.btn-success i {
-  margin-left: 8px;
-}
-
-/* Image Preview */
-.preview {
-  max-height: 200px;
-  margin-top: 10px;
-  border: 2px solid #ddd;
-  border-radius: 8px;
+/* Custom Card Styles */
+.custom-card {
+  border-radius: 15px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-/* Alert Message */
-.alert {
-  font-size: 1rem;
-  margin: 15px auto;
-  max-width: 600px;
-  border-radius: 8px;
+.bg-gradient-primary, .bg-gradient-secondary, .bg-gradient-dark {
+  background-color: #241e57 !important; /* Sets the new color */
+  color: white; /* Ensures text remains readable */
 }
-
-/* Card and Image List */
-.card {
-  margin-top: 20px;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-.card-header {
-  background-color: #007bff;
+.custom-header {
+  background: linear-gradient(135deg, #6c7ae0, #4f5d73);
   color: white;
-  padding: 15px;
-  border-radius: 10px 10px 0 0;
   font-size: 1.2rem;
-  font-weight: bold;
 }
 
-.list-group-item {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 15px;
-  border: 1px solid #eee;
-}
-
-.list-group-item p {
-  margin: 0;
-}
-
-.list-group-item img {
-  max-height: 60px;
-  border-radius: 4px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.list-group-item a {
-  color: #007bff;
-  text-decoration: none;
-}
-
-.list-group-item a:hover {
-  text-decoration: underline;
-}
-
-/* Payment Details Table */
-.payment-details-wrapper {
+.card-body {
   background-color: #ffffff;
-  padding: 20px;
   border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 20px;
 }
 
-.payment-details-wrapper h2 {
-  margin-bottom: 20px;
-  font-weight: bold;
-  color: #444;
+/* Button Styles */
+.btn-primary {
+  background-color: #6c7ae0;
+  border-color: #6c7ae0;
+  border-radius: 50px;
 }
 
-.table {
+.btn-primary:hover {
+  background-color: #4f5d73;
+  border-color: #4f5d73;
+}
+
+.btn-success {
+  background-color: #28a745;
+  border-color: #28a745;
+  border-radius: 50px;
+}
+
+.btn-success:hover {
+  background-color: #218838;
+  border-color: #218838;
+}
+
+/* Image and Thumbnail */
+.custom-img-thumbnail {
+  height: 60px;
+  width: auto;
+  border-radius: 10px;
+  transition: transform 0.2s;
+}
+
+.custom-img-thumbnail:hover {
+  transform: scale(1.05);
+}
+
+/* Alert Styles */
+.custom-alert {
+  border-radius: 10px;
+  padding: 15px;
+  background-color: #e3f2fd;
+  color: #31708f;
+}
+
+/* List Group Item */
+.custom-list-item {
+  transition: background-color 0.3s;
+}
+
+.custom-list-item:hover {
+  background-color: #f8f9fa;
+}
+
+/* Table Styles */
+.custom-table {
+  background-color: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border-spacing: 0;
   margin-top: 20px;
-  border-collapse: collapse;
-  width: 100%;
 }
 
-.table th, .table td {
-  text-align: left;
-  padding: 12px;
+.custom-table th {
+  background-color: #f8f9fa;
+  font-weight: 600;
 }
 
-.table th {
-  background-color: #f7f7f7;
-  color: #555;
+.custom-table-head th {
+  color: #4f5d73;
 }
 
-.table-striped tbody tr:nth-child(odd) {
-  background-color: #f9f9f9;
+.table-hover tbody tr:hover {
+  background-color: #f1f1f1;
 }
 
-.table-bordered th, .table-bordered td {
-  border: 1px solid #ddd;
-}
+/* Responsive Design */
+@media (max-width: 768px) {
+  .container {
+    padding: 10px;
+  }
 
-.table-bordered th {
-  font-weight: bold;
-}
-
-.btn-outline-primary {
-  font-size: 0.9rem;
-  padding: 5px 10px;
-  border-radius: 5px;
-}
-
-.btn-outline-primary:hover {
-  background-color: #007bff;
-  color: white;
-}
-
-/* Empty State */
-p.text-center {
-  margin: 20px 0;
-  color: #666;
-  font-style: italic;
+  .card-body {
+    padding: 15px;
+  }
 }

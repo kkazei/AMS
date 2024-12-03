@@ -98,3 +98,57 @@ body {
     }
   }
   
+  /* Responsive styles */
+@media (max-width: 768px) {
+  .register-container {
+      padding: 15px;
+  }
+
+  .register-form {
+      max-width: 90%; /* Allow the form to take up more space */
+      padding: 20px;
+  }
+
+  .form-title {
+      font-size: 22px; /* Reduce font size for small screens */
+  }
+
+  .form-group input {
+      font-size: 16px; /* Increase input text size for better readability */
+  }
+
+  .register-btn {
+      font-size: 18px; /* Larger button text for smaller screens */
+  }
+
+  .form-footer {
+      font-size: 12px; /* Smaller footer text */
+  }
+}
+
+@media (max-width: 480px) {
+  .register-container {
+      padding: 10px;
+  }
+
+  .register-form {
+      max-width: 100%;
+      padding: 15px;
+  }
+
+  .form-title {
+      font-size: 20px; /* Further reduce form title font size */
+  }
+
+  .form-group input {
+      font-size: 18px; /* Make input text larger for small screens */
+  }
+
+  .register-btn {
+      font-size: 18px; /* Larger button for better touch interaction */
+  }
+
+  .form-footer {
+      font-size: 12px; /* Keep footer small */
+  }
+}

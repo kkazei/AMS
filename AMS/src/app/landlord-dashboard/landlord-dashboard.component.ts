@@ -318,7 +318,7 @@ export class LandlordDashboardComponent implements OnInit {
             {
               label: 'Expenses',
               data: expenseData,  // Monthly expenses data
-              backgroundColor: '#f56c42',  // Example color for expenses
+              backgroundColor: '#241E57',  // Example color for expenses
             },
           ],
         },

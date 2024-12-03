@@ -1,87 +1,119 @@
-<div class="row my-4">
-  <div class="col-8">
-    <label class="btn btn-primary p-2 w-100 text-center">
-      <input type="file" (change)="onFileSelected($event)" class="d-none" />
-      <i class="bi bi-upload"></i> Choose File
-    </label>
-  </div>
-  <div class="col-8 mt-2">
-    <input type="text" [(ngModel)]="description" class="form-control" placeholder="Enter description" />
+<div class="container mt-1">
+  <!-- Page Header -->
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="display-6 fw-bold text-primary">Invoice</h1>
   </div>
 
-  <div class="col-4 d-flex align-items-center">
-    <button (click)="upload()" class="btn btn-success w-100">
-      Upload <i class="bi bi-arrow-up-circle"></i>
-    </button>
-  </div>
-</div>
-
-<div *ngIf="preview" class="my-3 text-center">
-  <h5>Image Preview</h5>
-  <img [src]="preview" class="preview rounded img-fluid shadow-lg" />
-</div>
-
-<div *ngIf="message" class="alert alert-info" role="alert">
-  {{ message }}
-</div>
-
-<!-- List of Images -->
-<div class="card" *ngIf="imageInfos && imageInfos.length > 0">
-  <div class="card-header">
-    <h5 class="mb-0">List of Images</h5>
-  </div>
-  <ul class="list-group list-group-flush">
-    <li class="list-group-item" *ngFor="let image of imageInfos; trackBy: trackByFn">
-      <div class="d-flex justify-content-between align-items-center">
-        <p class="mb-0">
-          <a [href]="image.img" target="_blank" class="text-primary">{{ image.imgName }} {{image.description }}</a>
-        </p>
-        <img [src]="image.img" [alt]="image.imgName" class="img-thumbnail" height="80px" />
+  <!-- Upload Section -->
+  <div class="card shadow mb-5">
+    <div class="card-header bg-gradient-primary text-white">
+      <h5 class="mb-0"><i class="bi bi-cloud-upload"></i> Upload Section</h5>
+    </div>
+    <div class="card-body">
+      <div class="row align-items-center">
+        <div class="col-lg-8">
+          <label class="btn btn-primary w-100 mb-3">
+            <input type="file" (change)="onFileSelected($event)" class="d-none" />
+            <i class="bi bi-upload"></i> Select File
+          </label>
+          <input
+            type="text"
+            [(ngModel)]="description"
+            class="form-control"
+            placeholder="Enter a description for the file"
+          />
+        </div>
+        <div class="col-lg-4 text-end">
+          <button (click)="upload()" class="btn btn-success w-100">
+            <i class="bi bi-arrow-up-circle"></i> Upload
+          </button>
+        </div>
       </div>
-    </li>
-  </ul>
-</div>
-
-<div *ngIf="!imageInfos || imageInfos.length === 0">
-  <p>No images found.</p>
-</div>
-
-<!-- Payment Details Section -->
-<div class="payment-details-wrapper mt-5">
-  <h2 class="text-center">Payment Details</h2>
-
-  <div *ngIf="paymentDetails && paymentDetails.length; else noPayments">
-    <table class="table table-striped table-bordered mt-3">
-      <thead class="table-light">
-        <tr>
-          <th>Tenant Name</th>
-          <th>Room</th>
-          <th>Amount</th>
-          <th>Reference Number</th>
-          <th>Proof of Payment</th>
-          <th>Payment Date</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let payment of paymentDetails">
-          <td>{{ payment.tenant_fullname }}</td>
-          <td>{{ payment.room || 'N/A' }}</td>
-          <td>₱{{ payment.amount  }}</td>
-          <td>{{ payment.reference_number || 'N/A' }}</td>
-          <td>
-            <a *ngIf="payment.proof_of_payment" [href]="payment.proof_of_payment" target="_blank" class="btn btn-outline-primary btn-sm">
-              View Proof
-            </a>
-            <span *ngIf="!payment.proof_of_payment" class="text-danger">No Proof</span>
-          </td>
-          <td>{{ payment.payment_date | date: 'short' }}</td>
-        </tr>
-      </tbody>
-    </table>
+    </div>
   </div>
 
-  <!-- No Payments Placeholder -->
-  <ng-template #noPayments>
-    <p class="text-center">No payment records available.</p>
-  </ng-template>
+  <!-- Image Preview Section -->
+  <div *ngIf="preview" class="card shadow mb-4">
+    <div class="card-body text-center">
+      <h5 class="text-secondary mb-3"><i class="bi bi-eye"></i> Preview</h5>
+      <img [src]="preview" class="img-fluid rounded border" alt="Image Preview" style="max-height: 250px;" />
+    </div>
+  </div>
+
+  <!-- Message Section -->
+  <div *ngIf="message" class="alert alert-info shadow-sm" role="alert">
+    <i class="bi bi-info-circle"></i> {{ message }}
+  </div>
+
+  <!-- List of Uploaded Images -->
+  <div *ngIf="imageInfos?.length" class="card shadow mb-5">
+    <div class="card-header bg-gradient-secondary text-white">
+      <h5 class="mb-0"><i class="bi bi-images"></i> Uploaded Images</h5>
+    </div>
+    <ul class="list-group list-group-flush">
+      <li
+        class="list-group-item d-flex justify-content-between align-items-center"
+        *ngFor="let image of imageInfos; trackBy: trackByFn"
+      >
+        <div>
+          <a [href]="image.img" target="_blank" class="text-primary fw-bold">{{ image.imgName }}</a>
+          <p class="mb-0 small text-muted">{{ image.description }}</p>
+        </div>
+        <img
+          [src]="image.img"
+          [alt]="image.imgName"
+          class="img-thumbnail"
+          style="height: 60px; width: auto;"
+        />
+      </li>
+    </ul>
+  </div>
+
+  <!-- Payment Details Section -->
+  <div class="card shadow">
+    <div class="card-header bg-gradient-dark text-white">
+      <h5 class="mb-0"><i class="bi bi-receipt"></i> Payment Details</h5>
+    </div>
+    <div class="card-body">
+      <div *ngIf="paymentDetails?.length; else noPayments">
+        <div class="table-responsive">
+          <table class="table table-hover table-striped table-bordered align-middle">
+            <thead class="bg-light text-dark">
+              <tr>
+                <th>Tenant Name</th>
+                <th>Room</th>
+                <th>Amount</th>
+                <th>Reference Number</th>
+                <th>Proof of Payment</th>
+                <th>Payment Date</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let payment of paymentDetails">
+                <td>{{ payment.tenant_fullname }}</td>
+                <td>{{ payment.room || 'N/A' }}</td>
+                <td>₱{{ payment.amount }}</td>
+                <td>{{ payment.reference_number || 'N/A' }}</td>
+                <td>
+                  <a
+                    *ngIf="payment.proof_of_payment"
+                    [href]="payment.proof_of_payment"
+                    target="_blank"
+                    class="btn btn-outline-primary btn-sm"
+                  >
+                    <i class="bi bi-eye"></i> View
+                  </a>
+                  <span *ngIf="!payment.proof_of_payment" class="text-danger">No Proof</span>
+                </td>
+                <td>{{ payment.payment_date | date: 'short' }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <ng-template #noPayments>
+        <p class="text-center text-muted">No payment records available.</p>
+      </ng-template>
+    </div>
+  </div>
 </div>

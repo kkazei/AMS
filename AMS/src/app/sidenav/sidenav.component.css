@@ -2,7 +2,7 @@
 .sidenav {
     width: 200px;
     height: 100%;
-    background-color: #3c5a97;
+    background-color: #241e57;
     color: white;
     font-family: Roboto, sans-serif;
     box-shadow: 2px 0 5px rgba(0, 0, 0, 0.3);
@@ -20,7 +20,11 @@
   
   .sidenav-header {
     text-align: center;
-    margin: 20px 0;
+    margin: 5px;
+    background-color: #ffffff;
+    padding-top: 10px;
+    border-radius: 10px;
+
   }
   
 /* Default styling for logo when sidenav is not collapsed */
@@ -155,6 +159,31 @@
   .toggle-button:hover {
     background-color: #424242;
   }
+
+
+  .logout-icon {
+    width: 50px; /* Matches the square shape */
+    height: 50px;
+    background-color: #13102d; /* Darker shade for contrast */
+    border: none;
+    border-radius: 10px; /* Subtle rounded corners */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    margin: 20px auto 70px; /* Center at the bottom with spacing */
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.logout-icon i {
+    font-size: 20px;
+    color: #fff; /* Matches icon color in the image */
+}
+
+.logout-icon:hover {
+    background-color: #8ab1d9; /* Slightly darker shade on hover */
+    transform: scale(1.1); /* Adds a hover effect */
+}
 
   /* Responsive Design */
 @media screen and (max-width: 768px) {
