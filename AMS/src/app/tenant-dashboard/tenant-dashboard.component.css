@@ -107,4 +107,127 @@
       }
     }
   }
+
+  .payment-method-wrapper {
+    max-width: 1250px;
+    margin: 20px auto;
+    background-color: #ffffff;
+    border: 1px solid #dcdcdc;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
   
+  .payment-method-wrapper h3 {
+    font-size: 18px;
+    color: #34495e;
+    margin-bottom: 20px;
+    text-align: left;
+  }
+  
+  .qr-payment-section {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+  }
+  
+  .qr-code-section {
+    flex: 1;
+    text-align: center;
+    background-color: #f9f9f9;
+    border: 1px solid #dcdcdc;
+    border-radius: 8px;
+    padding: 15px;
+  }
+  
+  .qr-code-img {
+    max-width: 350px;
+    max-height: 350px;
+    margin: 0 auto 10px auto;
+    display: block;
+  }
+  
+  .qr-description {
+    font-size: 14px;
+    color: #666;
+  }
+  
+  .attachment-section {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    background-color: #f9f9f9;
+    border: 1px solid #dcdcdc;
+    border-radius: 8px;
+    padding: 15px;
+  }
+  
+  .attachment-upload {
+    width: 400px;
+    font-size: 14px;
+    color: #444;
+    background-color: #e9ecef;
+    border: 1px solid #c8c8c8;
+    border-radius: 4px;
+    padding: 100px;
+    cursor: pointer;
+    text-align: center;
+  }
+  
+  .attachment-upload:hover {
+    background-color: #dcdcdc;
+  }
+  
+  .attachment-input {
+    display: none;
+  }
+  
+  .attachment-preview {
+    width: 100%;
+    height: 150px;
+    background-color: #dcdcdc;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #bcbcbc;
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  
+  .attachment-preview-img {
+    max-width: 100%;
+    max-height: 100%;
+  }
+  
+  .reference-label {
+    font-size: 14px;
+    color: #444;
+    margin-top: 10px;
+  }
+  
+  .reference-input {
+    width: 100%;
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #dcdcdc;
+    border-radius: 4px;
+    margin-top: 5px;
+  }
+  
+  .submit-btn {
+    width: 100%;
+    padding: 12px;
+    font-size: 16px;
+    font-weight: bold;
+    color: #ffffff;
+    background-color: #28a745;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 15px;
+  }
+  
+  .submit-btn:hover {
+    background-color: #218838;
+  }

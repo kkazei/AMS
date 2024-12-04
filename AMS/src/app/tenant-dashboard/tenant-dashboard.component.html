@@ -1,69 +1,68 @@
 <div class="dashboard-container">
-    <!-- Top Header -->
-    <div class="header">
-      <div class="user-info">
-        <h1>{{ userProfile?.fullname }} </h1>
-        <p>Room: {{ tenant.room || 'Not Assigned' }}</p>
-      
-      </div>
-      <div class="balance-info">
-        <p>Outstanding Balance</p>
-        <h1>₱{{ tenant.rent || 0 }}</h1>
-        <p>Due Date: {{ tenant.due_date | date:'MMMM dd, yyyy' }}</p>
-        <button class="pay-now-btn" (click)="isPaymentFormVisible = true">Pay Now</button>
-      </div>
+  <!-- Top Header -->
+  <div class="header">
+    <div class="user-info">
+      <h1>{{ userProfile?.fullname }} </h1>
+      <p>Room: {{ tenant.room || 'Not Assigned' }}</p>
     </div>
-
-
-
-<!-- Payment Form (Hidden until Pay Now is clicked) -->
-<div *ngIf="isPaymentFormVisible" class="payment-details-wrapper">
-  <h2>Payment Details</h2>
-
-  <form (ngSubmit)="onPayInvoice()">
-    <div>
-      <label for="paymentMethod">Payment Method</label>
-      <select id="paymentMethod" [(ngModel)]="selectedPaymentMethod" name="paymentMethod">
-        <option value="onhand">Pay On-Hand</option>
-        <option value="qr">Pay via QR</option>
-      </select>
+    <div class="balance-info">
+      <p>Outstanding Balance</p>
+      <h1>₱{{ tenant.rent || 0 }}</h1>
+      <p>Due Date: {{ tenant.due_date | date: 'MMMM dd, yyyy' }}</p>
+      <button class="pay-now-btn" (click)="togglePaymentForm()">Pay Now</button>
     </div>
+  </div>
 
-    <!-- Show QR image if Pay via QR is selected -->
-    <div *ngIf="selectedPaymentMethod === 'qr'">
-      <h3>Scan this QR Code to Pay</h3>
-      <div *ngIf="imageInfos && imageInfos.length > 0">
-        <div *ngFor="let image of imageInfos">
-          <h1>{{ image.description }}</h1>
-          <img [src]="image.img" alt="QR Code" class="img-thumbnail" height="150px" />
+  <!-- Payment Form (Hidden until Pay Now is clicked) -->
+  <div *ngIf="isPaymentFormVisible" class="payment-details-wrapper">
+    <form (ngSubmit)="onPayInvoice()">
+      <!-- Payment Method Section -->
+      <div class="payment-method-wrapper">
+        <h3>Scan or Save this QR Code to Pay</h3>
+        <div class="qr-payment-section">
+          <div class="qr-code-section">
+            <div *ngIf="imageInfos && imageInfos.length > 0">
+              <div *ngFor="let image of imageInfos" class="qr-image-wrapper">
+                <img [src]="image.img" alt="QR Code" class="qr-code-img" />
+                <p class="qr-description">{{ image.description }}</p>
+              </div>
+            </div>
+          </div>
+          <div class="attachment-section">
+            <h3>Add Attachment</h3>
+            <label for="proofOfPayment" class="attachment-upload">Add Attachment</label>
+            <input
+              type="file"
+              (change)="onPaymentProofFileSelected($event)"
+              id="proofOfPayment"
+              name="proofOfPayment"
+              class="attachment-input"
+            />
+            <div class="attachment-preview" *ngIf="paymentProof">
+              <img
+                [src]="paymentProofPreview"
+                alt="Payment Proof Preview"
+                class="attachment-preview-img"
+              />
+            </div>
+            <label for="referenceNumber" class="reference-label">Reference Number</label>
+            <input
+              type="text"
+              id="referenceNumber"
+              [(ngModel)]="paymentReferenceNumber"
+              name="referenceNumber"
+              class="reference-input"
+            />
+            <button type="submit" class="submit-btn">Send Proof of Payment</button>
+          </div>
         </div>
       </div>
-    </div>
+    </form>
+    <p *ngIf="paymentMessage">{{ paymentMessage }}</p>
+  </div>
 
-    <div>
-      <label for="amount">Amount</label>
-      <input type="number" id="amount" [(ngModel)]="paymentAmount" name="amount" [readonly]="true" />
-    </div>
-
-    <div *ngIf="selectedPaymentMethod === 'onhand'">
-      <label for="referenceNumber">Reference Number</label>
-      <input type="text" id="referenceNumber" [(ngModel)]="paymentReferenceNumber" name="referenceNumber" />
-    </div>
-
-    <div>
-      <label for="proofOfPayment">Proof of Payment</label>
-      <input type="file" (change)="onPaymentProofFileSelected($event)" id="proofOfPayment" name="proofOfPayment" />
-    </div>
-
-    <button type="submit">Submit Payment</button>
-  </form>
-
-  <p *ngIf="paymentMessage">{{ paymentMessage }}</p>
-</div>
-
-
-<div class="tenant-grid-container">
-    <!-- Grid Section -->
+  <!-- Tenant Grid Section -->
+  <div *ngIf="!isPaymentFormVisible" class="tenant-grid-container">
     <div class="grid-container">
       <button class="grid-item" (click)="openProfileModal()">
         <i class="material-icons">person</i>
@@ -82,8 +81,7 @@
         <p>Inquiries</p>
       </button>
     </div>
-
-<!-- Modal For Concerns -->
+    <!-- Modal For Concerns -->
 <div class="modal" id="ConcernsModal" tabindex="-1">
   <div class="modal-dialog modal-dialog-scrollable">
     <div class="modal-content">
@@ -305,4 +303,4 @@
 <!--End of Pay History Modal-->
 
     </div>
-    </div>
+  </div>

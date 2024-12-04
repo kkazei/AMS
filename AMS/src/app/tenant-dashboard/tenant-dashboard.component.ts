@@ -32,6 +32,9 @@ export class TenantDashboardComponent implements OnInit {
   leaseDetails: any = null; // Lease details list
   leaseImages: any[] = []; // Lease images list
   posts: any[] = [];
+  paymentProof: File | null = null; // To store the uploaded file
+paymentProofPreview: string | null = null; // To store the preview URL of the uploaded file
+
 
 
 
@@ -156,9 +159,18 @@ export class TenantDashboardComponent implements OnInit {
   onPaymentProofFileSelected(event: Event): void {
     const input = event.target as HTMLInputElement;
     if (input?.files?.[0]) {
-      this.paymentProofOfPayment = input.files[0]; // Store the payment proof file
+      // Store the selected file
+      this.paymentProofOfPayment = input.files[0];
+  
+      // Create a preview of the image
+      const reader = new FileReader();
+      reader.onload = (e: any) => {
+        this.paymentProofPreview = e.target.result; // Set the preview URL
+      };
+      reader.readAsDataURL(input.files[0]); // Use the selected file
     }
   }
+  
   
   onImageFileSelected(event: Event): void {
     const input = event.target as HTMLInputElement;
@@ -224,6 +236,11 @@ export class TenantDashboardComponent implements OnInit {
           this.paymentMessage = 'Failed to submit payment.';
         }
       );
+  }
+
+
+  togglePaymentForm(): void {
+    this.isPaymentFormVisible = !this.isPaymentFormVisible;
   }
 
   loadImages() {
