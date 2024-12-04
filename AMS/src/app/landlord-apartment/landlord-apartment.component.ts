@@ -32,6 +32,8 @@ export class LandlordApartmentComponent implements OnInit {
   paymentProofOfPayment: File | null = null;
   paymentMessage: string = '';
   paymentDetails: any = null; // Add this line
+  manualTenantEntry: boolean = false;
+manualTenantName: string = '';
 
   constructor(private authService: AuthService) {}
 
@@ -114,14 +116,21 @@ export class LandlordApartmentComponent implements OnInit {
   
 
   onPayInvoice() {
-    if (!this.paymentTenantId || !this.paymentAmount) {
+    if ((!this.paymentTenantId && !this.manualTenantName) || !this.paymentAmount) {
       this.paymentMessage = 'Tenant and amount are required.';
+      return;
+    }
+  
+    const tenantId = this.manualTenantEntry ? this.manualTenantName : this.paymentTenantId;
+  
+    if (!tenantId) {
+      this.paymentMessage = 'Tenant ID is required.';
       return;
     }
   
     this.authService
       .payInvoice(
-        this.paymentTenantId,
+        tenantId as string,
         this.paymentAmount,
         this.paymentReferenceNumber,
         this.paymentProofOfPayment

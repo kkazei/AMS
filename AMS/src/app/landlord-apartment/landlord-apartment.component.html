@@ -237,8 +237,16 @@
 <div class="pay-invoice-form-wrapper">
   <h2>Pay Invoice</h2>
   <form (ngSubmit)="onPayInvoice()">
-    <!-- Tenant Selection -->
+    <!-- Toggle Manual Tenant Entry -->
     <div class="form-group">
+      <label>
+        <input type="checkbox" [(ngModel)]="manualTenantEntry" name="manualTenantEntry" />
+        Enter tenant details manually
+      </label>
+    </div>
+
+    <!-- Tenant Selection or Manual Entry -->
+    <div *ngIf="!manualTenantEntry" class="form-group">
       <label for="tenant">Select Tenant</label>
       <select
         id="tenant"
@@ -251,6 +259,18 @@
           {{ tenant.tenant_fullname }}
         </option>
       </select>
+    </div>
+
+    <div *ngIf="manualTenantEntry" class="form-group">
+      <label for="tenantName">Tenant Name</label>
+      <input
+        type="text"
+        id="tenantName"
+        required
+        class="form-control"
+        [(ngModel)]="manualTenantName"
+        name="manualTenantName"
+      />
     </div>
 
     <!-- Payment Amount -->
@@ -291,7 +311,7 @@
 
     <!-- Submit Button -->
     <div class="form-group">
-      <button type="submit" class="btn btn-primary" [disabled]="!paymentTenantId || !paymentAmount">
+      <button type="submit" class="btn btn-primary" [disabled]="!paymentAmount || (!paymentTenantId && !manualTenantName)">
         Submit Payment
       </button>
     </div>
