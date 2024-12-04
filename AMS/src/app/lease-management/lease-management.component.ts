@@ -104,6 +104,8 @@ export class LeaseManagementComponent {
       this.authService.addLease(this.selectedFile, tenantId, room).subscribe(
         (response) => {
           this.message = 'Lease uploaded successfully!';
+          this.preview = ''; // Clear the preview after successful upload
+        this.selectedFile = null;
           this.loadLeaseImages(); // Reload the lease images after successful upload
         },
         (error) => {
@@ -120,6 +122,8 @@ export class LeaseManagementComponent {
   trackByFn(index: number, item: any) {
     return item.tenant_id;
   }
+
+
 
   closeAll() {
     this.selectedTenant = null; // Hide tenant details

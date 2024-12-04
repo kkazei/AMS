@@ -1,3 +1,4 @@
+import Swal from 'sweetalert2';
 import { Component } from '@angular/core';
 import { RouterModule, Router } from '@angular/router';
 import { AuthService } from '../services/auth.services';
@@ -16,17 +17,40 @@ export class SidenavComponent {
   constructor(private authService: AuthService, private router: Router) {}
 
   logout() {
-    this.authService.logout().subscribe({
-      next: (response) => {
-        console.log('Logged out successfully:', response);
-        this.router.navigate(['/login']); // Redirect to login or any other page
-      },
-      error: (error) => {
-        console.error('Logout error:', error);
-        // Optionally display an error message to the user
-      },
+    Swal.fire({
+      title: 'Are you sure?',
+      text: 'Do you really want to logout?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Yes, logout!',
+      cancelButtonText: 'No, stay logged in'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.authService.logout().subscribe({
+          next: () => {
+            localStorage.removeItem('user_id');
+            localStorage.removeItem('alertShown');
+            Swal.fire({
+              icon: 'success',
+              title: 'Logged Out',
+              text: 'You have successfully logged out!',
+            }).then(() => {
+              this.router.navigate(['/login']);
+            });
+          },
+          error: (error) => {
+            console.error('Logout error:', error);
+            Swal.fire({
+              icon: 'error',
+              title: 'Logout Failed',
+              text: 'An error occurred while logging out.',
+            });
+          }
+        });
+      }
     });
   }
+
 
 
   toggleSidenav() {
