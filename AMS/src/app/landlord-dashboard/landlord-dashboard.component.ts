@@ -60,7 +60,7 @@ export class LandlordDashboardComponent implements OnInit {
       console.log('Token:', token);
       console.log('User profile:', this.userProfile);
   
-      if (this.userProfile.usertype === 'admin') {
+      if (this.userProfile.usertype === 'landlord') {
         this.fetchData();
         this.getConcerns();
         this.getMaintenance();  // Fetch maintenance tasks when component initializes

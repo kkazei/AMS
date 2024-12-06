@@ -22,7 +22,7 @@ export class TenantLoginComponent {
 
   // Method for login
   userLogin() {
-    this.authService.login(this.username, this.password).subscribe(
+    this.authService.loginTenant(this.username, this.password).subscribe(
       (data) => {
         console.log('Login successful:', data);
         

@@ -34,7 +34,43 @@ export class AuthService {
     return new Observable((observer) => {
       axios
         .post(
-          this.apiUrl + 'login',
+          this.apiUrl + 'loginLandlord',
+          {
+            email: username,
+            password: password,
+          },
+          { headers }
+        )
+        .then((res) => {
+          if (res.status === 200 && res.data.jwt) {
+            const token = res.data.jwt;
+            if (isPlatformBrowser(this.platformId)) {
+              localStorage.setItem('jwt', token);
+            }
+            this.token = token;
+            this.loggedIn = true;
+            observer.next(res.data);
+          } else {
+            observer.error(new Error('Invalid login response'));
+          }
+          observer.complete();
+        })
+        .catch((error) => {
+          console.error('Login failed:', error);
+          observer.error(error);
+        });
+    });
+  }
+
+  loginTenant(username: string, password: string): Observable<any> {
+    const headers = {
+      'Content-Type': 'application/json',
+    };
+
+    return new Observable((observer) => {
+      axios
+        .post(
+          this.apiUrl + 'loginTenant',
           {
             email: username,
             password: password,
