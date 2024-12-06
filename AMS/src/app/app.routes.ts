@@ -12,23 +12,24 @@ import { LandlordConcernsComponent } from './landlord-concerns/landlord-concerns
 import { LeaseManagementComponent } from './lease-management/lease-management.component';
 import { InvoicesListComponent } from './invoices-list/invoices-list.component';
 import { MaintenanceComponent } from './maintenance/maintenance.component';
+import { AuthGuard } from './auth.guard';
 
 
 
 export const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
   { path: 'login', component: LoginComponent },
-  { path: 'landlord-dashboard', component: LandlordDashboardComponent },
-  { path: 'tenant-management', component: TenantManagementComponent },
-  { path: 'landlord-apartment', component: LandlordApartmentComponent },
-  { path: 'tenant-dashboard', component: TenantDashboardComponent },
+  { path: 'landlord-dashboard', component: LandlordDashboardComponent, canActivate: [AuthGuard] },
+  { path: 'tenant-management', component: TenantManagementComponent, canActivate: [AuthGuard] },
+  { path: 'landlord-apartment', component: LandlordApartmentComponent, canActivate: [AuthGuard] },
+  { path: 'tenant-dashboard', component: TenantDashboardComponent, canActivate: [AuthGuard] },
   {path: 'register', component: RegisterComponent},
   {path: 'tenant-login', component: TenantLoginComponent},
   {path: 'tenant-register', component: TenantRegisterComponent},
-  { path: 'landlord-concerns', component: LandlordConcernsComponent},
-  {path: 'lease-management', component: LeaseManagementComponent},
-  {path: 'invoices-list', component: InvoicesListComponent},
-  {path: 'maintenance', component: MaintenanceComponent},
+  { path: 'landlord-concerns', component: LandlordConcernsComponent, canActivate: [AuthGuard]},
+  {path: 'lease-management', component: LeaseManagementComponent, canActivate: [AuthGuard]},
+  {path: 'invoices-list', component: InvoicesListComponent, canActivate: [AuthGuard]},
+  {path: 'maintenance', component: MaintenanceComponent, canActivate: [AuthGuard]},
  
 
 

@@ -60,10 +60,14 @@ export class LandlordDashboardComponent implements OnInit {
       console.log('Token:', token);
       console.log('User profile:', this.userProfile);
   
-      this.fetchData();
-      this.getConcerns();
-      this.getMaintenance();  // Fetch maintenance tasks when component initializes
-      this.getPosts();
+      if (this.userProfile.usertype === 'admin') {
+        this.fetchData();
+        this.getConcerns();
+        this.getMaintenance();  // Fetch maintenance tasks when component initializes
+        this.getPosts();
+      } else {
+        console.error('Access denied. User is not an admin.');
+      }
     } else {
       console.error('User not logged in. JWT token missing.');
     }
