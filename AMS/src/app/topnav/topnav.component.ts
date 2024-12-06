@@ -23,7 +23,7 @@ export class TopnavComponent {
     this.authService.logout().subscribe({
       next: (response) => {
         console.log('Logged out successfully:', response);
-        this.router.navigate(['/login']);
+        this.router.navigate(['/tenant-login']);
       },
       error: (error) => {
         console.error('Logout error:', error);

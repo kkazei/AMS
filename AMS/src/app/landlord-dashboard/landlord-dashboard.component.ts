@@ -4,6 +4,7 @@ import { AuthService } from '../services/auth.services';
 import { FormsModule } from '@angular/forms';
 import { forkJoin } from 'rxjs';
 import { CommonModule } from '@angular/common';
+import { Router, RouterModule } from '@angular/router';
 
 
 Chart.register(...registerables); // Register Chart.js components
@@ -11,7 +12,7 @@ Chart.register(...registerables); // Register Chart.js components
 @Component({
   selector: 'app-landlord-dashboard',
   standalone: true,
-  imports: [FormsModule, CommonModule,],
+  imports: [FormsModule, CommonModule, RouterModule],
   templateUrl: './landlord-dashboard.component.html',
   styleUrls: ['./landlord-dashboard.component.css']
 })
@@ -51,7 +52,7 @@ export class LandlordDashboardComponent implements OnInit {
   acquiredCount: number = 0;
   monthlyExpenses: { [month: string]: number } = {};  // Store monthly expenses for maintenance
 
-  constructor(private authService: AuthService) {}
+  constructor(private authService: AuthService, private router: Router) {}
 
   ngOnInit(): void {
     const token = localStorage.getItem('jwt');
@@ -67,9 +68,11 @@ export class LandlordDashboardComponent implements OnInit {
         this.getPosts();
       } else {
         console.error('Access denied. User is not an admin.');
+        this.router.navigate(['/login']);
       }
     } else {
       console.error('User not logged in. JWT token missing.');
+      this.router.navigate(['/login']);
     }
   
     this.renderChart();

@@ -13,8 +13,27 @@ import { CommonModule } from '@angular/common';
 })
 export class SidenavComponent {
   isCollapsed = false;
+  userProfile: any;
 
   constructor(private authService: AuthService, private router: Router) {}
+  ngOnInit(): void {
+    const token = localStorage.getItem('jwt');
+    if (token) {
+      this.userProfile = this.authService.getUserProfileFromToken();
+      console.log('Token:', token);
+      console.log('User profile:', this.userProfile);
+  
+      if (this.userProfile.usertype === 'landlord') {
+       
+      } else {
+        console.error('Access denied. User is not an admin.');
+        this.router.navigate(['/login']);
+      }
+    } else {
+      console.error('User not logged in. JWT token missing.');
+      this.router.navigate(['/login']);
+    }
+  }
 
   logout() {
     Swal.fire({

@@ -3,11 +3,12 @@ import { AuthService } from '../services/auth.services';
 import { DatePipe } from '@angular/common';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { Router, RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-tenant-dashboard',
   standalone: true,
-  imports: [DatePipe, CommonModule, FormsModule],
+  imports: [DatePipe, CommonModule, FormsModule, RouterModule],
   templateUrl: './tenant-dashboard.component.html',
   styleUrls: ['./tenant-dashboard.component.css']
 })
@@ -38,22 +39,32 @@ paymentProofPreview: string | null = null; // To store the preview URL of the up
 
 
 
-  constructor(private authService: AuthService) {}
+  constructor(private authService: AuthService, private router: Router) {}
 
   ngOnInit(): void {
     const token = localStorage.getItem('jwt');
     if (token) {
       this.userProfile = this.authService.getUserProfileFromToken();
       console.log('User profile:', this.userProfile);
+
+      if (this.userProfile.usertype === 'tenant') {
+
       this.fetchTenantDetails();
       this.loadImages();
       this.loadPaymentDetails();
       this.loadLeaseImages();
       this.getPosts();
     } else {
-      console.warn('Token not found, user is not logged in');
+      console.error('Access denied. User is not an admin.');
+      this.router.navigate(['/tenant-login']);
     }
+  } else {
+    console.error('User not logged in. JWT token missing.');
+    this.router.navigate(['/tenant-login']);
   }
+}
+
+ 
 
   loadPaymentDetails(): void {
     this.authService.getPaymentDetails().subscribe(
