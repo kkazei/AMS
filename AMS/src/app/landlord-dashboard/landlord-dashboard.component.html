@@ -267,6 +267,7 @@
                 <h2 class="post-h2">Announcements</h2>
                 <div *ngFor="let post of posts" class="post-card">
                   <h3 class="post-title">{{ post.title }}</h3>
+                  <p class="post-date">{{ post.created_at | date:'short' }}</p>
                   <p class="post-content">{{ post.content }}</p>
                   <div *ngIf="post.image_path">
                     <img [src]="post.image_path" alt="Post Image" class="post-image" />
