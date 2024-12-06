@@ -29,9 +29,7 @@ export class SidenavComponent {
         console.error('Access denied. User is not an admin.');
         this.router.navigate(['/login']);
       }
-    } else {
-      console.error('User not logged in. JWT token missing.');
-      this.router.navigate(['/login']);
+    
     }
   }
 
