@@ -64,6 +64,8 @@ paymentProofPreview: string | null = null; // To store the preview URL of the up
   }
 }
 
+
+
  
 
   loadPaymentDetails(): void {
@@ -169,15 +171,16 @@ paymentProofPreview: string | null = null; // To store the preview URL of the up
   // Handle file selection
   onPaymentProofFileSelected(event: Event): void {
     const input = event.target as HTMLInputElement;
-    if (input.files && input.files.length > 0) {
-      this.paymentProofOfPayment = input.files[0];
-
-      // Create a preview of the selected file
+    if (input.files && input.files[0]) {
+      const file = input.files[0];
       const reader = new FileReader();
-      reader.onload = (e: any) => {
-        this.paymentProofPreview = e.target.result;
+  
+      // Generate preview
+      reader.onload = (e: ProgressEvent<FileReader>) => {
+        this.paymentProofPreview = e.target?.result as string;
       };
-      reader.readAsDataURL(this.paymentProofOfPayment);
+  
+      reader.readAsDataURL(file);
     }
   }
   
@@ -335,4 +338,47 @@ paymentProofPreview: string | null = null; // To store the preview URL of the up
       modal.style.display = "none";
     }
   }
+
+  printImage(imageSrc: string): void {
+    if (!imageSrc) {
+      console.error('No image source provided for printing.');
+      return;
+    }
+  
+    const printWindow = window.open('', '_blank');
+    if (printWindow) {
+      printWindow.document.write(`
+        <html>
+          <head>
+            <title>Print Lease Image</title>
+            <style>
+              body {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                height: 100vh;
+                margin: 0;
+              }
+              img {
+                max-width: 100%;
+                height: auto;
+              }
+            </style>
+          </head>
+          <body>
+            <img src="${imageSrc}" alt="Lease Image" />
+            <script>
+              window.onload = () => {
+                window.print();
+                window.close();
+              };
+            </script>
+          </body>
+        </html>
+      `);
+      printWindow.document.close();
+    }
+  }
+  
+
 }

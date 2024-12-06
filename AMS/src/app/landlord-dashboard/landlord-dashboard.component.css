@@ -362,7 +362,6 @@ td.paid {
 
 /* Card Styles */
 .apartments-list .card {
-  flex: 0 1 calc(50% - 30px);
   box-sizing: border-box;
   border-radius: 12px;
   border: 1px solid #ddd;

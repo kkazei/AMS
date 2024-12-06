@@ -383,6 +383,11 @@ export class LandlordDashboardComponent implements OnInit {
         console.log('Apartment created successfully:', response);
         this.message = 'Apartment created successfully!';
         this.getApartments();
+
+        // Reset the input fields
+      this.room = '';
+      this.rent = 0;
+      this.description = '';
       },
       (error) => {
         console.error('Error creating apartment:', error);

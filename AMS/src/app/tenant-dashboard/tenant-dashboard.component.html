@@ -13,7 +13,6 @@
     </div>
   </div>
 
-  <!-- Payment Form (Hidden until Pay Now is clicked) -->
   <div *ngIf="isPaymentFormVisible" class="payment-details-wrapper">
     <form (ngSubmit)="onPayInvoice()">
       <!-- Payment Method Section -->
@@ -30,7 +29,22 @@
           </div>
           <div class="attachment-section">
             <h3>Add Attachment</h3>
-            <label for="proofOfPayment" class="attachment-upload">Add Attachment</label>
+            <label
+              for="proofOfPayment"
+              class="attachment-upload"
+              [ngClass]="{ 'with-preview': paymentProofPreview }"
+            >
+              <ng-container *ngIf="!paymentProofPreview; else imagePreview">
+                Add Attachment
+              </ng-container>
+              <ng-template #imagePreview>
+                <img
+                  [src]="paymentProofPreview"
+                  alt="Payment Proof Preview"
+                  class="attachment-preview-img"
+                />
+              </ng-template>
+            </label>
             <input
               type="file"
               (change)="onPaymentProofFileSelected($event)"
@@ -38,13 +52,6 @@
               name="proofOfPayment"
               class="attachment-input"
             />
-            <div class="attachment-preview" *ngIf="paymentProofPreview">
-              <img
-                [src]="paymentProofPreview"
-                alt="Payment Proof Preview"
-                class="attachment-preview-img"
-              />
-            </div>
             <label for="referenceNumber" class="reference-label">Reference Number</label>
             <input
               type="text"
@@ -60,7 +67,7 @@
     </form>
     <p *ngIf="paymentMessage">{{ paymentMessage }}</p>
   </div>
-
+  
   <!-- Tenant Grid Section -->
   <div *ngIf="!isPaymentFormVisible" class="tenant-grid-container">
     <div class="grid-container">
@@ -89,7 +96,7 @@
       <!-- Modal Header -->
       <div class="modal-header">
         <h2>Create a New Concern</h2>
-        <button type="button" class="btn-close" (click)="closeConcernsModal()"></button>
+        <button type="button" class="btn-close" (click)="closeConcernsModal()">x</button>
       </div>
 
       <!-- Modal body -->
@@ -158,7 +165,7 @@
       <!-- Modal Header -->
       <div class="modal-header">
         <h2>Announcements</h2>
-        <button type="button" class="btn-close" (click)="closeProfileModal()"></button>
+        <button type="button" class="btn-close" (click)="closeProfileModal()">x</button>
       </div>
 
       <!-- Modal body -->
@@ -190,46 +197,54 @@
       <!-- Modal Header -->
       <div class="modal-header">
         <h2>Lease Agreement</h2>
-        <button type="button" class="btn-close" (click)="closeLeaseModal()"></button>
+        <button type="button" class="btn-close" (click)="closeLeaseModal()">x</button>
       </div>
 
-<!-- Modal body -->
-<div class="modal-body">
- <!-- Lease Images Section -->
- <div class="card shadow">
-  <div class="card-header bg-gradient-dark text-white">
-    <h5 class="mb-0"><i class="bi bi-images"></i> Lease Images</h5>
-  </div>
-  <div class="card-body">
-    <div *ngIf="leaseImages?.length; else noImages">
-      <div class="row">
-        <div class="col-md-4" *ngFor="let image of leaseImages">
-          <div class="card mb-3">
-            <img [src]="image.img" class="card-img-top" alt="Lease Image">
-            <div class="card-body">
-              <p class="card-text">{{ image.description || 'No description' }}</p>
+      <!-- Modal Body -->
+      <div class="modal-body">
+        <!-- Lease Images Section -->
+        <div class="card shadow">
+          <div class="card-header bg-gradient-dark text-white">
+            <h5 class="mb-0"><i class="bi bi-images"></i> Lease Images</h5>
+          </div>
+          <div class="card-body">
+            <div *ngIf="leaseImages?.length; else noImages">
+              <div class="row">
+                <div class="col-md-4" *ngFor="let image of leaseImages">
+                  <div class="card mb-3">
+                    <img
+                      [src]="image.img"
+                      class="card-img-top lease-image"
+                      alt="Lease Image"
+                    />
+                    <div class="card-body">
+                      <p class="card-text">{{ image.description || 'No description' }}</p>
+                      <!-- Print Button -->
+                      <button
+                        type="button"
+                        class="btn btn-outline-primary btn-sm"
+                        (click)="printImage(image.img)"
+                      >
+                        <i class="bi bi-printer"></i> Print
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
+            <ng-template #noImages>
+              <p class="text-center text-muted">No lease images available.</p>
+            </ng-template>
           </div>
         </div>
       </div>
-    </div>
-    <ng-template #noImages>
-      <p class="text-center text-muted">No lease images available.</p>
-    </ng-template>
-  </div>
-</div>
-  <div class="details mb-3">
-  </div>
-<!-- Modal Footer -->
-<div class="modal-footer">
-</div>
-      <div class="modal-footer">
-      </div>
+
+      <!-- Modal Footer -->
+      <div class="modal-footer"></div>
     </div>
   </div>
 </div>
-</div>
-<!--End of Lease Modal-->
+
 
 
 <!-- Modal For Pay History -->
@@ -240,7 +255,7 @@
       <!-- Modal Header -->
       <div class="modal-header">
         <h2>Payment History</h2>
-        <button type="button" class="btn-close" (click)="closePayHistoryModal()"></button>
+        <button type="button" class="btn-close" (click)="closePayHistoryModal()">x</button>
       </div>
 
       <!-- Modal body -->
