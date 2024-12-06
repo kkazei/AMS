@@ -532,6 +532,22 @@ export class LandlordDashboardComponent implements OnInit {
     this.selectedConcern = null;  // Clear the selected concern to hide the form
   }
 
+  deleteTenant(tenantId: number): void {
+    this.authService.deleteTenant(tenantId).subscribe(
+      (response) => {
+        if (response.status === 'success') {
+          // Remove the deleted tenant from the list
+          this.tenants = this.tenants.filter(tenant => tenant.tenant_id !== tenantId);
+        } else {
+          console.error('Error deleting tenant:', response.message);
+        }
+      },
+      (error) => {
+        // Handle error
+        console.error('Error deleting tenant:', error);
+      }
+    );
+  }
 
 
 

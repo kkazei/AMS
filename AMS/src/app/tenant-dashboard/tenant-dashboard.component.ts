@@ -159,14 +159,14 @@ paymentProofPreview: string | null = null; // To store the preview URL of the up
   onPaymentProofFileSelected(event: Event): void {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files.length > 0) {
-      this.paymentProof = input.files[0];
-  
-      // Generate a preview URL for the selected file
+      this.paymentProofOfPayment = input.files[0];
+
+      // Create a preview of the selected file
       const reader = new FileReader();
       reader.onload = (e: any) => {
         this.paymentProofPreview = e.target.result;
       };
-      reader.readAsDataURL(this.paymentProof);
+      reader.readAsDataURL(this.paymentProofOfPayment);
     }
   }
   

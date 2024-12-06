@@ -551,4 +551,20 @@ createConcerns(data: FormData): Observable<any> {
         });
       }
 
+      deleteTenant(tenantId: number): Observable<any> {
+        return new Observable((observer) => {
+            axios
+                .delete(`${this.apiUrl}/deleteTenant`, {
+                    data: { tenantId: tenantId }
+                })
+                .then((res) => {
+                    observer.next(res.data);
+                    observer.complete();
+                })
+                .catch((err) => {
+                    observer.error(err);
+                });
+        });
+    }
+
 }
