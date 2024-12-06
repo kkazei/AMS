@@ -1,3 +1,4 @@
+import Swal from 'sweetalert2';
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../services/auth.services';
 import { DatePipe } from '@angular/common';
@@ -200,33 +201,62 @@ paymentProofPreview: string | null = null; // To store the preview URL of the up
     concernData.append('title', this.concerntitle.trim() || 'No Subject');
     concernData.append('content', this.concerncontent.trim());
     concernData.append('tenant_id', this.userProfile.id.toString());
-
+  
     // If a file is selected, append it to the FormData
     if (this.selectedImage) {
       concernData.append('attachment', this.selectedImage, this.selectedImage.name);
     }
-
+  
     this.authService.createConcerns(concernData).subscribe(
       (response) => {
         console.log('Concern submitted successfully:', response);
-        this.message = 'Concern submitted successfully!';
+        
+        // Success modal
+        Swal.fire({
+          icon: 'success',
+          title: 'Concern Submitted',
+          text: 'Your concern has been submitted successfully!',
+        }).then(() => {
+          this.message = 'Concern submitted successfully!';
+          // You can reset the form here if needed
+          this.concerntitle = '';
+          this.concerncontent = '';
+          this.selectedImage = null;
+        });
       },
       (error) => {
         console.error('Error submitting concern:', error);
-        this.message = 'Failed to submit concern.';
+        
+        // Error modal
+        Swal.fire({
+          icon: 'error',
+          title: 'Submission Failed',
+          text: 'Failed to submit your concern. Please try again.',
+        }).then(() => {
+          this.message = 'Failed to submit concern.';
+        });
       }
     );
   }
+  
 
   // Handle form submission for payment
   onPayInvoice(): void {
     if (!this.paymentReferenceNumber || !this.paymentProofOfPayment) {
-      this.paymentMessage = 'Reference number and proof of payment are required.';
+      Swal.fire({
+        icon: 'error',
+        title: 'Missing Information',
+        text: 'Reference number and proof of payment are required.',
+      });
       return;
     }
   
     if (this.paymentAmount === null) {
-      this.paymentMessage = 'Payment amount is required.';
+      Swal.fire({
+        icon: 'error',
+        title: 'Missing Payment Amount',
+        text: 'Payment amount is required.',
+      });
       return;
     }
   
@@ -240,17 +270,33 @@ paymentProofPreview: string | null = null; // To store the preview URL of the up
       .subscribe(
         (response) => {
           console.log('Payment successful:', response);
-          this.paymentMessage = 'Payment successfully submitted!';
-          this.isPaymentFormVisible = false; // Hide the payment form after submission
-          window.location.reload(); // Refresh the page
+          
+          // Success modal
+          Swal.fire({
+            icon: 'success',
+            title: 'Payment Successful',
+            text: 'Your payment has been successfully submitted!',
+          }).then(() => {
+            this.paymentMessage = 'Payment successfully submitted!';
+            this.isPaymentFormVisible = false; // Hide the payment form after submission
+            window.location.reload(); // Refresh the page
+          });
         },
         (error) => {
           console.error('Error making payment:', error);
-          this.paymentMessage = 'Failed to submit payment.';
+          
+          // Error modal
+          Swal.fire({
+            icon: 'error',
+            title: 'Payment Failed',
+            text: 'There was an issue submitting your payment. Please try again.',
+          }).then(() => {
+            this.paymentMessage = 'Failed to submit payment.';
+          });
         }
       );
   }
-
+  
 
   togglePaymentForm(): void {
     this.isPaymentFormVisible = !this.isPaymentFormVisible;

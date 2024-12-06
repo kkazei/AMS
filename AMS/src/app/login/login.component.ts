@@ -1,3 +1,4 @@
+import Swal from 'sweetalert2';
 import { Component, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
@@ -27,19 +28,36 @@ export class LoginComponent {
       (data) => {
         console.log('Login successful:', data);
         
-        // Store the JWT token if necessary for further use (e.g., in localStorage or sessionStorage)
-        localStorage.setItem('jwt', data.jwt); // Store JWT token for later requests
+        // Store the JWT token
+        localStorage.setItem('jwt', data.jwt);
         
-        // Navigate to the landlord dashboard or another route after successful login
-        this.router.navigate(['/landlord-dashboard']);
+        // Show success modal
+        Swal.fire({
+          icon: 'success',
+          title: 'Login Successful',
+          text: 'You have successfully logged in!',
+        }).then(() => {
+          // Navigate after the user closes the modal
+          this.router.navigate(['/landlord-dashboard']);
+        });
       },
       (error) => {
         console.log('Login failed:', error);
+  
+        // Show error modal
+        Swal.fire({
+          icon: 'error',
+          title: 'Login Failed',
+          text: 'Invalid Credentials.',
+        });
+  
+        // Clear the input fields
         this.username = '';
         this.password = '';
       }
     );
   }
+  
 
   goToRegister() {
     this.router.navigate(['/register']); // Navigate to the register page
