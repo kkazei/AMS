@@ -23,12 +23,8 @@ export class SidenavComponent {
       console.log('Token:', token);
       console.log('User profile:', this.userProfile);
   
-      if (this.userProfile.usertype === 'landlord') {
-       
-      } else {
-        console.error('Access denied. User is not an admin.');
-        this.router.navigate(['/login']);
-      }
+
+      
     
     }
   }
