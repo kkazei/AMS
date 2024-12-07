@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../services/auth.services';
 import Swal from 'sweetalert2';
+
 @Component({
   selector: 'app-archive',
   standalone: true,
@@ -14,11 +15,11 @@ export class ArchiveComponent {
   userProfile: any; // Holds user profile information
   paymentDetails: any = null; // Payment details list
   archivedMaintenance: any[] = []; // Holds archived maintenance tasks
-
-
-
+  selectedInvoices: Set<number> = new Set<number>(); // Holds selected invoice IDs
+  selectedMaintenance: Set<number> = new Set<number>(); // Holds selected maintenance IDs
 
   constructor(private authService: AuthService) {}
+
   ngOnInit(): void {
     const token = localStorage.getItem('jwt');
     if (token) {
@@ -26,7 +27,6 @@ export class ArchiveComponent {
       console.log('User profile loaded:', this.userProfile);
       this.loadArchivedPaymentDetails();
       this.getArchivedMaintenance(); // Load archived maintenance tasks
-
     } else {
       console.warn('No token found. User is not logged in.');
     }
@@ -47,6 +47,7 @@ export class ArchiveComponent {
       }
     );
   }
+
   restorePaymentVisibility(invoiceId: number): void {
     this.authService.restorePaymentVisibility(invoiceId)
       .then((response) => {
@@ -90,8 +91,7 @@ export class ArchiveComponent {
         });
       });
   }
-  
-  
+
   getArchivedMaintenance(): void {
     this.authService.getArchivedMaintenance().subscribe(
       (response: any) => {
@@ -109,7 +109,63 @@ export class ArchiveComponent {
       }
     );
   }
-  
-  
-  
+
+  toggleInvoiceSelection(invoiceId: number): void {
+    if (this.selectedInvoices.has(invoiceId)) {
+      this.selectedInvoices.delete(invoiceId);
+    } else {
+      this.selectedInvoices.add(invoiceId);
+    }
+  }
+
+  selectAllInvoices(): void {
+    if (this.paymentDetails) {
+      this.paymentDetails.forEach((payment: any) => this.selectedInvoices.add(payment.invoice_id));
+    }
+  }
+
+  deleteSelectedInvoices(): void {
+    const invoiceIds = Array.from(this.selectedInvoices);
+    invoiceIds.forEach(invoiceId => {
+      this.authService.deleteInvoice(invoiceId).subscribe(
+        (response) => {
+          console.log('Invoice deleted:', response);
+          this.selectedInvoices.delete(invoiceId);
+          this.loadArchivedPaymentDetails(); // Refresh the list of archived payments
+        },
+        (error) => {
+          console.error('Error deleting invoice:', error);
+        }
+      );
+    });
+  }
+  toggleMaintenanceSelection(maintenanceId: number): void {
+    if (this.selectedMaintenance.has(maintenanceId)) {
+      this.selectedMaintenance.delete(maintenanceId);
+    } else {
+      this.selectedMaintenance.add(maintenanceId);
+    }
+  }
+
+  selectAllMaintenance(): void {
+    if (this.archivedMaintenance) {
+      this.archivedMaintenance.forEach((maintenance: any) => this.selectedMaintenance.add(maintenance.maintenance_id));
+    }
+  }
+
+  deleteSelectedMaintenance(): void {
+    const maintenanceIds = Array.from(this.selectedMaintenance);
+    maintenanceIds.forEach(maintenanceId => {
+      this.authService.deleteMaintenance(maintenanceId).subscribe(
+        (response) => {
+          console.log('Maintenance task deleted:', response);
+          this.selectedMaintenance.delete(maintenanceId);
+          this.getArchivedMaintenance(); // Refresh the list of archived maintenance tasks
+        },
+        (error) => {
+          console.error('Error deleting maintenance task:', error);
+        }
+      );
+    });
+  }
 }

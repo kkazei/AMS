@@ -699,4 +699,36 @@ createConcerns(data: FormData): Observable<any> {
     });
   }
 
+  deleteInvoice(invoiceId: number): Observable<any> {
+    return new Observable((observer) => {
+        axios
+            .delete(`${this.apiUrl}/deleteInvoice`, {
+                data: { invoice_id: invoiceId }
+            })
+            .then((res) => {
+                observer.next(res.data);
+                observer.complete();
+            })
+            .catch((err) => {
+                observer.error(err);
+            });
+    });
+}
+
+deleteMaintenance(maintenanceId: number): Observable<any> {
+  return new Observable((observer) => {
+      axios
+          .delete(`${this.apiUrl}/deleteMaintenance`, {
+              data: { maintenance_id: maintenanceId }
+          })
+          .then((res) => {
+              observer.next(res.data);
+              observer.complete();
+          })
+          .catch((err) => {
+              observer.error(err);
+          });
+  });
+}
+
 }
