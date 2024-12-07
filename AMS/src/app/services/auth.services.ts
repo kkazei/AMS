@@ -619,4 +619,45 @@ createConcerns(data: FormData): Observable<any> {
       });
   }
 
+
+  getArchivedPayments(): Observable<any> {
+    return new Observable((observer) => {
+      axios
+        .get(`${this.apiUrl}/getArchivedPayments`)
+        .then((res) => {
+          observer.next(res.data);
+          observer.complete();
+        })
+        .catch((err) => {
+          console.error('Error fetching posts:', err);
+          observer.error(err);
+        });
+    });
+  }
+   
+
+  // Update payment visibility (set isVisible = 0 to archive)
+  updatePaymentVisibility(invoiceId: number) {
+    return axios.post(`${this.apiUrl}/updatePaymentVisibility`, {
+      invoice_id: invoiceId
+    })
+    .then(response => response.data)
+    .catch(error => {
+      console.error('Error updating payment visibility', error);
+      throw error;
+    });
+  }
+
+  // Restore payment visibility (set isVisible = 1)
+  restorePaymentVisibility(invoiceId: number) {
+    return axios.post(`${this.apiUrl}/restorePaymentVisibility`, {
+      invoice_id: invoiceId
+    })
+    .then(response => response.data)
+    .catch(error => {
+      console.error('Error restoring payment visibility', error);
+      throw error;
+    });
+  }
+
 }

@@ -1,1 +1,45 @@
-<p>archive works!</p>
+<div *ngIf="userProfile">
+    <h2>Welcome, {{ userProfile.name }}</h2>
+    <p>Your archived payments are listed below:</p>
+  
+    <div *ngIf="paymentDetails && paymentDetails.length > 0; else noPayments">
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th>Payment ID</th>
+            <th>Amount</th>
+            <th>Date</th>
+            <th>Proof of Payment</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let payment of paymentDetails">
+            <td>{{ payment.tenant_fullname }}</td>
+            <td>₱{{ payment.amount }}</td>
+            <td>{{ payment.payment_date | date: 'short' }}</td>
+            <td>
+              <a *ngIf="payment.proof_of_payment" [href]="payment.proof_of_payment" target="_blank" class="btn btn-outline-primary btn-sm">
+                <i class="bi bi-eye"></i> View
+              </a>
+              <span *ngIf="!payment.proof_of_payment" class="text-danger">No Proof</span>
+            </td>
+            <td>
+              <button class="btn btn-success btn-sm" (click)="restorePaymentVisibility(payment.invoice_id)">
+                <i class="bi bi-arrow-repeat"></i> Restore Payment Visibility
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  
+    <ng-template #noPayments>
+      <p>No archived payments found.</p>
+    </ng-template>
+  </div>
+  
+  <div *ngIf="!userProfile">
+    <p>Please log in to view your archived payments.</p>
+  </div>
+  
