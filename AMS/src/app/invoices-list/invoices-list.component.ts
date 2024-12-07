@@ -3,6 +3,8 @@ import { Component } from '@angular/core';
 import { AuthService } from '../services/auth.services';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import jsPDF from 'jspdf';
+import 'jspdf-autotable';
 
 @Component({
   selector: 'app-invoices-list',
@@ -86,6 +88,54 @@ export class InvoicesListComponent {
       reader.readAsDataURL(file);
     }
   }
+
+  generateInvoice(payment: any): void {
+    const doc = new jsPDF();
+
+    // Add border
+    doc.setLineWidth(0.5);
+    doc.rect(5, 5, doc.internal.pageSize.width - 10, doc.internal.pageSize.height - 10);
+
+    // Add header
+    doc.setFontSize(20);
+    doc.setFont('helvetica', 'bold');
+    doc.text('Invoice', 105, 20, { align: 'center' });
+
+    // Add company logo
+    const imgData = 'data:image/jpeg;base64,...'; // Add your base64 encoded image data here
+    doc.addImage(imgData, 'JPEG', 10, 10, 30, 30);
+
+    // Add tenant details
+    doc.setFontSize(12);
+    doc.setFont('helvetica', 'normal');
+    doc.text(`Tenant Name: ${payment.tenant_fullname}`, 14, 50);
+    doc.text(`Room: ${payment.room || 'N/A'}`, 14, 60);
+    doc.text(`Amount: Php${payment.amount}`, 14, 70);
+    doc.text(`Reference Number: ${payment.reference_number || 'N/A'}`, 14, 80);
+    doc.text(`Payment Date: ${payment.payment_date}`, 14, 90);
+
+    // Add table for payment details
+    (doc as any).autoTable({
+      startY: 100,
+      head: [['Description', 'Amount']],
+      body: [
+        ['Rent', `₱${payment.amount}`],
+        // Add more rows if needed
+      ],
+      styles: { halign: 'center' },
+      headStyles: { fillColor: [22, 160, 133] },
+      theme: 'grid'
+    });
+
+    // Add footer
+    doc.setFontSize(10);
+    doc.setFont('helvetica', 'italic');
+    doc.text('Thank you for your payment!', 105, doc.internal.pageSize.height - 20, { align: 'center' });
+    doc.text('Contact us: unitpaysolutions@gmail.com | 0992 611 5081', 105, doc.internal.pageSize.height - 10, { align: 'center' });
+
+    // Save the PDF
+    doc.save(`${payment.tenant_fullname}-Invoice.pdf`);
+}
 
   // Upload file with description
   upload(): void {
