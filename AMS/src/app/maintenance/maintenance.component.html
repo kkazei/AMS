@@ -111,6 +111,7 @@
           <strong>Expenses:</strong> {{ maintenance.expenses | currency }} <br />
           <strong>Status:</strong> {{ maintenance.status }} <br />
           <button (click)="editMaintenance(maintenance)">Edit</button>
+          <button (click)="archiveMaintenance(maintenance.maintenance_id)">Archive</button>
         </li>
       </ul>
     </div>

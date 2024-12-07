@@ -660,4 +660,43 @@ createConcerns(data: FormData): Observable<any> {
     });
   }
 
+  getArchivedMaintenance(): Observable<any> {
+    return new Observable((observer) => {
+      axios
+        .get(`${this.apiUrl}/getArchivedMaintenance`)
+        .then((res) => {
+          observer.next(res.data);
+          observer.complete();
+        })
+        .catch((err) => {
+          console.error('Error fetching posts:', err);
+          observer.error(err);
+        });
+    });
+  }
+
+  // Update payment visibility (set isVisible = 0 to archive)
+  archiveMaintenance(maintenanceId: number) {
+    return axios.post(`${this.apiUrl}/archiveMaintenance`, {
+      maintenance_id: maintenanceId
+    })
+    .then(response => response.data)
+    .catch(error => {
+      console.error('Error updating payment visibility', error);
+      throw error;
+    });
+  }
+
+  // Restore payment visibility (set isVisible = 1)
+  restoreMaintenance(maintenanceId: number) {
+    return axios.post(`${this.apiUrl}/restoreMaintenance`, {
+      maintenance_id: maintenanceId
+    })
+    .then(response => response.data)
+    .catch(error => {
+      console.error('Error restoring payment visibility', error);
+      throw error;
+    });
+  }
+
 }

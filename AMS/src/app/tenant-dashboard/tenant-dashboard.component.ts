@@ -172,16 +172,14 @@ paymentProofPreview: string | null = null; // To store the preview URL of the up
   // Handle file selection
   onPaymentProofFileSelected(event: Event): void {
     const input = event.target as HTMLInputElement;
-    if (input.files && input.files[0]) {
+    if (input.files && input.files.length > 0) {
       const file = input.files[0];
       const reader = new FileReader();
-  
-      // Generate preview
-      reader.onload = (e: ProgressEvent<FileReader>) => {
-        this.paymentProofPreview = e.target?.result as string;
+      reader.onload = (e: any) => {
+        this.paymentProofPreview = e.target.result;
       };
-  
       reader.readAsDataURL(file);
+      this.paymentProof = file; // Store the file for submission
     }
   }
   
@@ -264,7 +262,7 @@ paymentProofPreview: string | null = null; // To store the preview URL of the up
         this.tenant.tenant_id,
         this.paymentAmount, // Now it's guaranteed to be a number
         this.paymentReferenceNumber,
-        this.paymentProofOfPayment
+        this.paymentProof
       )
       .subscribe(
         (response) => {

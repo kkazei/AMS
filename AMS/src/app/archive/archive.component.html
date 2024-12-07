@@ -38,6 +38,43 @@
       <p>No archived payments found.</p>
     </ng-template>
   </div>
+  <div *ngIf="userProfile">
+    <h2>Archived Maintenance Tasks</h2>
+    <p>Below is the list of archived maintenance tasks:</p>
+  
+    <div *ngIf="archivedMaintenance && archivedMaintenance.length > 0; else noMaintenance">
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th>Task ID</th>
+            <th>Description</th>
+            <th>Start Date</th>
+            <th>End Date</th>
+            <th>Expense</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let maintenance of archivedMaintenance">
+            <td>{{ maintenance.maintenance_id }}</td>
+            <td>{{ maintenance.description }}</td>
+            <td>{{ maintenance.start_date | date: 'short' }}</td>
+            <td>{{ maintenance.end_date | date: 'short' }}</td>
+            <td>₱{{ maintenance.expenses }}</td>
+            <td>
+              <button class="btn btn-success btn-sm" (click)="restoreMaintenanceVisibility(maintenance.maintenance_id)">
+                <i class="bi bi-arrow-repeat"></i> Restore Task Visibility
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  
+    <ng-template #noMaintenance>
+      <p>No archived maintenance tasks found.</p>
+    </ng-template>
+  </div>
   
   <div *ngIf="!userProfile">
     <p>Please log in to view your archived payments.</p>

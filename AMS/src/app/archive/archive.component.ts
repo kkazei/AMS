@@ -13,6 +13,8 @@ import Swal from 'sweetalert2';
 export class ArchiveComponent {
   userProfile: any; // Holds user profile information
   paymentDetails: any = null; // Payment details list
+  archivedMaintenance: any[] = []; // Holds archived maintenance tasks
+
 
 
 
@@ -23,6 +25,7 @@ export class ArchiveComponent {
       this.userProfile = this.authService.getUserProfileFromToken();
       console.log('User profile loaded:', this.userProfile);
       this.loadArchivedPaymentDetails();
+      this.getArchivedMaintenance(); // Load archived maintenance tasks
 
     } else {
       console.warn('No token found. User is not logged in.');
@@ -65,5 +68,48 @@ export class ArchiveComponent {
         });
       });
   }
+
+  restoreMaintenanceVisibility(maintenanceId: number): void {
+    this.authService.restoreMaintenance(maintenanceId)
+      .then((response) => {
+        console.log('Maintenance visibility restored:', response);
+        Swal.fire({
+          icon: 'success',
+          title: 'Maintenance Restored',
+          text: 'The maintenance task has been restored successfully.',
+        }).then(() => {
+          this.getArchivedMaintenance(); // Refresh the list of archived maintenance tasks
+        });
+      })
+      .catch((error) => {
+        console.error('Error restoring maintenance visibility:', error);
+        Swal.fire({
+          icon: 'error',
+          title: 'Restore Failed',
+          text: 'Failed to restore the maintenance task. Please try again later.',
+        });
+      });
+  }
+  
+  
+  getArchivedMaintenance(): void {
+    this.authService.getArchivedMaintenance().subscribe(
+      (response: any) => {
+        if (response.status === 'success' && Array.isArray(response.data)) {
+          console.log('Archived maintenance tasks fetched:', response.data);
+          this.archivedMaintenance = response.data; // Assign only the data array
+        } else {
+          console.warn('Unexpected response format for archived maintenance tasks:', response);
+          this.archivedMaintenance = []; // Fallback to an empty array
+        }
+      },
+      (error) => {
+        console.error('Error fetching archived maintenance tasks:', error);
+        this.archivedMaintenance = []; // Handle error case by clearing the list
+      }
+    );
+  }
+  
+  
   
 }

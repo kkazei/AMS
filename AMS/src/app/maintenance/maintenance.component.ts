@@ -185,4 +185,28 @@ export class MaintenanceComponent {
       status: 'pending' // Default status
     };
   }
+
+  archiveMaintenance(maintenanceId: number): void {
+    this.authService.archiveMaintenance(maintenanceId).then(
+      (response) => {
+        console.log('Maintenance task archived successfully:', response);
+        
+        Swal.fire({
+          icon: 'success',
+          title: 'Maintenance Archived',
+          text: 'The maintenance task has been archived successfully!',
+        }).then(() => {
+          this.getMaintenance(); // Refresh the list of maintenance tasks
+        });
+      }
+    ).catch((error) => {
+      console.error('Error archiving maintenance task:', error);
+      
+      Swal.fire({
+        icon: 'error',
+        title: 'Archive Failed',
+        text: 'Failed to archive the maintenance task. Please try again.',
+      });
+    });
+  }
 }
