@@ -7,7 +7,7 @@
   <!-- Upload Section -->
   <div class="card shadow mb-5">
     <div class="card-header bg-gradient-primary text-white">
-      <h5 class="mb-0"><i class="bi bi-cloud-upload"></i> Upload Section</h5>
+      <h5 class="mb-0"><i class="bi bi-cloud-upload"></i> Upload Payment QR</h5>
     </div>
     <div class="card-body">
       <div class="row align-items-center">
@@ -20,7 +20,7 @@
             type="text"
             [(ngModel)]="description"
             class="form-control"
-            placeholder="Enter a description for the file"
+            placeholder="Enter More Payment Instructions"
           />
         </div>
         <div class="col-lg-4 text-end">
@@ -46,28 +46,36 @@
   </div>
 
   <!-- List of Uploaded Images -->
-  <div *ngIf="imageInfos?.length" class="card shadow mb-5">
-    <div class="card-header bg-gradient-secondary text-white">
-      <h5 class="mb-0"><i class="bi bi-images"></i> Uploaded Images</h5>
-    </div>
-    <ul class="list-group list-group-flush">
-      <li
-        class="list-group-item d-flex justify-content-between align-items-center"
-        *ngFor="let image of imageInfos; trackBy: trackByFn"
-      >
-        <div>
-          <a [href]="image.img" target="_blank" class="text-primary fw-bold">{{ image.imgName }}</a>
-          <p class="mb-0 small text-muted">{{ image.description }}</p>
-        </div>
-        <img
-          [src]="image.img"
-          [alt]="image.imgName"
-          class="img-thumbnail"
-          style="height: 60px; width: auto;"
-        />
-      </li>
-    </ul>
+<div *ngIf="imageInfos?.length" class="card shadow mb-5">
+  <div class="card-header bg-gradient-secondary text-white">
+    <h5 class="mb-0"><i class="bi bi-images"></i> Uploaded Images</h5>
   </div>
+  <ul class="list-group list-group-flush">
+    <li
+      class="list-group-item d-flex justify-content-between align-items-center"
+      *ngFor="let image of imageInfos; trackBy: trackByFn"
+    >
+      <div>
+        <a [href]="image.img" target="_blank" class="text-primary fw-bold">{{ image.imgName }}</a>
+        <p class="mb-0 small text-muted">{{ image.description }}</p>
+      </div>
+      <img
+        [src]="image.img"
+        [alt]="image.imgName"
+        class="img-thumbnail"
+        style="height: 60px; width: auto;"
+      />
+      <!-- Delete button -->
+      <button
+        class="btn btn-outline-danger btn-sm"
+        (click)="deleteImage(image.id)"
+      >
+        <i class="bi bi-trash"></i> Delete
+      </button>
+    </li>
+  </ul>
+</div>
+
 
   <!-- Payment Details Section -->
   <div class="card shadow">

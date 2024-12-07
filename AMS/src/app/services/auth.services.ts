@@ -603,4 +603,20 @@ createConcerns(data: FormData): Observable<any> {
         });
     }
 
+    deleteImage(landlordId: number): Observable<any> {
+      return new Observable((observer) => {
+          axios
+              .delete(`${this.apiUrl}/deleteImage`, {
+                  data: { landlordId: landlordId }
+              })
+              .then((res) => {
+                  observer.next(res.data);
+                  observer.complete();
+              })
+              .catch((err) => {
+                  observer.error(err);
+              });
+      });
+  }
+
 }

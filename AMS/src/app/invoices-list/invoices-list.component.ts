@@ -122,6 +122,44 @@ export class InvoicesListComponent {
       });
     }
   }
+
+  deleteImage(imageId: number): void {
+    const landlordId = this.userProfile?.id; // Get landlord ID from user profile
+  
+    if (landlordId) {
+      this.authService.deleteImage(landlordId).subscribe(
+        (response) => {
+          console.log('Image deleted:', response);
+  
+          // After successful deletion, remove the image from the list
+          this.imageInfos = this.imageInfos.filter(image => image.id !== imageId);
+  
+          Swal.fire({
+            icon: 'success',
+            title: 'Image Deleted',
+            text: 'The image has been deleted successfully.',
+          });
+        },
+        (error) => {
+          console.error('Error deleting image:', error);
+  
+          Swal.fire({
+            icon: 'error',
+            title: 'Delete Failed',
+            text: 'Failed to delete the image. Please try again later.',
+          });
+        }
+      );
+    } else {
+      console.warn('Landlord ID is not available.');
+      Swal.fire({
+        icon: 'warning',
+        title: 'No Landlord ID',
+        text: 'Cannot delete image. Landlord ID is missing.',
+      });
+    }
+  }
+  
   
 
   // Reset form fields after successful upload

@@ -11,6 +11,7 @@ import { LeaseManagementComponent } from './lease-management/lease-management.co
 import { InvoicesListComponent } from './invoices-list/invoices-list.component';
 import { MaintenanceComponent } from './maintenance/maintenance.component';
 import { LandlordTestComponent } from './landlord-test/landlord-test.component';
+import { ArchiveComponent } from './archive/archive.component';
 import { AuthGuard } from './auth.guard';
 
 
@@ -27,6 +28,7 @@ export const routes: Routes = [
   {path: 'lease-management', component: LeaseManagementComponent, canActivate: [AuthGuard]},
   {path: 'invoices-list', component: InvoicesListComponent, canActivate: [AuthGuard]},
   {path: 'maintenance', component: MaintenanceComponent, canActivate: [AuthGuard]},
+  {path: 'archive', component: ArchiveComponent, canActivate: [AuthGuard]},
   {path: 'landlord-test', component: LandlordTestComponent}
  
 
