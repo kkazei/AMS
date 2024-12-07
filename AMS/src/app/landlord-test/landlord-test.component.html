@@ -1,0 +1,98 @@
+   <!-- Main Overview Section -->
+   <section class="main-overview">
+    <div class="overview-grid">
+      <button class="overview-card" (click)="openTenantModal()"><i class="fa-solid fa-user"></i><br>TENANTS</button>             
+     
+    </div>
+  <!-- Modal For Tenant -->
+  <div class="modal" id="TenantModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-scrollable">
+      <div class="modal-content">
+  
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h4 class="modal-title">Assign Tenant to a Room</h4>
+          <button type="button" class="btn-close" (click)="closeTenantModal()">X</button>
+        </div>
+  
+        <!-- Modal body -->
+        <div class="modal-body">
+          <form class="assign-tenant-form" (ngSubmit)="assignTenantToApartment()">
+            <!-- Select Apartment -->
+            <div class="form-group">
+              <label for="apartment">Select Apartment</label>
+              <select id="apartment" required class="form-control" [(ngModel)]="selectedApartmentId" name="apartment">
+                <option *ngFor="let apartment of apartments" [value]="apartment.apartment_id">
+                  {{ apartment.room }} ({{ apartment.description }})
+                </option>
+              </select>
+            </div>
+  
+           <!-- Select Tenant -->
+            <div class="form-group">
+              <label for="tenant">Select Tenant</label>
+              <select id="tenant" required class="form-control" [(ngModel)]="selectedTenantId" name="tenant" (change)="checkTenantAssignment()">
+                <option *ngFor="let tenant of tenants" [value]="tenant.tenant_id">
+                  {{ tenant.tenant_fullname }}
+                </option>
+              </select>
+            </div>
+  
+            <!-- Display message if tenant is already assigned -->
+            <div *ngIf="message" class="alert alert-warning">
+              {{ message }}
+            </div>
+  
+            <!-- Action Buttons -->
+            <div class="form-group">
+              <button type="button" class="btn btn-primary" (click)="updateApartmentAndTenant('assign_tenant')">
+                Assign Tenant
+              </button>
+              <button type="button" class="btn btn-warning" (click)="updateApartmentAndTenant('remove_tenant')">
+                Remove
+              </button>
+            </div>
+          </form>
+        </div>
+  
+        <!-- Modal Footer -->
+        <div class="modal-footer">
+          <div class="tenants-list">
+            <h2>Tenant List</h2>
+            <div *ngIf="tenants && tenants.length; else noTenants">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Tenant ID</th>
+                    <th>Room</th>
+                    <th>Contact Number</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let tenant of tenants">
+                    <td>{{ tenant.tenant_fullname }}</td>
+                    <td>{{ tenant.tenant_email }}</td>
+                    <td>{{ tenant.tenant_id }}</td>
+                    <td>{{ tenant.room ? tenant.room : 'Not Assigned' }}</td>
+                    <td>{{ tenant.tenant_phone }}</td>
+                    <td>
+                      <button type="button" class="btn btn-danger" (click)="deleteTenant(tenant.tenant_id)">
+                        Delete
+                      </button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <ng-template #noTenants>
+              <p>No tenants found.</p>
+            </ng-template>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!--End of Tenant Modal-->

@@ -248,7 +248,6 @@ paymentProofPreview: string | null = null; // To store the preview URL of the up
         title: 'Missing Information',
         text: 'Reference number and proof of payment are required.',
       });
-      return;
     }
   
     if (this.paymentAmount === null) {
@@ -277,7 +276,6 @@ paymentProofPreview: string | null = null; // To store the preview URL of the up
             title: 'Payment Successful',
             text: 'Your payment has been successfully submitted!',
           }).then(() => {
-            this.paymentMessage = 'Payment successfully submitted!';
             this.isPaymentFormVisible = false; // Hide the payment form after submission
             window.location.reload(); // Refresh the page
           });
