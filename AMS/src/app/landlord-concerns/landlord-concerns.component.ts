@@ -1,4 +1,3 @@
-import Swal from 'sweetalert2';
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../services/auth.services';
 import { CommonModule } from '@angular/common';
@@ -56,38 +55,18 @@ export class LandlordConcernsComponent implements OnInit {
     this.selectedConcern = { ...concern };
   }
 
-  updateConcern(): void {
+  updateConcern() {
     if (this.selectedConcern) {
       this.authService.updateConcerns(this.selectedConcern).subscribe(
         (response) => {
           console.log('Concern updated successfully:', response);
-  
-          Swal.fire({
-            icon: 'success',
-            title: 'Concern Updated',
-            text: 'The concern has been updated successfully!',
-          }).then(() => {
-            this.getConcerns(); // Refresh the concerns list
-            this.selectedConcern = null; // Clear the selected concern
-          });
+          this.getConcerns(); // Refresh the concerns list
+          this.selectedConcern = null; // Clear the selected concern
         },
         (error) => {
           console.error('Error updating concern:', error);
-  
-          Swal.fire({
-            icon: 'error',
-            title: 'Update Failed',
-            text: 'Failed to update the concern. Please try again later.',
-          });
         }
       );
-    } else {
-      Swal.fire({
-        icon: 'warning',
-        title: 'No Concern Selected',
-        text: 'Please select a concern to update.',
-      });
     }
   }
-  
 }

@@ -1,4 +1,3 @@
-import Swal from 'sweetalert2';
 import { Component } from '@angular/core';
 import { AuthService } from '../services/auth.services';
 import { CommonModule } from '@angular/common';
@@ -90,39 +89,24 @@ export class InvoicesListComponent {
   // Upload file with description
   upload(): void {
     const landlordId = this.userProfile?.id; // Landlord ID from user profile
-  
     if (this.paymentProofOfPayment && this.description && landlordId) {
       this.authService.addImage(this.paymentProofOfPayment, this.description, landlordId).subscribe(
         (response) => {
           console.log('Upload successful:', response);
-  
-          Swal.fire({
-            icon: 'success',
-            title: 'Upload Successful',
-            text: 'Your file has been uploaded successfully!',
-          }).then(() => {
-            this.loadImages(); // Refresh the list of images
-            this.resetForm();  // Reset preview and description
-          });
+          this.message = 'File uploaded successfully!';
+          this.loadImages(); // Refresh the list of images
+          this.resetForm(); // Reset preview and description
         },
         (error) => {
           console.error('Upload failed:', error);
-          Swal.fire({
-            icon: 'error',
-            title: 'Upload Failed',
-            text: 'Failed to upload the file. Please try again later.',
-          });
+          this.message = 'File upload failed!';
         }
       );
     } else {
-      Swal.fire({
-        icon: 'warning',
-        title: 'Incomplete Details',
-        text: 'Please select a file, provide a description, and ensure the landlord ID is available.',
-      });
+      console.warn('Missing file, description, or landlord ID.');
+      this.message = 'Please select a file, provide a description, and ensure the landlord ID is available.';
     }
   }
-  
 
   // Reset form fields after successful upload
   resetForm(): void {

@@ -1,4 +1,3 @@
-import Swal from 'sweetalert2';
 import { Component } from '@angular/core';
 import { AuthService } from '../services/auth.services';
 import { CommonModule } from '@angular/common';
@@ -98,45 +97,26 @@ export class LeaseManagementComponent {
   }
 
   // Upload the selected file for the selected tenant
-  upload(): void {
+  upload() {
     if (this.selectedFile && this.selectedTenant) {
       const tenantId = this.selectedTenant.tenant_id;
       const room = this.selectedTenant.room;
-  
       this.authService.addLease(this.selectedFile, tenantId, room).subscribe(
         (response) => {
-          // Success modal
-          Swal.fire({
-            icon: 'success',
-            title: 'Lease Uploaded',
-            text: 'The lease has been uploaded successfully!',
-          }).then(() => {
-            this.message = 'Lease uploaded successfully!';
-            this.preview = ''; // Clear the preview after successful upload
-            this.selectedFile = null;
-            this.loadLeaseImages(); // Reload the lease images after successful upload
-          });
+          this.message = 'Lease uploaded successfully!';
+          this.preview = ''; // Clear the preview after successful upload
+        this.selectedFile = null;
+          this.loadLeaseImages(); // Reload the lease images after successful upload
         },
         (error) => {
-          // Error modal
-          Swal.fire({
-            icon: 'error',
-            title: 'Upload Failed',
-            text: 'Failed to upload the lease. Please try again later.',
-          });
+          this.message = 'Lease upload failed!';
           console.error('Error uploading lease:', error);
         }
       );
     } else {
-      // Validation modal for missing file or tenant
-      Swal.fire({
-        icon: 'warning',
-        title: 'Incomplete Details',
-        text: 'Please select a tenant and file before uploading!',
-      });
+      this.message = 'Please select a tenant and file before uploading!';
     }
   }
-  
 
   // Track tenants in the grid using a unique identifier
   trackByFn(index: number, item: any) {

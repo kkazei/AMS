@@ -2,6 +2,8 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { LoginComponent } from './login/login.component';
 import { LandlordDashboardComponent } from './landlord-dashboard/landlord-dashboard.component';
+import { TenantManagementComponent } from './tenant-management/tenant-management.component';
+import { LandlordApartmentComponent } from './landlord-apartment/landlord-apartment.component';
 import { TenantDashboardComponent } from './tenant-dashboard/tenant-dashboard.component';
 import { RegisterComponent } from './register/register.component';
 import { TenantLoginComponent } from './tenant-login/tenant-login.component';
@@ -18,6 +20,8 @@ export const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
   { path: 'login', component: LoginComponent },
   { path: 'landlord-dashboard', component: LandlordDashboardComponent, canActivate: [AuthGuard] },
+  { path: 'tenant-management', component: TenantManagementComponent, canActivate: [AuthGuard] },
+  { path: 'landlord-apartment', component: LandlordApartmentComponent, canActivate: [AuthGuard] },
   { path: 'tenant-dashboard', component: TenantDashboardComponent, canActivate: [AuthGuard] },
   {path: 'register', component: RegisterComponent},
   {path: 'tenant-login', component: TenantLoginComponent},

@@ -1,4 +1,3 @@
-import Swal from 'sweetalert2';
 import { Component, OnInit } from '@angular/core';
 import { Chart, registerables } from 'chart.js';
 import { AuthService } from '../services/auth.services';
@@ -347,41 +346,28 @@ export class LandlordDashboardComponent implements OnInit {
     this.selectedFile = event.target.files[0];
   }
 
-  createPost() {
-    const postData = new FormData();
-    postData.append('title', this.title.trim() || 'Untitled Post');
-    postData.append('content', this.content.trim());
-    postData.append('landlord_id', this.userProfile.id.toString());
-  
-    if (this.selectedFile) {
-      postData.append('image', this.selectedFile, this.selectedFile.name);
-    }
-  
-    this.authService.createAnnouncement(postData).subscribe(
-      (response) => {
-        console.log('Post created successfully:', response);
-        Swal.fire({
-          icon: 'success',
-          title: 'Post Created',
-          text: 'Your announcement post has been created successfully!',
-        }).then(() => {
-          this.getPosts(); // Refresh posts
-          this.title = '';
-          this.content = '';
-          this.selectedFile = null;
-        });
-      },
-      (error) => {
-        console.error('Error creating post:', error);
-        Swal.fire({
-          icon: 'error',
-          title: 'Error',
-          text: 'Failed to create the post. Please try again later.',
-        });
-      }
-    );
+ createPost() {
+  const postData = new FormData();
+  postData.append('title', this.title.trim() || 'Untitled Post');
+  postData.append('content', this.content.trim());
+  postData.append('landlord_id', this.userProfile.id.toString());
+
+  if (this.selectedFile) {
+    postData.append('image', this.selectedFile, this.selectedFile.name);
   }
-  
+
+  this.authService.createAnnouncement(postData).subscribe(
+    (response) => {
+      console.log('Post created successfully:', response);
+      this.message = 'Post created successfully!';
+      this.getPosts();
+    },
+    (error) => {
+      console.error('Error creating post:', error);
+      this.message = 'Failed to create post.';
+    }
+  );
+}
 
 
   createApartment() {
@@ -391,73 +377,49 @@ export class LandlordDashboardComponent implements OnInit {
       description: this.description.trim(),
       landlord_id: this.userProfile.id,
     };
-  
+
     this.authService.createApartment(apartmentData).subscribe(
       (response) => {
         console.log('Apartment created successfully:', response);
-        Swal.fire({
-          icon: 'success',
-          title: 'Apartment Created',
-          text: 'The apartment has been created successfully!',
-        }).then(() => {
-          this.getApartments(); // Refresh apartments
-          // Reset the input fields
-          this.room = '';
-          this.rent = 0;
-          this.description = '';
-        });
+        this.message = 'Apartment created successfully!';
+        this.getApartments();
+
+        // Reset the input fields
+      this.room = '';
+      this.rent = 0;
+      this.description = '';
       },
       (error) => {
         console.error('Error creating apartment:', error);
-        Swal.fire({
-          icon: 'error',
-          title: 'Error',
-          text: 'Failed to create the apartment. Please try again later.',
-        });
+        this.message = 'Failed to create apartment.';
       }
     );
   }
-  
 
   assignTenantToApartment() {
     if (!this.selectedApartmentId || !this.selectedTenantId) {
-      Swal.fire({
-        icon: 'warning',
-        title: 'Missing Information',
-        text: 'Please select both an apartment and a tenant.',
-      });
+      console.error('Apartment and Tenant selection is required');
+      this.message = 'Please select both an apartment and a tenant.';
       return;
     }
-  
+
     const assignmentData = {
       apartment_id: this.selectedApartmentId,
       tenant_id: this.selectedTenantId,
     };
-  
+
     this.authService.assignTenantToApartment(assignmentData).subscribe(
       (response) => {
         console.log('Tenant assigned successfully:', response);
-        Swal.fire({
-          icon: 'success',
-          title: 'Tenant Assigned',
-          text: 'The tenant has been successfully assigned to the apartment!',
-        }).then(() => {
-          this.getApartments(); // Refresh the apartments after assignment
-          this.selectedApartmentId = null;
-          this.selectedTenantId = null;
-        });
+        this.message = 'Tenant assigned successfully!';
+        this.getApartments(); // Refresh the apartments after assignment
       },
       (error) => {
         console.error('Error assigning tenant:', error);
-        Swal.fire({
-          icon: 'error',
-          title: 'Error',
-          text: 'Failed to assign the tenant. Please try again later.',
-        });
+        this.message = 'Failed to assign tenant.';
       }
     );
   }
-  
 
   fetchTotalIncomeSinceStartOfYear(): void {
     const currentYear = new Date().getFullYear();
@@ -488,97 +450,69 @@ export class LandlordDashboardComponent implements OnInit {
   // Updated method to handle only 'remove_tenant'
   updateApartmentAndTenant(action: string) {
     if (!this.selectedApartmentId) {
-      Swal.fire({
-        icon: 'warning',
-        title: 'Apartment Selection Required',
-        text: 'Please select an apartment to proceed.',
-      });
+      console.error('Apartment selection is required');
+      this.message = 'Please select an apartment.';
       return;
     }
   
+    // Handle 'remove_tenant' action
     if (action === 'remove_tenant') {
       if (!this.selectedTenantId) {
-        Swal.fire({
-          icon: 'warning',
-          title: 'Tenant Selection Required',
-          text: 'Please select a tenant to remove.',
-        });
+        console.error('Tenant selection is required for removal');
+        this.message = 'Please select a tenant for removal.';
         return;
       }
   
       const updateData: any = {
         apartment_id: this.selectedApartmentId,
         action: action,
-        tenant_id: this.selectedTenantId,
+        tenant_id: this.selectedTenantId,  // Include tenant_id for removal
       };
   
       this.authService.updateApartmentAndTenant(updateData).subscribe(
         (response) => {
           console.log('Tenant removed successfully:', response);
-          Swal.fire({
-            icon: 'success',
-            title: 'Tenant Removed',
-            text: 'The tenant has been removed successfully!',
-          }).then(() => {
-            this.getApartments(); // Refresh apartments
-            this.getTenants();   // Refresh tenants
-          });
+          this.message = 'Tenant removed successfully!';
+          this.getApartments(); // Refresh the apartments after removal
+          this.getTenants(); // Refresh tenants to reflect changes
         },
         (error) => {
           console.error('Error removing tenant:', error);
-          Swal.fire({
-            icon: 'error',
-            title: 'Error Removing Tenant',
-            text: 'Failed to remove the tenant. Please try again later.',
-          });
+          this.message = 'Failed to remove tenant.';
         }
       );
-    } else if (action === 'assign_tenant') {
+    }
+    // Handle 'assign_tenant' action
+    else if (action === 'assign_tenant') {
       if (!this.selectedTenantId) {
-        Swal.fire({
-          icon: 'warning',
-          title: 'Tenant Selection Required',
-          text: 'Please select a tenant to assign.',
-        });
+        console.error('Tenant selection is required for assignment');
+        this.message = 'Please select a tenant for assignment.';
         return;
       }
   
       const assignmentData: any = {
         apartment_id: this.selectedApartmentId,
-        tenant_id: this.selectedTenantId,
+        tenant_id: this.selectedTenantId,  // Include tenant_id for assignment
       };
   
       this.authService.assignTenantToApartment(assignmentData).subscribe(
         (response) => {
           console.log('Tenant assigned successfully:', response);
-          Swal.fire({
-            icon: 'success',
-            title: 'Tenant Assigned',
-            text: 'The tenant has been assigned successfully!',
-          }).then(() => {
-            this.getApartments();                // Refresh apartments
-            this.getTenants();                   // Refresh tenants
-            this.fetchTotalIncomeSinceStartOfYear(); // Update income stats
-          });
+          this.message = 'Tenant assigned successfully!';
+          this.getApartments(); // Refresh the apartments after assignment
+          this.getTenants(); // Refresh tenants to reflect changes
+          this.fetchTotalIncomeSinceStartOfYear(); // Recalculate total income
         },
         (error) => {
           console.error('Error assigning tenant:', error);
-          Swal.fire({
-            icon: 'error',
-            title: 'Error Assigning Tenant',
-            text: 'Failed to assign the tenant. Please try again later.',
-          });
+          this.message = 'Failed to assign tenant.';
         }
       );
     } else {
-      Swal.fire({
-        icon: 'error',
-        title: 'Invalid Action',
-        text: 'The specified action is not valid.',
-      });
+      console.error('Invalid action:', action);
+      this.message = 'Invalid action specified.';
     }
   }
-  
   selectConcern(concern: any): void {
     this.selectedConcern = { ...concern };  // Create a copy to avoid mutating original data
   }
@@ -588,93 +522,44 @@ export class LandlordDashboardComponent implements OnInit {
     this.authService.updateConcerns(updatedConcern).subscribe(
       (response) => {
         console.log('Concern updated successfully:', response);
-        Swal.fire({
-          icon: 'success',
-          title: 'Concern Updated',
-          text: 'The concern has been updated successfully!',
-        }).then(() => {
-          this.getConcerns();  // Reload concerns after successful update
-          this.selectedConcern = null;  // Reset selected concern
-        });
+        this.getConcerns();  // Reload concerns after successful update
+        this.selectedConcern = null;  // Reset selected concern
       },
       (error) => {
         console.error('Error updating concern:', error);
-        Swal.fire({
-          icon: 'error',
-          title: 'Error Updating Concern',
-          text: 'Failed to update the concern. Please try again later.',
-        });
+        // Show an error message if needed
       }
     );
   }
-  
   checkTenantAssignment(): void {
     const selectedTenant = this.tenants.find(tenant => tenant.tenant_id === this.selectedTenantId);
-    
     if (selectedTenant && selectedTenant.room) {
-      Swal.fire({
-        icon: 'info',
-        title: 'Tenant Already Assigned',
-        text: `This tenant is already assigned to apartment: ${selectedTenant.room}`,
-      });
+      this.message = `Tenant is already assigned to apartment: ${selectedTenant.room}`;
     } else {
-      Swal.fire({
-        icon: 'success',
-        title: 'Tenant Not Assigned',
-        text: 'This tenant is not currently assigned to any apartment.',
-      });
+      this.message = '';
     }
   }
-  
   // Cancel the edit and reset the form
   cancelEdit(): void {
     this.selectedConcern = null;  // Clear the selected concern to hide the form
   }
 
   deleteTenant(tenantId: number): void {
-    // Show confirmation modal
-    Swal.fire({
-      icon: 'warning',
-      title: 'Delete Tenant?',
-      text: 'Are you sure you want to delete this tenant? This action cannot be undone.',
-      showCancelButton: true,
-      confirmButtonText: 'Yes, delete it!',
-      cancelButtonText: 'Cancel',
-    }).then((result) => {
-      if (result.isConfirmed) {
-        // Proceed with deletion
-        this.authService.deleteTenant(tenantId).subscribe(
-          (response) => {
-            if (response.status === 'success') {
-              Swal.fire({
-                icon: 'success',
-                title: 'Deleted',
-                text: 'The tenant has been successfully deleted.',
-              }).then(() => {
-                // Remove the tenant from the list
-                this.tenants = this.tenants.filter(tenant => tenant.tenant_id !== tenantId);
-              });
-            } else {
-              Swal.fire({
-                icon: 'error',
-                title: 'Deletion Failed',
-                text: response.message || 'An error occurred while trying to delete the tenant.',
-              });
-            }
-          },
-          (error) => {
-            Swal.fire({
-              icon: 'error',
-              title: 'Error',
-              text: 'Failed to delete the tenant. Please try again later.',
-            });
-            console.error('Error deleting tenant:', error);
-          }
-        );
+    this.authService.deleteTenant(tenantId).subscribe(
+      (response) => {
+        if (response.status === 'success') {
+          // Remove the deleted tenant from the list
+          this.tenants = this.tenants.filter(tenant => tenant.tenant_id !== tenantId);
+        } else {
+          console.error('Error deleting tenant:', response.message);
+        }
+      },
+      (error) => {
+        // Handle error
+        console.error('Error deleting tenant:', error);
       }
-    });
+    );
   }
-  
 
 
 

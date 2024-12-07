@@ -1,4 +1,3 @@
-import Swal from 'sweetalert2';
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -96,56 +95,32 @@ export class MaintenanceComponent {
     this.authService.addMaintenance(this.newMaintenanceData).subscribe(
       (response) => {
         console.log('Maintenance added successfully:', response);
-        
-        Swal.fire({
-          icon: 'success',
-          title: 'Maintenance Added',
-          text: 'The maintenance task has been added successfully!',
-        }).then(() => {
-          this.getMaintenance(); // Refresh the list of maintenance tasks after adding
-          this.resetNewMaintenanceData(); // Reset the form
-        });
+        alert('Maintenance task added successfully!');
+        this.getMaintenance(); // Refresh the list of maintenance tasks after adding
+        this.resetNewMaintenanceData(); // Reset the form
       },
       (error) => {
         console.error('Error adding maintenance:', error);
-        
-        Swal.fire({
-          icon: 'error',
-          title: 'Add Failed',
-          text: 'Failed to add maintenance task. Please try again.',
-        });
+        alert('Failed to add maintenance task. Please try again.');
       }
     );
   }
-  
 
   // Method to submit updated maintenance task
   onEditSubmit(): void {
     this.authService.updateMaintenance(this.editMaintenanceData).subscribe(
       (response) => {
         console.log('Maintenance updated successfully:', response);
-        
-        Swal.fire({
-          icon: 'success',
-          title: 'Maintenance Updated',
-          text: 'The maintenance task has been updated successfully!',
-        }).then(() => {
-          this.getMaintenance(); // Refresh the list of maintenance tasks after updating
-          this.cancelEdit(); // Exit edit mode
-        });
+        alert('Maintenance task updated successfully!');
+        this.getMaintenance(); // Refresh the list of maintenance tasks after updating
+        this.cancelEdit(); // Exit edit mode
       },
       (error) => {
         console.error('Error updating maintenance:', error);
-        
-        Swal.fire({
-          icon: 'error',
-          title: 'Update Failed',
-          text: 'Failed to update maintenance task. Please try again.',
-        });
+        alert('Failed to update maintenance task. Please try again.');
       }
     );
   }
-  
 
   // Method to edit a maintenance task
   editMaintenance(maintenance: any): void {
