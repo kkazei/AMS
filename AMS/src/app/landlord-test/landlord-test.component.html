@@ -18,30 +18,42 @@
         <!-- Modal body -->
         <div class="modal-body">
           <form class="assign-tenant-form" (ngSubmit)="assignTenantToApartment()">
-            <!-- Select Apartment -->
-            <div class="form-group">
-              <label for="apartment">Select Apartment</label>
-              <select id="apartment" required class="form-control" [(ngModel)]="selectedApartmentId" name="apartment">
-                <option *ngFor="let apartment of apartments" [value]="apartment.apartment_id">
-                  {{ apartment.room }} ({{ apartment.description }})
-                </option>
-              </select>
-            </div>
-  
-           <!-- Select Tenant -->
-            <div class="form-group">
-              <label for="tenant">Select Tenant</label>
-              <select id="tenant" required class="form-control" [(ngModel)]="selectedTenantId" name="tenant" (change)="checkTenantAssignment()">
-                <option *ngFor="let tenant of tenants" [value]="tenant.tenant_id">
-                  {{ tenant.tenant_fullname }}
-                </option>
-              </select>
-            </div>
-  
-            <!-- Display message if tenant is already assigned -->
-            <div *ngIf="message" class="alert alert-warning">
-              {{ message }}
-            </div>
+   <!-- Select Apartment -->
+<div class="form-group">
+  <label for="apartment">Select Apartment</label>
+  <select
+    id="apartment"
+    required
+    class="form-control"
+    [(ngModel)]="selectedApartmentId"
+    name="apartment"
+    (change)="onApartmentChange()">
+    <option *ngFor="let apartment of apartments" [value]="apartment.apartment_id">
+      {{ apartment.room }} ({{ apartment.description }})
+    </option>
+  </select>
+</div>
+
+<!-- Select Tenant -->
+<div class="form-group">
+  <label for="tenant">Select Tenant</label>
+  <select
+    id="tenant"
+    required
+    class="form-control"
+    [(ngModel)]="selectedTenantId"
+    name="tenant"
+    [disabled]="!selectedApartmentId">
+    <option *ngFor="let tenant of tenants" [value]="tenant.tenant_id">
+      {{ tenant.tenant_fullname }}
+    </option>
+  </select>
+</div>
+
+<!-- Display message if tenant is already assigned -->
+<div *ngIf="message" class="alert alert-warning">
+  {{ message }}
+</div>
   
             <!-- Action Buttons -->
             <div class="form-group">

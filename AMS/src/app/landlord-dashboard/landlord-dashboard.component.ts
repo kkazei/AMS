@@ -421,41 +421,107 @@ export class LandlordDashboardComponent implements OnInit {
 
   assignTenantToApartment() {
     if (!this.selectedApartmentId || !this.selectedTenantId) {
-      Swal.fire({
-        icon: 'warning',
-        title: 'Missing Information',
-        text: 'Please select both an apartment and a tenant.',
-      });
+      console.error('Apartment and Tenant selection is required');
+      this.message = 'Please select both an apartment and a tenant.';
       return;
     }
-  
+
     const assignmentData = {
       apartment_id: this.selectedApartmentId,
       tenant_id: this.selectedTenantId,
     };
-  
+
     this.authService.assignTenantToApartment(assignmentData).subscribe(
       (response) => {
         console.log('Tenant assigned successfully:', response);
-        Swal.fire({
-          icon: 'success',
-          title: 'Tenant Assigned',
-          text: 'The tenant has been successfully assigned to the apartment!',
-        }).then(() => {
-          this.getApartments(); // Refresh the apartments after assignment
-          this.selectedApartmentId = null;
-          this.selectedTenantId = null;
-        });
+        this.message = 'Tenant assigned successfully!';
+        this.getApartments(); // Refresh the apartments after assignment
       },
       (error) => {
         console.error('Error assigning tenant:', error);
-        Swal.fire({
-          icon: 'error',
-          title: 'Error',
-          text: 'Failed to assign the tenant. Please try again later.',
-        });
+        this.message = 'Failed to assign tenant.';
       }
     );
+  }
+
+  onApartmentChange(): void {
+    if (this.selectedApartmentId) {
+      // Convert selectedApartmentId to a number
+      const selectedApartmentIdNumber = Number(this.selectedApartmentId);
+  
+      // Debug: Log the selected apartment ID and tenants
+      console.log('Selected Apartment ID:', selectedApartmentIdNumber);
+      console.log('Apartments:', this.apartments);
+  
+      // Debug: Check the type of selectedApartmentId and apartment.apartment_id
+      console.log('Type of selectedApartmentId:', typeof selectedApartmentIdNumber);
+      console.log('Type of apartment_id:', typeof this.apartments[0].apartment_id);
+  
+      // Find the selected apartment from the apartments array
+      const selectedApartment = this.apartments.find(
+        (apartment) => apartment.apartment_id === selectedApartmentIdNumber
+      );
+  
+      // Debug: Log the found apartment
+      console.log('Selected Apartment:', selectedApartment);
+  
+      if (selectedApartment) {
+        // Check if the selected apartment already has a tenant assigned
+        const assignedTenantId = selectedApartment.tenant_id;
+        console.log('Assigned Tenant ID:', assignedTenantId);
+        
+        if (assignedTenantId) {
+          // Find the tenant assigned to this apartment
+          const assignedTenant = this.tenants.find(
+            (tenant) => tenant.tenant_id === assignedTenantId
+          );
+  
+          // Debug: Log the found tenant
+          console.log('Assigned Tenant:', assignedTenant);
+  
+          if (assignedTenant) {
+            // Automatically select the tenant for this apartment
+            this.selectedTenantId = assignedTenant.tenant_id;
+  
+            // Show a message that the tenant is already assigned to this apartment
+            Swal.fire({
+              icon: 'info',
+              title: 'Tenant Found',
+              text: `Tenant ${assignedTenant.tenant_fullname} is already assigned to this apartment.`,
+            });
+          }
+        } else {
+          // No tenant assigned, clear the selected tenant ID
+          this.selectedTenantId = null;
+          
+          // Inform the user that no tenant is assigned to the apartment
+          Swal.fire({
+            icon: 'warning',
+            title: 'No Tenant Assigned',
+            text: 'This apartment does not have a tenant assigned.',
+          });
+        }
+      } else {
+        // Debug: Log if apartment is not found
+        console.error('Apartment not found in the list.');
+  
+        // Apartment not found
+        this.selectedTenantId = null;
+        Swal.fire({
+          icon: 'error',
+          title: 'Apartment Not Found',
+          text: 'The selected apartment could not be found in the list.',
+        });
+      }
+    } else {
+      // No apartment selected, clear the selected tenant ID
+      this.selectedTenantId = null;
+      Swal.fire({
+        icon: 'warning',
+        title: 'No Apartment Selected',
+        text: 'Please select an apartment to proceed.',
+      });
+    }
   }
   
 
@@ -522,6 +588,9 @@ export class LandlordDashboardComponent implements OnInit {
           }).then(() => {
             this.getApartments(); // Refresh apartments
             this.getTenants();   // Refresh tenants
+            // Clear the selections
+            this.selectedApartmentId = null;
+            this.selectedTenantId = null;
           });
         },
         (error) => {
@@ -558,7 +627,9 @@ export class LandlordDashboardComponent implements OnInit {
           }).then(() => {
             this.getApartments();                // Refresh apartments
             this.getTenants();                   // Refresh tenants
-            this.fetchTotalIncomeSinceStartOfYear(); // Update income stats
+            // Clear the selections
+            this.selectedApartmentId = null;
+            this.selectedTenantId = null;
           });
         },
         (error) => {
@@ -578,6 +649,7 @@ export class LandlordDashboardComponent implements OnInit {
       });
     }
   }
+  
   
   selectConcern(concern: any): void {
     this.selectedConcern = { ...concern };  // Create a copy to avoid mutating original data
