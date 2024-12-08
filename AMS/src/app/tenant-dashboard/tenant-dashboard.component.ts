@@ -240,7 +240,7 @@ paymentProofPreview: string | null = null; // To store the preview URL of the up
 
   // Handle form submission for payment
   onPayInvoice(): void {
-    if (!this.paymentReferenceNumber || !this.paymentProofOfPayment) {
+    if (!this.paymentReferenceNumber && !this.paymentProofOfPayment) {
       Swal.fire({
         icon: 'error',
         title: 'Missing Information',
