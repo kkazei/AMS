@@ -212,24 +212,39 @@ export class InvoicesListComponent {
   
   // Update payment visibility (archive payment)
   updatePaymentVisibility(invoiceId: number): void {
-    this.authService.updatePaymentVisibility(invoiceId)
-      .then(() => {
-        Swal.fire({
-          icon: 'success',
-          title: 'Payment Archived',
-          text: 'The payment has been archived successfully.',
-        }).then(() => {
-          this.loadPaymentDetails(); // Refresh payment details list
-        });
-      })
-      .catch((error) => {
-        Swal.fire({
-          icon: 'error',
-          title: 'Error',
-          text: 'Failed to archive payment. Please try again.',
-        });
-      });
+    Swal.fire({
+      icon: 'warning',
+      title: 'Are you sure?',
+      text: 'Do you want to archive this payment?',
+      showCancelButton: true,
+      confirmButtonText: 'Yes, Archive it',
+      cancelButtonText: 'Cancel',
+      reverseButtons: true,
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.authService.updatePaymentVisibility(invoiceId)
+          .then(() => {
+            Swal.fire({
+              icon: 'success',
+              title: 'Payment Archived',
+              text: 'The payment has been archived successfully.',
+            }).then(() => {
+              this.loadPaymentDetails(); // Refresh payment details list
+            });
+          })
+          .catch((error) => {
+            Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: 'Failed to archive payment. Please try again.',
+            });
+          });
+      } else {
+        console.log('Archive action canceled');
+      }
+    });
   }
+  
 
   // Reset form fields after successful upload
   resetForm(): void {

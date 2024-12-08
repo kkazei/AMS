@@ -39,6 +39,15 @@ button {
   font-size: 1.2rem;
 }
 
+
+.card-header {
+  background-color: #241e57;
+}
+
+.card-header h5 {
+  color: #ffffff;
+  
+}
 .card-body {
   background-color: #ffffff;
   border-radius: 10px;

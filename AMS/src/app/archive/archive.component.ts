@@ -126,19 +126,55 @@ export class ArchiveComponent {
 
   deleteSelectedInvoices(): void {
     const invoiceIds = Array.from(this.selectedInvoices);
-    invoiceIds.forEach(invoiceId => {
-      this.authService.deleteInvoice(invoiceId).subscribe(
-        (response) => {
-          console.log('Invoice deleted:', response);
-          this.selectedInvoices.delete(invoiceId);
-          this.loadArchivedPaymentDetails(); // Refresh the list of archived payments
-        },
-        (error) => {
-          console.error('Error deleting invoice:', error);
-        }
-      );
+  
+    if (invoiceIds.length === 0) {
+      Swal.fire({
+        icon: 'warning',
+        title: 'No Invoices Selected',
+        text: 'Please select at least one invoice to delete.',
+      });
+      return;
+    }
+  
+    Swal.fire({
+      icon: 'warning',
+      title: 'Are you sure?',
+      text: `You are about to delete ${invoiceIds.length} invoice(s). This action cannot be undone.`,
+      showCancelButton: true,
+      confirmButtonText: 'Yes, Delete',
+      cancelButtonText: 'Cancel',
+      reverseButtons: true,
+    }).then((result) => {
+      if (result.isConfirmed) {
+        invoiceIds.forEach((invoiceId) => {
+          this.authService.deleteInvoice(invoiceId).subscribe(
+            (response) => {
+              console.log('Invoice deleted:', response);
+              this.selectedInvoices.delete(invoiceId);
+              this.loadArchivedPaymentDetails(); // Refresh the list of archived payments
+            },
+            (error) => {
+              console.error('Error deleting invoice:', error);
+              Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: `Failed to delete invoice with ID: ${invoiceId}. Please try again.`,
+              });
+            }
+          );
+        });
+  
+        Swal.fire({
+          icon: 'success',
+          title: 'Invoices Deleted',
+          text: `${invoiceIds.length} invoice(s) were successfully deleted.`,
+        });
+      } else {
+        console.log('Deletion canceled');
+      }
     });
   }
+  
   toggleMaintenanceSelection(maintenanceId: number): void {
     if (this.selectedMaintenance.has(maintenanceId)) {
       this.selectedMaintenance.delete(maintenanceId);
@@ -155,17 +191,53 @@ export class ArchiveComponent {
 
   deleteSelectedMaintenance(): void {
     const maintenanceIds = Array.from(this.selectedMaintenance);
-    maintenanceIds.forEach(maintenanceId => {
-      this.authService.deleteMaintenance(maintenanceId).subscribe(
-        (response) => {
-          console.log('Maintenance task deleted:', response);
-          this.selectedMaintenance.delete(maintenanceId);
-          this.getArchivedMaintenance(); // Refresh the list of archived maintenance tasks
-        },
-        (error) => {
-          console.error('Error deleting maintenance task:', error);
-        }
-      );
+  
+    if (maintenanceIds.length === 0) {
+      Swal.fire({
+        icon: 'warning',
+        title: 'No Tasks Selected',
+        text: 'Please select at least one maintenance task to delete.',
+      });
+      return;
+    }
+  
+    Swal.fire({
+      icon: 'warning',
+      title: 'Are you sure?',
+      text: `You are about to delete ${maintenanceIds.length} maintenance task(s). This action cannot be undone.`,
+      showCancelButton: true,
+      confirmButtonText: 'Yes, Delete',
+      cancelButtonText: 'Cancel',
+      reverseButtons: true,
+    }).then((result) => {
+      if (result.isConfirmed) {
+        maintenanceIds.forEach((maintenanceId) => {
+          this.authService.deleteMaintenance(maintenanceId).subscribe(
+            (response) => {
+              console.log('Maintenance task deleted:', response);
+              this.selectedMaintenance.delete(maintenanceId);
+              this.getArchivedMaintenance(); // Refresh the list of archived maintenance tasks
+            },
+            (error) => {
+              console.error('Error deleting maintenance task:', error);
+              Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: `Failed to delete maintenance task with ID: ${maintenanceId}. Please try again.`,
+              });
+            }
+          );
+        });
+  
+        Swal.fire({
+          icon: 'success',
+          title: 'Tasks Deleted',
+          text: `${maintenanceIds.length} maintenance task(s) were successfully deleted.`,
+        });
+      } else {
+        console.log('Deletion canceled');
+      }
     });
   }
+  
 }

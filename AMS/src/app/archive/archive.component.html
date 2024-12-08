@@ -1,94 +1,136 @@
-<div *ngIf="userProfile">
-  <h2>Welcome, {{ userProfile.name }}</h2>
-  <p>Your archived payments are listed below:</p>
-
-  <div *ngIf="paymentDetails && paymentDetails.length > 0; else noPayments">
-    <button class="btn btn-primary" (click)="selectAllInvoices()">Select All</button>
-    <button class="btn btn-danger" (click)="deleteSelectedInvoices()">Delete Selected</button>
-    <table class="table table-bordered">
-      <thead>
-        <tr>
-          <th>Select</th>
-          <th>Payment ID</th>
-          <th>Amount</th>
-          <th>Date</th>
-          <th>Proof of Payment</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let payment of paymentDetails">
-          <td>
-            <input type="checkbox" (change)="toggleInvoiceSelection(payment.invoice_id)" [checked]="selectedInvoices.has(payment.invoice_id)">
-          </td>
-          <td>{{ payment.tenant_fullname }}</td>
-          <td>₱{{ payment.amount }}</td>
-          <td>{{ payment.payment_date | date: 'short' }}</td>
-          <td>
-            <a *ngIf="payment.proof_of_payment" [href]="payment.proof_of_payment" target="_blank" class="btn btn-outline-primary btn-sm">
-              <i class="bi bi-eye"></i> View
-            </a>
-            <span *ngIf="!payment.proof_of_payment" class="text-danger">No Proof</span>
-          </td>
-          <td>
-            <button class="btn btn-success btn-sm" (click)="restorePaymentVisibility(payment.invoice_id)">
-              <i class="bi bi-arrow-repeat"></i> Restore Payment Visibility
-            </button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+<div *ngIf="userProfile" class="container mt-4">
+  <!-- Welcome Header -->
+  <div class="text-center mb-4">
+    <h1 class="display-6">Archive</h1>
+    <p class="text-muted">Manage your archived records below.</p>
   </div>
 
-  <ng-template #noPayments>
-    <p>No archived payments found.</p>
-  </ng-template>
-</div>
-
-<div *ngIf="userProfile">
-  <h2>Archived Maintenance Tasks</h2>
-  <p>Below is the list of archived maintenance tasks:</p>
-
-  <div *ngIf="archivedMaintenance && archivedMaintenance.length > 0; else noMaintenance">
-    <button class="btn btn-primary" (click)="selectAllMaintenance()">Select All</button>
-    <button class="btn btn-danger" (click)="deleteSelectedMaintenance()">Delete Selected</button>
-    <table class="table table-bordered">
-      <thead>
-        <tr>
-          <th>Select</th>
-          <th>Task ID</th>
-          <th>Description</th>
-          <th>Start Date</th>
-          <th>End Date</th>
-          <th>Expense</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let maintenance of archivedMaintenance">
-          <td>
-            <input type="checkbox" (change)="toggleMaintenanceSelection(maintenance.maintenance_id)" [checked]="selectedMaintenance.has(maintenance.maintenance_id)">
-          </td>
-          <td>{{ maintenance.maintenance_id }}</td>
-          <td>{{ maintenance.description }}</td>
-          <td>{{ maintenance.start_date | date: 'short' }}</td>
-          <td>{{ maintenance.end_date | date: 'short' }}</td>
-          <td>₱{{ maintenance.expenses }}</td>
-          <td>
-            <button class="btn btn-success btn-sm" (click)="restoreMaintenanceVisibility(maintenance.maintenance_id)">
-              <i class="bi bi-arrow-repeat"></i> Restore Task Visibility
-            </button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+  <!-- Archived Payments Section -->
+  <div class="card shadow-sm mb-5">
+    <div class="card-header d-flex justify-content-between align-items-center text-white">
+      <h5 class="mb-0">Archived Payments</h5>
+      <div>
+        <button class="btn btn-outline-light btn-sm me-2" (click)="selectAllInvoices()">
+          <i class="bi bi-check-square"></i> Select All
+        </button>
+        <button class="btn btn-outline-danger btn-sm" (click)="deleteSelectedInvoices()">
+          <i class="bi bi-trash"></i> Delete Selected
+        </button>
+      </div>
+    </div>
+    <div class="card-body p-0">
+      <ng-container *ngIf="paymentDetails && paymentDetails.length > 0; else noPayments">
+        <table class="table table-hover mb-0">
+          <thead class="table-light">
+            <tr>
+              <th style="width: 5%;">Select</th>
+              <th style="width: 25%;">Tenant</th>
+              <th style="width: 15%;">Amount</th>
+              <th style="width: 20%;">Date</th>
+              <th style="width: 20%;">Proof of Payment</th>
+              <th style="width: 15%;">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let payment of paymentDetails">
+              <td>
+                <input
+                  type="checkbox"
+                  (change)="toggleInvoiceSelection(payment.invoice_id)"
+                  [checked]="selectedInvoices.has(payment.invoice_id)"
+                />
+              </td>
+              <td>{{ payment.tenant_fullname }}</td>
+              <td>₱{{ payment.amount }}</td>
+              <td>{{ payment.payment_date | date: 'short' }}</td>
+              <td>
+                <a
+                  *ngIf="payment.proof_of_payment"
+                  [href]="payment.proof_of_payment"
+                  target="_blank"
+                  class="view-btn"
+                >
+                  <i class="bi bi-eye"></i> View
+                </a>
+                <span *ngIf="!payment.proof_of_payment" class="text-danger">No Proof</span>
+              </td>
+              <td>
+                <button class="btn btn-success btn-sm" (click)="restorePaymentVisibility(payment.invoice_id)">
+                  <i class="bi bi-arrow-repeat"></i> Restore
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </ng-container>
+      <ng-template #noPayments>
+        <div class="text-center p-4">
+          <p class="text-muted">No archived payments found.</p>
+        </div>
+      </ng-template>
+    </div>
   </div>
 
-  <ng-template #noMaintenance>
-    <p>No archived maintenance tasks found.</p>
-  </ng-template>
+  <!-- Archived Maintenance Section -->
+  <div class="card shadow-sm">
+    <div class="card-header d-flex justify-content-between align-items-center text-white">
+      <h5 class="mb-0">Archived Maintenance Tasks</h5>
+      <div>
+        <button class="btn btn-outline-light btn-sm me-2" (click)="selectAllMaintenance()">
+          <i class="bi bi-check-square"></i> Select All
+        </button>
+        <button class="btn btn-outline-danger btn-sm" (click)="deleteSelectedMaintenance()">
+          <i class="bi bi-trash"></i> Delete Selected
+        </button>
+      </div>
+    </div>
+    <div class="card-body p-0">
+      <ng-container *ngIf="archivedMaintenance && archivedMaintenance.length > 0; else noMaintenance">
+        <table class="table table-hover mb-0">
+          <thead class="table-light">
+            <tr>
+              <th style="width: 5%;">Select</th>
+              <th style="width: 15%;">Task ID</th>
+              <th style="width: 30%;">Description</th>
+              <th style="width: 15%;">Start Date</th>
+              <th style="width: 15%;">End Date</th>
+              <th style="width: 10%;">Expense</th>
+              <th style="width: 10%;">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let maintenance of archivedMaintenance">
+              <td>
+                <input
+                  type="checkbox"
+                  (change)="toggleMaintenanceSelection(maintenance.maintenance_id)"
+                  [checked]="selectedMaintenance.has(maintenance.maintenance_id)"
+                />
+              </td>
+              <td>{{ maintenance.maintenance_id }}</td>
+              <td>{{ maintenance.description }}</td>
+              <td>{{ maintenance.start_date | date: 'short' }}</td>
+              <td>{{ maintenance.end_date | date: 'short' }}</td>
+              <td>₱{{ maintenance.expenses }}</td>
+              <td>
+                <button class="btn btn-success btn-sm" (click)="restoreMaintenanceVisibility(maintenance.maintenance_id)">
+                  <i class="bi bi-arrow-repeat"></i> Restore
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </ng-container>
+      <ng-template #noMaintenance>
+        <div class="text-center p-4">
+          <p class="text-muted">No archived maintenance tasks found.</p>
+        </div>
+      </ng-template>
+    </div>
+  </div>
 </div>
 
-<div *ngIf="!userProfile">
-  <p>Please log in to view your archived payments.</p>
+<!-- Login Prompt -->
+<div *ngIf="!userProfile" class="text-center mt-5">
+  <p class="text-muted">Please log in to view your archived records.</p>
 </div>

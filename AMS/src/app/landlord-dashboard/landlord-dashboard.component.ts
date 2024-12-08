@@ -483,23 +483,11 @@ export class LandlordDashboardComponent implements OnInit {
             // Automatically select the tenant for this apartment
             this.selectedTenantId = assignedTenant.tenant_id;
   
-            // Show a message that the tenant is already assigned to this apartment
-            Swal.fire({
-              icon: 'info',
-              title: 'Tenant Found',
-              text: `Tenant ${assignedTenant.tenant_fullname} is already assigned to this apartment.`,
-            });
           }
         } else {
           // No tenant assigned, clear the selected tenant ID
           this.selectedTenantId = null;
           
-          // Inform the user that no tenant is assigned to the apartment
-          Swal.fire({
-            icon: 'warning',
-            title: 'No Tenant Assigned',
-            text: 'This apartment does not have a tenant assigned.',
-          });
         }
       } else {
         // Debug: Log if apartment is not found
