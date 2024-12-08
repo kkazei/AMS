@@ -16,12 +16,8 @@
             <input type="file" (change)="onFileSelected($event)" class="d-none" />
             <i class="bi bi-upload"></i> Select File
           </label>
-          <input
-            type="text"
-            [(ngModel)]="description"
-            class="form-control"
-            placeholder="Enter More Payment Instructions"
-          />
+          <input type="text" [(ngModel)]="description" class="form-control"
+            placeholder="Enter More Payment Instructions" />
         </div>
         <div class="col-lg-4 text-end">
           <button (click)="upload()" class="btn btn-success w-100">
@@ -46,117 +42,105 @@
   </div>
 
   <!-- List of Uploaded Images -->
-<div *ngIf="imageInfos?.length" class="card shadow mb-5">
-  <div class="card-header bg-gradient-secondary text-white">
-    <h5 class="mb-0"><i class="bi bi-images"></i> Uploaded Images</h5>
+  <div *ngIf="imageInfos?.length" class="card shadow mb-5">
+    <div class="card-header bg-gradient-secondary text-white">
+      <h5 class="mb-0"><i class="bi bi-images"></i> Uploaded Images</h5>
+    </div>
+    <ul class="list-group list-group-flush">
+      <li class="list-group-item d-flex justify-content-between align-items-center"
+        *ngFor="let image of imageInfos; trackBy: trackByFn">
+        <div>
+          <a [href]="image.img" target="_blank" class="text-primary fw-bold">{{ image.imgName }}</a>
+          <p class="mb-0 small text-muted">{{ image.description }}</p>
+        </div>
+        <img [src]="image.img" [alt]="image.imgName" class="img-thumbnail" style="height: 60px; width: auto;" />
+        <!-- Delete button -->
+        <button class="btn btn-outline-danger btn-sm" (click)="deleteImage(image.id)">
+          <i class="bi bi-trash"></i> Delete
+        </button>
+      </li>
+    </ul>
   </div>
-  <ul class="list-group list-group-flush">
-    <li
-      class="list-group-item d-flex justify-content-between align-items-center"
-      *ngFor="let image of imageInfos; trackBy: trackByFn"
-    >
-      <div>
-        <a [href]="image.img" target="_blank" class="text-primary fw-bold">{{ image.imgName }}</a>
-        <p class="mb-0 small text-muted">{{ image.description }}</p>
-      </div>
-      <img
-        [src]="image.img"
-        [alt]="image.imgName"
-        class="img-thumbnail"
-        style="height: 60px; width: auto;"
-      />
-      <!-- Delete button -->
-      <button
-        class="btn btn-outline-danger btn-sm"
-        (click)="deleteImage(image.id)"
-      >
-        <i class="bi bi-trash"></i> Delete
-      </button>
-    </li>
-  </ul>
-</div>
-<!-- Search Section -->
-<div class="card shadow mb-4">
-  <div class="card-body">
-    <input
-      type="text"
-      [(ngModel)]="searchQuery"
-      class="form-control"
-      placeholder="Search by Tenant Name or Reference Number"
-    />
-  </div>
-</div>
-
-<!-- Invoice Section -->
-<div class="card shadow mt-5">
-  <div class="card-header">
-    <h5 class="mb-0"><i class="bi bi-file-earmark-pdf"></i> Generate Digital Invoice</h5>
-  </div>
-  <div class="card-body">
-    <div *ngIf="filteredPayments?.length">
-      <div class="table-responsive">
-        <table class="table table-bordered">
-          <thead class="bg-light text-dark">
-            <tr>
-              <th>Tenant Name</th>
-              <th>Room</th>
-              <th>Amount</th>
-              <th>Reference Number</th>
-              <th>Proof of Payment</th>
-              <th>Payment Date</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let payment of filteredPayments">
-              <td>{{ payment.tenant_fullname }}</td>
-              <td>{{ payment.room || 'N/A' }}</td>
-              <td>₱{{ payment.amount }}</td>
-              <td>{{ payment.reference_number || 'N/A' }}</td>
-              <td>{{ payment.payment_date | date: 'short' }}</td>
-              <td>
-                <button *ngIf="payment.proof_of_payment" (click)="openProofModal(payment.proof_of_payment)" class="btn btn-outline-primary btn-sm">
-                  <i class="bi bi-eye"></i> View
-                </button>
-                <span *ngIf="!payment.proof_of_payment" class="text-danger">No Proof</span>
-              </td>
-              <td>
-                <button class="btn btn-info btn-sm" (click)="generateInvoice(payment)">
-                  <i class="bi bi-file-earmark-pdf"></i> Generate Invoice
-                </button>
-                <button class="btn btn-warning btn-sm" (click)="updatePaymentVisibility(payment.invoice_id)">
-                  <i class="bi bi-archive"></i> Archive
-                </button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+  <!-- Search Section -->
+  <div class="card shadow mb-4">
+    <div class="card-body">
+      <input type="text" [(ngModel)]="searchQuery" class="form-control"
+        placeholder="Search by Tenant Name or Reference Number" />
     </div>
   </div>
-</div>
 
-<!-- Modal For Proof of Payment -->
-<div class="modal" id="ProofModal" tabindex="-1">
-  <div class="modal-dialog modal-dialog-scrollable">
-    <div class="modal-content">
-
-      <!-- Modal Header -->
-      <div class="modal-header">
-        <h2>Proof of Payment</h2>
-        <button type="button" class="btn-close" (click)="closeProofModal()">x</button>
-      </div>
-
-      <!-- Modal Body -->
-      <div class="modal-body">
-        <div *ngIf="selectedProof">
-          <img [src]="selectedProof" alt="Proof of Payment" class="img-fluid rounded border" />
+  <!-- Invoice Section -->
+  <div class="card shadow mt-5">
+    <div class="card-header">
+      <h5 class="mb-0"><i class="bi bi-file-earmark-pdf"></i> Generate Digital Invoice</h5>
+    </div>
+    <div class="card-body">
+      <div *ngIf="filteredPayments?.length">
+        <div class="table-responsive">
+          <table class="table table-bordered">
+            <thead class="bg-light text-dark">
+              <tr>
+                <th>Tenant Name</th>
+                <th>Room</th>
+                <th>Amount</th>
+                <th>Reference Number</th>
+                <th>Proof of Payment</th>
+                <th>Payment Date</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let payment of filteredPayments">
+                <td>{{ payment.tenant_fullname }}</td>
+                <td>{{ payment.room || 'N/A' }}</td>
+                <td>₱{{ payment.amount }}</td>
+                <td>{{ payment.reference_number || 'N/A' }}</td>
+                <td>{{ payment.payment_date | date: 'short' }}</td>
+                <td class="parent-container">
+                  <button *ngIf="payment.proof_of_payment" (click)="openProofModal(payment.proof_of_payment)"
+                    class="btn btn-outline-primary">
+                    <i class="bi bi-eye"></i> View
+                  </button>
+                  <span *ngIf="!payment.proof_of_payment" class="text-danger">No Proof</span>
+                </td>
+                <td>
+                  <button class="btn btn-info btn-sm" (click)="generateInvoice(payment)">
+                    <i class="bi bi-file-earmark-pdf"></i> Generate Invoice
+                  </button>
+                  <button class="btn btn-warning btn-sm" (click)="updatePaymentVisibility(payment.invoice_id)">
+                    <i class="bi bi-archive"></i> Archive
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
         </div>
       </div>
-
-      <!-- Modal Footer -->
-      <div class="modal-footer"></div>
     </div>
   </div>
+
+  <!-- Modal For Proof of Payment -->
+  <div class="modal" id="ProofModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-scrollable">
+      <div class="modal-content">
+
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h2>Proof of Payment</h2>
+          <button type="button" class="btn-close" (click)="closeProofModal()">x</button>
+        </div>
+
+        <!-- Modal Body -->
+        <div class="modal-body">
+          <div *ngIf="selectedProof">
+            <img [src]="selectedProof" alt="Proof of Payment" class="img-fluid rounded border" />
+          </div>
+        </div>
+
+        <!-- Modal Footer -->
+        <div class="modal-footer"></div>
+      </div>
+    </div>
+  </div>
+  <!--End of Proof of Payment Modal-->
 </div>
-<!--End of Proof of Payment Modal-->

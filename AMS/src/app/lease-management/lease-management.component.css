@@ -5,6 +5,16 @@ body {
     color: #333;
     margin: 20px;
   }
+
+  h1{
+    color: #241e57 !important;
+  }
+
+  .container {
+    max-width: 1300px;
+    margin: 0 auto;
+    padding: 20px;
+  }
   
   /* Container for the Tenant Grid */
   .grid-container {

@@ -77,6 +77,12 @@ button {
   border-color: #218838;
 }
 
+.parent-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 /* Image and Thumbnail */
 .custom-img-thumbnail {
   height: 60px;
@@ -128,13 +134,72 @@ button {
   background-color: #f1f1f1;
 }
 
-/* Responsive Design */
-@media (max-width: 768px) {
+/* Responsive Styles */
+@media (max-width: 1200px) {
   .container {
-    padding: 10px;
+    max-width: 100%;
+    padding: 15px;
+  }
+
+  .custom-card {
+    margin-bottom: 15px;
+  }
+}
+
+@media (max-width: 992px) {
+  .custom-header {
+    font-size: 1rem;
+    text-align: center;
+  }
+
+  button {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+}
+
+@media (max-width: 768px) {
+  .custom-table th, .custom-table td {
+    font-size: 0.9rem;
+    padding: 8px;
   }
 
   .card-body {
     padding: 15px;
+  }
+
+  .btn-primary,
+  .btn-success {
+    font-size: 0.9rem;
+    padding: 10px 15px;
+  }
+}
+
+@media (max-width: 576px) {
+  h1 {
+    font-size: 1.5rem;
+  }
+
+  .custom-card {
+    margin-bottom: 10px;
+    box-shadow: none;
+  }
+
+  .custom-alert {
+    font-size: 0.9rem;
+    padding: 10px;
+  }
+
+  .custom-header {
+    font-size: 0.9rem;
+    padding: 10px;
+  }
+
+  .custom-img-thumbnail {
+    height: 50px;
+  }
+
+  .custom-table {
+    font-size: 0.85rem;
   }
 }

@@ -5,10 +5,13 @@ body {
     color: #495057;
   }
   
-  /* Container and Card Styling */
+  h1{
+    color: #241e57 !important;
+  }
   .container {
     max-width: 1300px;
-    margin-bottom: 20px;
+    margin: 0 auto;
+    padding: 20px;
   }
   
   .card {
