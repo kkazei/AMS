@@ -157,7 +157,7 @@
 </div>
 <!--End of Concerns Modal-->
 
-<!-- Modal For Announcements -->
+<!-- Existing Modal For Announcements -->
 <div class="modal" id="ProfileModal" tabindex="-1">
   <div class="modal-dialog modal-dialog-scrollable">
     <div class="modal-content">
@@ -190,8 +190,8 @@
                         <img [src]="post.image_path" alt="Post Image" class="post-image" />
                       </div>
 
-                      <!-- Print Button (if applicable) -->
-                      <button type="button" class="btn btn-outline-primary btn-sm" >
+                      <!-- View Button -->
+                      <button type="button" class="btn btn-outline-primary btn-sm" (click)="openFullAnnouncementModal(post)">
                         <i class="bi bi-printer"></i> View
                       </button>
                     </div>
@@ -212,6 +212,32 @@
   </div>
 </div>
 <!--End of Announcement Modal-->
+
+<!-- Modal For Full Announcement -->
+<div class="modal" id="FullAnnouncementModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-scrollable">
+    <div class="modal-content">
+
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h2>{{ selectedPost?.title }}</h2>
+        <button type="button" class="btn-close" (click)="closeFullAnnouncementModal()">x</button>
+      </div>
+
+      <!-- Modal Body -->
+      <div class="modal-body">
+        <p>{{ selectedPost?.content }}</p>
+        <div *ngIf="selectedPost?.image_path">
+          <img [src]="selectedPost.image_path" alt="Post Image" class="post-image" />
+        </div>
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="modal-footer"></div>
+    </div>
+  </div>
+</div>
+<!--End of Full Announcement Modal-->
 
 <!-- Modal For Lease -->
 <div class="modal" id="LeaseModal" tabindex="-1">

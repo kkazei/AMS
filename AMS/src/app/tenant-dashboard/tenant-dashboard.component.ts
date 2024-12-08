@@ -36,8 +36,7 @@ export class TenantDashboardComponent implements OnInit {
   posts: any[] = [];
   paymentProof: File | null = null; // To store the uploaded file
 paymentProofPreview: string | null = null; // To store the preview URL of the uploaded file
-
-
+selectedPost: any = null;
 
 
   constructor(private authService: AuthService, private router: Router) {}
@@ -240,12 +239,13 @@ paymentProofPreview: string | null = null; // To store the preview URL of the up
 
   // Handle form submission for payment
   onPayInvoice(): void {
-    if (!this.paymentReferenceNumber && !this.paymentProofOfPayment) {
+    if (!this.paymentProofOfPayment) {
       Swal.fire({
         icon: 'error',
         title: 'Missing Information',
-        text: 'Reference number and proof of payment are required.',
+        text: 'Proof of payment is required.',
       });
+      return;
     }
   
     if (this.paymentAmount === null) {
@@ -422,5 +422,20 @@ paymentProofPreview: string | null = null; // To store the preview URL of the up
     }
   }
   
+
+  openFullAnnouncementModal(post: any): void {
+    this.selectedPost = post;
+    const modal = document.getElementById("FullAnnouncementModal");
+    if (modal != null) {
+      modal.style.display = "block";
+    }
+  }
+
+  closeFullAnnouncementModal(): void {
+    const modal = document.getElementById("FullAnnouncementModal");
+    if (modal != null) {
+      modal.style.display = "none";
+    }
+  }
 
 }
