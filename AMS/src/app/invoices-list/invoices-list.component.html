@@ -75,7 +75,17 @@
     </li>
   </ul>
 </div>
-
+<!-- Search Section -->
+<div class="card shadow mb-4">
+  <div class="card-body">
+    <input
+      type="text"
+      [(ngModel)]="searchQuery"
+      class="form-control"
+      placeholder="Search by Tenant Name or Reference Number"
+    />
+  </div>
+</div>
 
 <!-- Invoice Section -->
 <div class="card shadow mt-5">
@@ -83,7 +93,7 @@
     <h5 class="mb-0"><i class="bi bi-file-earmark-pdf"></i> Generate Digital Invoice</h5>
   </div>
   <div class="card-body">
-    <div *ngIf="paymentDetails?.length">
+    <div *ngIf="filteredPayments?.length">
       <div class="table-responsive">
         <table class="table table-bordered">
           <thead class="bg-light text-dark">
@@ -98,7 +108,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let payment of paymentDetails">
+            <tr *ngFor="let payment of filteredPayments">
               <td>{{ payment.tenant_fullname }}</td>
               <td>{{ payment.room || 'N/A' }}</td>
               <td>₱{{ payment.amount }}</td>

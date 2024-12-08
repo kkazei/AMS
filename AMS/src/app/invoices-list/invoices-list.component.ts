@@ -27,6 +27,8 @@ export class InvoicesListComponent {
   message: string = ''; // Upload feedback message
   description: string = ''; // Description for file uploads
   selectedProof: any = null; // Selected proof for modal
+  searchQuery: string = ''; // Search query for filtering payments
+
 
   constructor(private authService: AuthService) {}
 
@@ -76,6 +78,18 @@ export class InvoicesListComponent {
       }
     );
   }
+
+  get filteredPayments() {
+    if (!this.searchQuery) {
+      return this.paymentDetails;
+    }
+    const query = this.searchQuery.toLowerCase();
+    return this.paymentDetails.filter((payment: { tenant_fullname: string; reference_number: string }) =>
+      payment.tenant_fullname.toLowerCase().includes(query) ||
+      payment.reference_number.toLowerCase().includes(query)
+    );
+  }
+
 
   // Handle file selection and preview
   onFileSelected(event: any): void {
