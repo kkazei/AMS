@@ -17,7 +17,10 @@ export class ArchiveComponent {
   archivedMaintenance: any[] = []; // Holds archived maintenance tasks
   selectedInvoices: Set<number> = new Set<number>(); // Holds selected invoice IDs
   selectedMaintenance: Set<number> = new Set<number>(); // Holds selected maintenance IDs
-
+// Pagination variables
+currentPage: number = 1; // Tracks current page
+itemsPerPage: number = 5; // Number of items per page
+paymentCurrentPage: number = 1; // Tracks current page for payments
   constructor(private authService: AuthService) {}
 
   ngOnInit(): void {
@@ -47,6 +50,48 @@ export class ArchiveComponent {
       }
     );
   }
+
+  // Compute paginated data
+get paginatedArchivedMaintenance(): any[] {
+  const startIndex = (this.currentPage - 1) * this.itemsPerPage;
+  return this.archivedMaintenance.slice(startIndex, startIndex + this.itemsPerPage);
+}
+
+// Compute paginated payment details
+get paginatedPaymentDetails(): any[] {
+  const startIndex = (this.paymentCurrentPage - 1) * this.itemsPerPage;
+  return this.paymentDetails
+    ? this.paymentDetails.slice(startIndex, startIndex + this.itemsPerPage)
+    : [];
+}
+
+// Total pages for payment details
+get totalPaymentPages(): number {
+  return this.paymentDetails
+    ? Math.ceil(this.paymentDetails.length / this.itemsPerPage)
+    : 0;
+}
+
+
+
+// Total pages based on data length and items per page
+get totalPages(): number {
+  return Math.ceil(this.archivedMaintenance.length / this.itemsPerPage);
+}
+
+changePage(page: number): void {
+  if (page >= 1 && page <= this.totalPages) {
+    this.currentPage = page;
+  }
+}
+
+changePaymentPage(page: number): void {
+  if (page >= 1 && page <= this.totalPaymentPages) {
+    this.paymentCurrentPage = page;
+  }
+}
+
+
 
   restorePaymentVisibility(invoiceId: number): void {
     this.authService.restorePaymentVisibility(invoiceId)

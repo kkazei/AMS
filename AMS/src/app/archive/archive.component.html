@@ -32,7 +32,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let payment of paymentDetails">
+            <tr *ngFor="let payment of paginatedPaymentDetails">
               <td>
                 <input
                   type="checkbox"
@@ -62,6 +62,21 @@
             </tr>
           </tbody>
         </table>
+        <div class="pagination-controls text-center p-3">
+          <button 
+            class="btn btn-primary" 
+            [disabled]="paymentCurrentPage === 1" 
+            (click)="changePaymentPage(paymentCurrentPage - 1)">
+            Previous
+          </button>
+          <span>Page {{ paymentCurrentPage }} of {{ totalPaymentPages }}</span>
+          <button 
+            class="btn btn-primary" 
+            [disabled]="paymentCurrentPage === totalPaymentPages" 
+            (click)="changePaymentPage(paymentCurrentPage + 1)">
+            Next
+          </button>
+        </div>
       </ng-container>
       <ng-template #noPayments>
         <div class="text-center p-4">
@@ -71,7 +86,6 @@
     </div>
   </div>
 
-  <!-- Archived Maintenance Section -->
   <div class="card shadow-sm">
     <div class="card-header d-flex justify-content-between align-items-center text-white">
       <h5 class="mb-0">Archived Maintenance Tasks</h5>
@@ -85,21 +99,20 @@
       </div>
     </div>
     <div class="card-body p-0">
-      <ng-container *ngIf="archivedMaintenance && archivedMaintenance.length > 0; else noMaintenance">
+      <ng-container *ngIf="paginatedArchivedMaintenance.length > 0; else noMaintenance">
         <table class="table table-hover mb-0">
           <thead class="table-light">
             <tr>
-              <th style="width: 5%;">Select</th>
-              <th style="width: 15%;">Task ID</th>
-              <th style="width: 30%;">Description</th>
-              <th style="width: 15%;">Start Date</th>
-              <th style="width: 15%;">End Date</th>
-              <th style="width: 10%;">Expense</th>
-              <th style="width: 10%;">Actions</th>
+              <th>Select</th>
+              <th>Description</th>
+              <th>Start Date</th>
+              <th>End Date</th>
+              <th>Expense</th>
+              <th>Actions</th>
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let maintenance of archivedMaintenance">
+            <tr *ngFor="let maintenance of paginatedArchivedMaintenance">
               <td>
                 <input
                   type="checkbox"
@@ -107,7 +120,6 @@
                   [checked]="selectedMaintenance.has(maintenance.maintenance_id)"
                 />
               </td>
-              <td>{{ maintenance.maintenance_id }}</td>
               <td>{{ maintenance.description }}</td>
               <td>{{ maintenance.start_date | date: 'short' }}</td>
               <td>{{ maintenance.end_date | date: 'short' }}</td>
@@ -120,6 +132,22 @@
             </tr>
           </tbody>
         </table>
+        <div class="pagination-controls">
+          <button 
+            class="btn btn-primary" 
+            [disabled]="currentPage === 1" 
+            (click)="changePage(currentPage - 1)">
+            Previous
+          </button>
+          <span>Page {{ currentPage }} of {{ totalPages }}</span>
+          <button 
+            class="btn btn-primary" 
+            [disabled]="currentPage === totalPages" 
+            (click)="changePage(currentPage + 1)">
+            Next
+          </button>
+        </div>
+        
       </ng-container>
       <ng-template #noMaintenance>
         <div class="text-center p-4">
@@ -128,7 +156,10 @@
       </ng-template>
     </div>
   </div>
-</div>
+  
+  
+  </div>
+  
 
 <!-- Login Prompt -->
 <div *ngIf="!userProfile" class="text-center mt-5">
