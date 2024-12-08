@@ -239,11 +239,11 @@ selectedPost: any = null;
 
   // Handle form submission for payment
   onPayInvoice(): void {
-    if (!this.paymentProofOfPayment) {
+    if (!this.paymentReferenceNumber && !this.paymentProofOfPayment) {
       Swal.fire({
         icon: 'error',
         title: 'Missing Information',
-        text: 'Proof of payment is required.',
+        text: 'Reference number and proof of payment are required.',
       });
       return;
     }

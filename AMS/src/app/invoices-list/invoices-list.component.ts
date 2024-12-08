@@ -26,6 +26,7 @@ export class InvoicesListComponent {
   imageInfos: any[] = []; // List of images
   message: string = ''; // Upload feedback message
   description: string = ''; // Description for file uploads
+  selectedProof: any = null; // Selected proof for modal
 
   constructor(private authService: AuthService) {}
 
@@ -256,5 +257,20 @@ export class InvoicesListComponent {
   // Track images by name for rendering
   trackByFn(index: number, item: any): string {
     return item.imgName;
+  }
+
+  openProofModal(proof: any): void {
+    this.selectedProof = proof;
+    const modal = document.getElementById("ProofModal");
+    if (modal != null) {
+      modal.style.display = "block";
+    }
+  }
+
+  closeProofModal(): void {
+    const modal = document.getElementById("ProofModal");
+    if (modal != null) {
+      modal.style.display = "none";
+    }
   }
 }

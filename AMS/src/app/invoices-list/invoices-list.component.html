@@ -105,9 +105,9 @@
               <td>{{ payment.reference_number || 'N/A' }}</td>
               <td>{{ payment.payment_date | date: 'short' }}</td>
               <td>
-                <a *ngIf="payment.proof_of_payment" [href]="payment.proof_of_payment" target="_blank" class="btn btn-outline-primary btn-sm">
+                <button *ngIf="payment.proof_of_payment" (click)="openProofModal(payment.proof_of_payment)" class="btn btn-outline-primary btn-sm">
                   <i class="bi bi-eye"></i> View
-                </a>
+                </button>
                 <span *ngIf="!payment.proof_of_payment" class="text-danger">No Proof</span>
               </td>
               <td>
@@ -125,3 +125,28 @@
     </div>
   </div>
 </div>
+
+<!-- Modal For Proof of Payment -->
+<div class="modal" id="ProofModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-scrollable">
+    <div class="modal-content">
+
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h2>Proof of Payment</h2>
+        <button type="button" class="btn-close" (click)="closeProofModal()">x</button>
+      </div>
+
+      <!-- Modal Body -->
+      <div class="modal-body">
+        <div *ngIf="selectedProof">
+          <img [src]="selectedProof" alt="Proof of Payment" class="img-fluid rounded border" />
+        </div>
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="modal-footer"></div>
+    </div>
+  </div>
+</div>
+<!--End of Proof of Payment Modal-->
