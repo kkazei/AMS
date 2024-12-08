@@ -108,6 +108,8 @@
     }
   }
 
+  
+
   .payment-method-wrapper {
     max-width: 1250px;
     margin: 20px auto;
@@ -231,6 +233,105 @@
 
 
 
+/* General Modal Styling */
+.modal-content {
+  max-width: 100%;
+  margin: auto;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  background: #343a40;
+  color: white;
+}
+
+.btn-close {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  color: white;
+  cursor: pointer;
+}
+
+.modal-body {
+  padding: 1rem;
+  max-height: 70vh;
+  overflow-y: auto;
+}
+
+/* Announcements Section */
+.card {
+  border: none;
+  overflow: hidden;
+  border-radius: 8px;
+}
+
+.card-header {
+  background: linear-gradient(45deg, #4a69bd, #6a89cc);
+  color: white;
+  font-weight: bold;
+  text-align: center;
+}
+
+.card-body {
+  text-align: left;
+}
+
+.post-title {
+  font-size: 1.25rem;
+  font-weight: bold;
+}
+
+.post-date {
+  font-size: 0.9rem;
+  color: #6c757d;
+}
+
+.post-content {
+  margin-top: 10px;
+  font-size: 1rem;
+  color: #212529;
+}
+
+.post-image {
+  margin-bottom: 10px;
+  max-width: 100%;
+  height: auto;
+  margin-top: 10px;
+  border-radius: 8px;
+}
+
+/* Print Button Styling */
+.btn-outline-primary {
+  border-color: #4a69bd;
+  color: #4a69bd;
+}
+
+.btn-outline-primary:hover {
+  background: #4a69bd;
+  color: white;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .col-md-4 {
+    flex: 0 0 100%;
+    max-width: 100%;
+  }
+}
+
+@media (min-width: 769px) {
+  .col-md-4 {
+    flex: 0 0 33.3333%;
+    max-width: 33.3333%;
+  }
+}
 
 
 

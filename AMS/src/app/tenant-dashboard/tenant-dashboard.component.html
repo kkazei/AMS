@@ -157,7 +157,7 @@
 </div>
 <!--End of Concerns Modal-->
 
-<!-- Modal For Profile -->
+<!-- Modal For Announcements -->
 <div class="modal" id="ProfileModal" tabindex="-1">
   <div class="modal-dialog modal-dialog-scrollable">
     <div class="modal-content">
@@ -168,27 +168,50 @@
         <button type="button" class="btn-close" (click)="closeProfileModal()">x</button>
       </div>
 
-      <!-- Modal body -->
+      <!-- Modal Body -->
       <div class="modal-body">
-        <div *ngIf="posts && posts.length" class="posts-list">
-          <h2 class="post-h2"></h2>
-          <div *ngFor="let post of posts" class="post-card">
-            <h3 class="post-title">{{ post.title }}</h3>
-            <p class="post-date">{{ post.created_at | date:'short' }}</p>
-            <p class="post-content">{{ post.content }}</p>
-            <div *ngIf="post.image_path">
-              <img [src]="post.image_path" alt="Post Image" class="post-image" />
+        <!-- Announcements Section -->
+        <div class="card shadow">
+          <div class="card-header bg-gradient-dark text-white">
+            <h5 class="mb-0"><i class="bi bi-megaphone"></i> Latest Announcements</h5>
+          </div>
+          <div class="card-body">
+            <div *ngIf="posts?.length; else noPosts">
+              <div class="row">
+                <div class="col-md-4" *ngFor="let post of posts">
+                  <div class="card mb-3">
+                    <div class="card-body">
+                      <h5 class="post-title">{{ post.title }}</h5>
+                      <p class="post-date">{{ post.created_at | date:'short' }}</p>
+                      <p class="post-content">{{ post.content }}</p>
+
+                      <!-- Post Image Section -->
+                      <div *ngIf="post.image_path">
+                        <img [src]="post.image_path" alt="Post Image" class="post-image" />
+                      </div>
+
+                      <!-- Print Button (if applicable) -->
+                      <button type="button" class="btn btn-outline-primary btn-sm" >
+                        <i class="bi bi-printer"></i> View
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
+            <ng-template #noPosts>
+              <p class="text-center text-muted">No announcements available.</p>
+            </ng-template>
           </div>
         </div>
-      <!-- Modal Footer -->
-      <div class="modal-footer">
       </div>
+
+      <!-- Modal Footer -->
+      <div class="modal-footer"></div>
     </div>
   </div>
 </div>
-</div>
-<!--End of Profile Modal-->
+<!--End of Announcement Modal-->
 
 <!-- Modal For Lease -->
 <div class="modal" id="LeaseModal" tabindex="-1">
