@@ -88,7 +88,7 @@
         <p>Inquiries</p>
       </button>
     </div>
-    <!-- Modal For Concerns -->
+   <!-- Modal For Concerns -->
 <div class="modal" id="ConcernsModal" tabindex="-1">
   <div class="modal-dialog modal-dialog-scrollable">
     <div class="modal-content">
@@ -147,6 +147,21 @@
           </button>
         </form>
         <p *ngIf="message">{{ message }}</p>
+      </div>
+
+      <!-- Concerns List -->
+      <div class="concerns-list">
+        <h3>Existing Concerns</h3>
+        <div *ngIf="concerns && concerns.length > 0">
+          <div *ngFor="let concern of concerns" class="concern-item">
+            <h4>{{ concern.title }}</h4>
+            <p>{{ concern.description }}</p>
+            <img [src]="concern.image_path" alt="Concern Image" class="concern-image" />
+          </div>
+        </div>
+        <div *ngIf="!concerns || concerns.length === 0">
+          <p>No concerns available.</p>
+        </div>
       </div>
 
       <!-- Modal Footer -->

@@ -54,6 +54,7 @@ selectedPost: any = null;
       this.loadPaymentDetails();
       this.loadLeaseImages();
       this.getPosts();
+      this.getConcerns();
     } else {
       console.error('Access denied. User is not an admin.');
       this.router.navigate(['/tenant-login']);
@@ -219,6 +220,7 @@ selectedPost: any = null;
           this.concerntitle = '';
           this.concerncontent = '';
           this.selectedImage = null;
+          this.getConcerns(); // Reload the concerns list
         });
       },
       (error) => {
@@ -421,6 +423,33 @@ selectedPost: any = null;
       printWindow.document.close();
     }
   }
+
+  getConcerns() {
+    const currentUserId = this.userProfile?.id; // Use the logged-in user's ID
+    if (!currentUserId) {
+        console.error('User ID not found. Unable to load concerns.');
+        return;
+    }
+
+    this.authService.getConcerns().subscribe(
+        (response: any[]) => {
+            console.log('Concerns fetched:', response);
+            console.log('Current User ID:', currentUserId);
+            this.concerns = response
+                .filter(concern => concern.tenant_id === currentUserId) // Filter concerns by tenant_id
+                .map(concern => {
+                    return {
+                        ...concern,
+                        image_path: concern.image_path ? `http://localhost/amsAPI/api/${concern.image_path}` : null // Adjust the base URL as needed
+                    };
+                });
+            console.log('Filtered concerns for user:', this.concerns);
+        },
+        (error) => {
+            console.error('Error fetching concerns:', error);
+        }
+    );
+}
   
 
   openFullAnnouncementModal(post: any): void {

@@ -1,5 +1,6 @@
 import { Injectable, Inject, PLATFORM_ID } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, from, throwError } from 'rxjs';
+import { map, catchError } from 'rxjs/operators';
 import axios from 'axios';
 import { isPlatformBrowser } from '@angular/common';
 
@@ -731,4 +732,22 @@ deleteMaintenance(maintenanceId: number): Observable<any> {
   });
 }
 
+importPayments(file: File): Observable<any> {
+  const formData: FormData = new FormData();
+  formData.append('file', file, file.name);
+
+  return from(
+    axios.post(`${this.apiUrl}/importPayments`, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    })
+  ).pipe(
+    map(response => response.data),
+    catchError(error => {
+      console.error('Error importing payments:', error);
+      return throwError(error);
+    })
+  );
+}
 }
