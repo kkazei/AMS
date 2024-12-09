@@ -108,7 +108,7 @@
           <strong>Start Date:</strong> {{ maintenance.start_date }} <br />
           <strong>End Date:</strong> {{ maintenance.end_date || 'N/A' }} <br />
           <strong>Description:</strong> {{ maintenance.description }} <br />
-          <strong>Expenses:</strong> {{ maintenance.expenses | currency }} <br />
+          <strong>Expenses:</strong> {{ maintenance.expenses | currency:'PHP' }} <br />
           <strong>Status:</strong> {{ maintenance.status }} <br />
           <button (click)="editMaintenance(maintenance)">Edit</button>
           <button (click)="archiveMaintenance(maintenance.maintenance_id)">Archive</button>
