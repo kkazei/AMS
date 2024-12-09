@@ -3,7 +3,7 @@
   <div class="forms-section">
     <!-- Add Maintenance Form -->
     <div *ngIf="!editMode">
-      <h3>Add Maintenance Task</h3>
+      <h3>Add Maintenance/Expenses</h3>
       <form (submit)="onAddSubmit()">
         <label>
           Apartment:
@@ -44,13 +44,13 @@
           </select>
         </label>
         <br />
-        <button type="submit" class="update-button">Add Maintenance</button>
+        <button type="submit" class="update-button">Add</button>
       </form>
     </div>
 
     <!-- Edit Maintenance Form -->
     <div *ngIf="editMode">
-      <h3>Edit Maintenance Task</h3>
+      <h3>Edit Maintenance/Expenses</h3>
       <form (submit)="onEditSubmit()">
         <label>
           Apartment:
@@ -100,7 +100,7 @@
   <!-- Display Section -->
   <div class="maintenance-section">
     <div *ngIf="maintenanceList.length > 0">
-      <h3>Maintenance Tasks</h3>
+      <h3>Maintenance and Expenses</h3>
       <ul>
         <li *ngFor="let maintenance of maintenanceList">
           <strong>Apartment:</strong>

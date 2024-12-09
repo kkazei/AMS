@@ -77,11 +77,11 @@ export class MaintenanceComponent {
   getMaintenance(): void {
     this.authService.getMaintenance().subscribe(
       (response) => {
-        console.log('Maintenance tasks fetched:', response);
+        console.log('Maintenance/Expenses fetched:', response);
         this.maintenanceList = response.data; // Access the 'data' property that contains the maintenance tasks
       },
       (error) => {
-        console.error('Error fetching maintenance tasks:', error);
+        console.error('Error fetching maintenance/Expenses:', error);
       }
     );
   }
@@ -95,24 +95,24 @@ export class MaintenanceComponent {
   onAddSubmit(): void {
     this.authService.addMaintenance(this.newMaintenanceData).subscribe(
       (response) => {
-        console.log('Maintenance added successfully:', response);
+        console.log('Maintenance/Expemses added successfully:', response);
         
         Swal.fire({
           icon: 'success',
-          title: 'Maintenance Added',
-          text: 'The maintenance task has been added successfully!',
+          title: 'Maintenance/Expenses Added',
+          text: 'The maintenance/expenses has been added successfully!',
         }).then(() => {
           this.getMaintenance(); // Refresh the list of maintenance tasks after adding
           this.resetNewMaintenanceData(); // Reset the form
         });
       },
       (error) => {
-        console.error('Error adding maintenance:', error);
+        console.error('Error adding maintenance/expenses:', error);
         
         Swal.fire({
           icon: 'error',
           title: 'Add Failed',
-          text: 'Failed to add maintenance task. Please try again.',
+          text: 'Failed to add maintenance/expenses. Please try again.',
         });
       }
     );
@@ -123,11 +123,11 @@ export class MaintenanceComponent {
   onEditSubmit(): void {
     this.authService.updateMaintenance(this.editMaintenanceData).subscribe(
       (response) => {
-        console.log('Maintenance updated successfully:', response);
+        console.log('Maintenance/expenses updated successfully:', response);
         
         Swal.fire({
           icon: 'success',
-          title: 'Maintenance Updated',
+          title: 'Maintenance/Expenses Updated',
           text: 'The maintenance task has been updated successfully!',
         }).then(() => {
           this.getMaintenance(); // Refresh the list of maintenance tasks after updating
@@ -135,12 +135,12 @@ export class MaintenanceComponent {
         });
       },
       (error) => {
-        console.error('Error updating maintenance:', error);
+        console.error('Error updating maintenance/Expenses:', error);
         
         Swal.fire({
           icon: 'error',
           title: 'Update Failed',
-          text: 'Failed to update maintenance task. Please try again.',
+          text: 'Failed to update maintenance/expenses. Please try again.',
         });
       }
     );
@@ -189,23 +189,23 @@ export class MaintenanceComponent {
   archiveMaintenance(maintenanceId: number): void {
     this.authService.archiveMaintenance(maintenanceId).then(
       (response) => {
-        console.log('Maintenance task archived successfully:', response);
+        console.log('Maintenance/Expenses archived successfully:', response);
         
         Swal.fire({
           icon: 'success',
-          title: 'Maintenance Archived',
-          text: 'The maintenance task has been archived successfully!',
+          title: 'Maintenance/Expenses Archived',
+          text: 'The maintenance/expemses has been archived successfully!',
         }).then(() => {
           this.getMaintenance(); // Refresh the list of maintenance tasks
         });
       }
     ).catch((error) => {
-      console.error('Error archiving maintenance task:', error);
+      console.error('Error archiving maintenance/expenses:', error);
       
       Swal.fire({
         icon: 'error',
         title: 'Archive Failed',
-        text: 'Failed to archive the maintenance task. Please try again.',
+        text: 'Failed to archive the maintenance/expenses. Please try again.',
       });
     });
   }
