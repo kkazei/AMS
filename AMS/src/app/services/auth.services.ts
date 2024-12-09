@@ -750,4 +750,20 @@ importPayments(file: File): Observable<any> {
     })
   );
 }
+
+deletePost(postId: number): Observable<any> {
+  return new Observable((observer) => {
+      axios
+          .delete(`${this.apiUrl}/deletePost`, {
+              data: { post_id: postId }
+          })
+          .then((res) => {
+              observer.next(res.data);
+              observer.complete();
+          })
+          .catch((err) => {
+              observer.error(err);
+          });
+  });
+}
 }

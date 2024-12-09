@@ -222,6 +222,19 @@ export class LandlordDashboardComponent implements OnInit {
     );
   }
 
+  deletePost(postId: number) {
+    this.authService.deletePost(postId).subscribe(
+      (response) => {
+        console.log('Post deleted:', response);
+        // Remove the deleted post from the posts array
+        this.posts = this.posts.filter(post => post.post_id !== postId);
+      },
+      (error) => {
+        console.error('Error deleting post:', error);
+      }
+    );
+  }
+
   updateSummaryStats(): void {
     this.vacantCount = this.apartments.filter(a => !a.tenant_id).length;
     this.acquiredCount = this.apartments.length - this.vacantCount;
