@@ -332,12 +332,12 @@
             <td>{{ tenant.due_date | date }}</td>
             <td>{{ tenant.room }}</td>
             <td [ngClass]="{
-              'pending': tenant.status === 'pending',
+              'pending': calculateStatus(tenant.due_date) === 'pending',
               'paid': tenant.status === 'paid',
-              'status-overdue': tenant.status === 'overdue'
+              'status-overdue': calculateStatus(tenant.due_date) === 'overdue'
             }">
-              {{ tenant.status }}
-            </td>          </tr>
+              {{ calculateStatus(tenant.due_date) }}
+            </td>       </tr>
         </tbody>
       </table>
     </section>

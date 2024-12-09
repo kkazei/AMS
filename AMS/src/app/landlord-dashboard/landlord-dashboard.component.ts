@@ -229,7 +229,18 @@ export class LandlordDashboardComponent implements OnInit {
     this.income = this.tenants.reduce((total, tenant) => total + tenant.amount, 0);
   }
   
+  calculateStatus(dueDate: string): string {
+    const currentDate = new Date();
+    const due = new Date(dueDate);
   
+    if (due > currentDate) {
+      return 'pending';
+    } else if (due.toDateString() === currentDate.toDateString()) {
+      return 'due today';
+    } else {
+      return 'overdue';
+    }
+  }
 
 
   getMaintenance(): void {
