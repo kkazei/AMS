@@ -28,6 +28,9 @@ export class InvoicesListComponent {
   description: string = ''; // Description for file uploads
   selectedProof: any = null; // Selected proof for modal
   searchQuery: string = ''; // Search query for filtering payments
+  currentPage: number = 1; // Tracks the current page
+  itemsPerPage: number = 10; // Number of items per page
+  totalPages: number = 1; // Total pages, calculated dynamically
 
 
   constructor(private authService: AuthService) {}
@@ -45,20 +48,60 @@ export class InvoicesListComponent {
   }
 
   // Load payment details
+  // Method to calculate total pages
+  calculateTotalPages(): void {
+    this.totalPages = Math.ceil(this.paymentDetails.length / this.itemsPerPage);
+  }
+
+  // Getter for paginated data
+  get paginatedPayments() {
+    const startIndex = (this.currentPage - 1) * this.itemsPerPage;
+    const endIndex = startIndex + this.itemsPerPage;
+    return this.filteredPayments.slice(startIndex, endIndex);
+  }
+
+  // Navigate to the next page
+  nextPage(): void {
+    if (this.currentPage < this.totalPages) {
+      this.currentPage++;
+    }
+  }
+
+  // Navigate to the previous page
+  prevPage(): void {
+    if (this.currentPage > 1) {
+      this.currentPage--;
+    }
+  }
+
+  // Navigate to a specific page
+  goToPage(page: number): void {
+    if (page >= 1 && page <= this.totalPages) {
+      this.currentPage = page;
+    }
+  }
+
+  // Update total pages when payment details are updated
   loadPaymentDetails(): void {
     this.authService.getPaymentDetails().subscribe(
       (response: any[]) => {
         console.log('Payment details fetched:', response);
-        this.paymentDetails = response.map(payment => ({
-          ...payment,
-          proof_of_payment: `http://localhost/amsAPI/api/${payment.proof_of_payment}`
-        }));
+        this.paymentDetails = response
+          .map(payment => ({
+            ...payment,
+            proof_of_payment: `http://localhost/amsAPI/api/${payment.proof_of_payment}`,
+            payment_date: new Date(payment.payment_date) // Ensure dates are parsed
+          }))
+          .sort((a, b) => new Date(b.payment_date).getTime() - new Date(a.payment_date).getTime()); // Sort by date descending
+        this.calculateTotalPages(); // Recalculate total pages
       },
       (error) => {
         console.error('Error fetching payment details:', error);
       }
     );
   }
+
+  
 
   // Load images
   loadImages(): void {

@@ -90,7 +90,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let payment of filteredPayments">
+              <tr *ngFor="let payment of paginatedPayments">
                 <td>{{ payment.tenant_fullname }}</td>
                 <td>{{ payment.room || 'N/A' }}</td>
                 <td>₱{{ payment.amount }}</td>
@@ -115,6 +115,17 @@
             </tbody>
           </table>
         </div>
+        <!-- Pagination Controls -->
+<div class="pagination-controls">
+  <button class="btn btn-primary" (click)="prevPage()" [disabled]="currentPage === 1">
+    Previous
+  </button>
+  
+      <span>Page {{ currentPage }} of {{ totalPages }}</span>
+  <button class="btn btn-primary" (click)="nextPage()" [disabled]="currentPage === totalPages">
+    Next
+  </button>
+</div>
       </div>
     </div>
   </div>
