@@ -1,0 +1,67 @@
+<div class="announcements-feed">
+    <!-- Create Announcement Form -->
+    <div class="create-announcement">
+      <h3>Create a New Announcement</h3>
+      <form class="create-post-form" (ngSubmit)="createPost()">
+        <!-- Post Title -->
+        <div class="form-group">
+          <input
+            type="text"
+            id="posttitle"
+            required
+            class="form-control"
+            placeholder="Post Title"
+            [(ngModel)]="title"
+            name="posttitle"
+            #titleInput="ngModel"
+          />
+          <div *ngIf="titleInput.invalid && titleInput.touched" class="error-message">
+            Title is required.
+          </div>
+        </div>
+  
+        <!-- Post Content -->
+        <div class="form-group">
+          <textarea
+            id="postcontent"
+            required
+            class="form-control"
+            placeholder="Post Content"
+            [(ngModel)]="content"
+            name="postcontent"
+            #contentInput="ngModel"
+          ></textarea>
+          <div *ngIf="contentInput.invalid && contentInput.touched" class="error-message">
+            Content is required.
+          </div>
+        </div>
+  
+        <!-- File Input for Image -->
+        <div class="form-group">
+          <input type="file" (change)="onFileSelected($event)" class="form-control" />
+        </div>
+  
+        <!-- Submit Button -->
+        <button type="submit" class="btn btn-primary">Create Post</button>
+      </form>
+    </div>
+  
+    <!-- Announcements List -->
+    <h3>Announcements</h3>
+    <div class="announcement" *ngFor="let post of posts">
+      <div class="announcement-header">
+        <h4>{{ post.title }}</h4>
+        <button class="btn btn-danger" (click)="deletePost(post.post_id)">Delete</button>
+      </div>
+      <div class="announcement-body">
+        <p>{{ post.content }}</p>
+        <div *ngIf="post.image_path">
+          <img [src]="post.image_path" alt="Post Image" class="post-image" />
+        </div>
+      </div>
+      <div class="announcement-footer">
+        <small>{{ post.date | date:'short' }}</small>
+      </div>
+    </div>
+  </div>
+  

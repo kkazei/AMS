@@ -667,30 +667,28 @@ export class LandlordDashboardComponent implements OnInit {
     this.selectedConcern = { ...concern };  // Create a copy to avoid mutating original data
   }
 
-  // Handle the form submission to update the concern
-  updateConcern(updatedConcern: any): void {
-    this.authService.updateConcerns(updatedConcern).subscribe(
+  markAsSolved(concern: any) {
+    concern.status = 'solved';
+    this.authService.updateConcerns(concern).subscribe(
       (response) => {
-        console.log('Concern updated successfully:', response);
+        console.log('Concern marked as solved:', response);
         Swal.fire({
           icon: 'success',
-          title: 'Concern Updated',
-          text: 'The concern has been updated successfully!',
-        }).then(() => {
-          this.getConcerns();  // Reload concerns after successful update
-          this.selectedConcern = null;  // Reset selected concern
+          title: 'Success',
+          text: 'Concern marked as solved.',
         });
       },
       (error) => {
         console.error('Error updating concern:', error);
         Swal.fire({
           icon: 'error',
-          title: 'Error Updating Concern',
+          title: 'Error',
           text: 'Failed to update the concern. Please try again later.',
         });
       }
     );
   }
+
   
   checkTenantAssignment(): void {
     const selectedTenant = this.tenants.find(tenant => tenant.tenant_id === this.selectedTenantId);

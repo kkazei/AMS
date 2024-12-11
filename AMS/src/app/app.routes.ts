@@ -12,6 +12,8 @@ import { InvoicesListComponent } from './invoices-list/invoices-list.component';
 import { MaintenanceComponent } from './maintenance/maintenance.component';
 import { LandlordTestComponent } from './landlord-test/landlord-test.component';
 import { ArchiveComponent } from './archive/archive.component';
+import { TenantsProfileComponent } from './tenants-profile/tenants-profile.component';
+import { LandlordAnnouncementsComponent } from './landlord-announcements/landlord-announcements.component';
 import { AuthGuard } from './auth.guard';
 
 
@@ -29,6 +31,8 @@ export const routes: Routes = [
   {path: 'invoices-list', component: InvoicesListComponent, canActivate: [AuthGuard]},
   {path: 'maintenance', component: MaintenanceComponent, canActivate: [AuthGuard]},
   {path: 'archive', component: ArchiveComponent, canActivate: [AuthGuard]},
+  {path: 'tenants-profile', component: TenantsProfileComponent, canActivate: [AuthGuard]},
+  {path: 'landlord-announcements', component: LandlordAnnouncementsComponent, canActivate: [AuthGuard]},
   {path: 'landlord-test', component: LandlordTestComponent}
  
 
