@@ -11,7 +11,7 @@ import 'jspdf-autotable';
   standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './tenants-profile.component.html',
-  styleUrl: './tenants-profile.component.css'
+  styleUrls: ['./tenants-profile.component.css'] // Updated to `styleUrls`
 })
 export class TenantsProfileComponent {
   userProfile: any;
@@ -34,6 +34,7 @@ export class TenantsProfileComponent {
   currentPage: number = 1; // Tracks the current page
   itemsPerPage: number = 10; // Number of items per page
   totalPages: number = 1; // Total pages, calculated dynamically
+  showDetails: boolean = false; // Flag to show tenant details, payment history, and lease agreements only
 
   constructor(private authService: AuthService) {}
 
@@ -64,6 +65,24 @@ export class TenantsProfileComponent {
     );
   }
 
+  // Select a tenant to view their details
+  selectTenant(tenant: any) {
+    this.selectedTenant = tenant;
+    this.showDetails = true; // Show tenant details, lease agreements, and payment history
+    this.getPaymentDetails(); // Fetch payment details for the selected tenant
+    this.loadLeaseImages(); // Load lease images for the selected tenant
+  }
+
+  // Back button to reset the view
+  resetView() {
+    this.selectedTenant = null;
+    this.showDetails = false; // Show the grid and hide tenant details, lease agreements, and payment history
+    this.leaseImages = [];
+    this.paymentDetails = null;
+    this.preview = '';
+    this.message = '';
+  }
+
   // Fetch payment details for the selected tenant
   getPaymentDetails() {
     if (this.selectedTenant) {
@@ -87,13 +106,6 @@ export class TenantsProfileComponent {
     }
   }
 
-  // Select a tenant to view their details
-  selectTenant(tenant: any) {
-    this.selectedTenant = tenant;
-    this.getPaymentDetails(); // Fetch payment details for the selected tenant
-    this.loadLeaseImages(); // Load lease images for the selected tenant
-  }
-
   // Fetch lease images for the selected tenant
   loadLeaseImages() {
     if (this.selectedTenant) {
@@ -101,15 +113,12 @@ export class TenantsProfileComponent {
       this.authService.loadLease(tenantId).subscribe(
         (response: any) => {
           if (response.status === 'success') {
-            // Filter the images based on the tenant ID to make sure we only display images for the selected tenant
             this.leaseImages = response.data
               .filter((image: any) => image.tenant_id === tenantId) // Ensure the tenant_id matches
-              .map((image: any) => {
-                return {
-                  ...image,
-                  img: `http://localhost/amsAPI/api/${image.img}` // Adjust path as needed
-                };
-              });
+              .map((image: any) => ({
+                ...image,
+                img: `http://localhost/amsAPI/api/${image.img}` // Adjust path as needed
+              }));
           } else {
             console.error('Failed to retrieve images:', response.message);
           }
@@ -119,6 +128,16 @@ export class TenantsProfileComponent {
         }
       );
     }
+  }
+
+
+  clearSelection(): void {
+    this.selectedTenant = null;
+    this.message = '';
+  }
+
+  trackByFn(index: number, item: any) {
+    return item.tenant_id;
   }
   
   generateInvoice(payment: any): void {
@@ -223,10 +242,7 @@ export class TenantsProfileComponent {
   }
   
 
-  // Track tenants in the grid using a unique identifier
-  trackByFn(index: number, item: any) {
-    return item.tenant_id;
-  }
+  
 
 
 
@@ -395,4 +411,6 @@ export class TenantsProfileComponent {
     this.description = ''; // Clear the description
     this.paymentProofOfPayment = null; // Clear the file selection
   }
+
+  
 }
