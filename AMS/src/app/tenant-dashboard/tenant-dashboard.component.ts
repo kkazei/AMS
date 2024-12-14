@@ -37,6 +37,8 @@ export class TenantDashboardComponent implements OnInit {
   paymentProof: File | null = null; // To store the uploaded file
 paymentProofPreview: string | null = null; // To store the preview URL of the uploaded file
 selectedPost: any = null;
+currentSection: string | null = null; // Tracks the current section
+
 
 
   constructor(private authService: AuthService, private router: Router) {}
@@ -98,6 +100,15 @@ selectedPost: any = null;
     );
   }
 
+  showSection(section: string): void {
+    this.currentSection = section; // Set the current section
+  }
+
+  backToGrid(): void {
+    this.currentSection = null; // Return to grid
+  }
+
+
   loadLeaseImages(): void {
     const currentUserId = this.userProfile?.id; // Use the logged-in user's ID
     if (!currentUserId) {
@@ -127,6 +138,8 @@ selectedPost: any = null;
       }
     );
   }
+
+
 
   getPosts() {
     this.authService.getPosts().subscribe(

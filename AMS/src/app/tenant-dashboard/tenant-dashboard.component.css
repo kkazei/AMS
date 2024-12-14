@@ -78,7 +78,7 @@
       gap: 15px;
   
       .grid-item {
-        background-color: #2b2b75;
+        background-color: #241e57;
         color: white;
         text-align: center;
         padding: 20px;
@@ -449,6 +449,7 @@ textarea.form-control {
 
 /* Button Styles */
 .btn {
+  margin-top: 10px;
   display: inline-block;
   padding: 10px 20px;
   font-size: 1rem;
@@ -529,6 +530,7 @@ textarea.form-control {
 .lease-image {
   max-width: 100%;
   border-radius: 8px;
+  max-height: 350px;
 }
 
 /* Animations */
