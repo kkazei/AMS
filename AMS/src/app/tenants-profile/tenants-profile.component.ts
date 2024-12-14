@@ -35,6 +35,9 @@ export class TenantsProfileComponent {
   itemsPerPage: number = 10; // Number of items per page
   totalPages: number = 1; // Total pages, calculated dynamically
   showDetails: boolean = false; // Flag to show tenant details, payment history, and lease agreements only
+  showUploadSection: boolean = false;
+  showLeaseModal: boolean = false;
+  showPaymentQRModal: boolean = false;
 
   constructor(private authService: AuthService) {}
 
@@ -105,7 +108,27 @@ export class TenantsProfileComponent {
       console.warn('No tenant selected');
     }
   }
+  toggleUploadSection() {
+    this.showUploadSection = !this.showUploadSection;
+  }
 
+  openLeaseModal() {
+    this.showLeaseModal = true;
+  }
+
+  closeLeaseModal() {
+    this.showLeaseModal = false;
+    this.preview;
+  }
+
+  openPaymentQRModal() {
+    this.showPaymentQRModal = true;
+  }
+
+  closePaymentQRModal() {
+    this.showPaymentQRModal = false;
+    this.preview;
+  }
   // Fetch lease images for the selected tenant
   loadLeaseImages() {
     if (this.selectedTenant) {
@@ -412,5 +435,17 @@ export class TenantsProfileComponent {
     this.paymentProofOfPayment = null; // Clear the file selection
   }
 
-  
+  filterTenants(): void {
+    if (this.searchQuery.trim()) {
+      const query = this.searchQuery.toLowerCase();
+      this.tenants = this.tenants.filter(
+        (tenant) =>
+          (tenant.tenant_fullname && tenant.tenant_fullname.toLowerCase().includes(query)) ||
+          (tenant.room && tenant.room.toLowerCase().includes(query))
+      );
+    } else {
+      // Re-fetch tenants to reset the list
+      this.getTenants();
+    }
+  }
 }

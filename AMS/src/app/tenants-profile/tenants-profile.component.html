@@ -3,7 +3,81 @@
   <!-- Title -->
   <div class="d-flex justify-content-between align-items-center mb-4">
     <h1 class="display-6 fw-bold text-primary">Tenant Management</h1>
+    <button class="btn btn-primary ms-2" (click)="openPaymentQRModal()">
+      <i class="bi bi-plus-circle"></i> Add Payment QR
+    </button>
+    <div class="search-bar">
+      <input
+        type="text"
+        class="form-control"
+        placeholder="Search tenant by name or room"
+        [(ngModel)]="searchQuery"
+        (input)="filterTenants()"
+      />
+    </div>
   </div>
+ 
+<!-- Payment QR Modal -->
+<div
+  class="modal fade"
+  id="paymentQRModal"
+  tabindex="-1"
+  [ngClass]="{'show d-block': showPaymentQRModal, 'd-none': !showPaymentQRModal}"
+  role="dialog"
+  aria-labelledby="paymentQRModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-scrollable">
+    <div class="modal-content">
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h2>Upload Payment QR</h2>
+        <button type="button" class="btn-close" (click)="closePaymentQRModal()">x</button>
+      </div>
+      <!-- Modal Body -->
+      <div class="modal-body">
+        <div class="upload-section">
+          <div>
+            <label class="btn btn-default p-0 w-100 mb-3">
+              <input type="file" (change)="onFileSelected($event)" class="d-none" />
+              <i class="bi bi-upload"></i> Select File
+            </label>
+            <input type="text" [(ngModel)]="description" class="form-control" placeholder="Enter More Payment Instructions" />
+            <button (click)="uploadImage()" class="btn btn-success w-100 mt-3">
+              <i class="bi bi-arrow-up-circle"></i> Upload
+            </button>
+          </div>
+          <div *ngIf="preview" class="mt-3">
+            <h4>Preview:</h4>
+            <img [src]="preview" class="img-fluid rounded border" alt="Payment QR Preview" />
+          </div>
+        </div>
+      </div>
+      <!-- Modal Footer -->
+      <div class="modal-footer">
+        <div *ngIf="imageInfos?.length" class="card shadow w-100">
+          <div class="card-header bg-gradient-secondary text-white">
+            <h5 class="mb-0"><i class="bi bi-images"></i> Uploaded Images</h5>
+          </div>
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item d-flex justify-content-between align-items-center"
+              *ngFor="let image of imageInfos; trackBy: trackByFn">
+              <div>
+                <a [href]="image.img" target="_blank" class="text-primary fw-bold">{{ image.imgName }}</a>
+                <p class="mb-0 small text-muted">{{ image.description }}</p>
+              </div>
+              <img [src]="image.img" [alt]="image.imgName" class="img-thumbnail" style="height: 60px; width: auto;" />
+              <!-- Delete button -->
+              <button class="btn btn-outline-danger btn-sm" (click)="deleteImage(image.id)">
+                <i class="bi bi-trash"></i> Delete
+              </button>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
   <!-- Grid Container -->
   <div *ngIf="!selectedTenant && tenants" class="grid-container">
@@ -20,113 +94,154 @@
     </div>
   </div>
 
-  <!-- Selected Tenant Details -->
-  <div *ngIf="selectedTenant">
-    <!-- Display tenant details -->
-    <div class="tenant-details mt-4">
-      <div class="card shadow">
-        <div class="card-header bg-primary text-white">
-          <h3>Tenant Details</h3>
-        </div>
-        <div class="card-body">
-          <h4>Name: {{ selectedTenant.tenant_fullname || 'Not Assigned' }}</h4>
-          <p><strong>Room:</strong> {{ selectedTenant.room || 'N/A' }}</p>
-          <p><strong>Assigned Date:</strong> {{ selectedTenant.assigned_date || 'N/A' }}</p>
-          <p><strong>Rent:</strong> {{ selectedTenant.rent || 'N/A' }}</p>
+ <!-- Selected Tenant Details -->
+<div *ngIf="selectedTenant">
+  <!-- Display tenant details -->
+  <div class="tenant-details mt-4">
+    <div class="card shadow">
+      <div class="card-header bg-primary text-white">
+        <h3>Tenant Details</h3>
+      </div>
+      <div class="card-body">
+        <h4>Name: {{ selectedTenant.tenant_fullname || 'Not Assigned' }}</h4>
+        <p><strong>Room:</strong> {{ selectedTenant.room || 'N/A' }}</p>
+        <p><strong>Assigned Date:</strong> {{ selectedTenant.assigned_date || 'N/A' }}</p>
+        <p><strong>Rent:</strong> {{ selectedTenant.rent || 'N/A' }}</p>
+        <p><strong>Phone:</strong> {{ selectedTenant.tenant_phone || 'N/A' }}</p>
+        <p><strong>Due Date:</strong> {{ selectedTenant.due_date || 'N/A' }}</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Lease Agreements -->
+  <div *ngIf="leaseImages.length > 0" class="lease-agreements mt-4">
+    <div class="card shadow">
+      <div class="card-header bg-secondary text-white d-flex justify-content-between align-items-center">
+        <h4>Uploaded Lease Agreements</h4>
+        <button class="btn btn-primary" (click)="openLeaseModal()">
+          <i class="bi bi-plus-circle"></i> Add Lease Agreement
+        </button>
+      </div>
+      <div class="card-body">
+        <div class="row">
+          <div *ngFor="let image of leaseImages" class="col-md-4 mb-3">
+            <img [src]="image.img" alt="Lease Image" class="img-fluid rounded border" />
+          </div>
         </div>
       </div>
     </div>
+  </div>
 
-    <!-- Lease Agreements -->
-    <div *ngIf="leaseImages.length > 0" class="lease-agreements mt-4">
-      <div class="card shadow">
-        <div class="card-header bg-secondary text-white">
-          <h4>Uploaded Lease Agreements</h4>
+  <!-- Lease Agreement Modal -->
+  <div
+    class="modal"
+    id="leaseModal"
+    [ngClass]="{'show d-block': showLeaseModal, 'd-none': !showLeaseModal}"
+    tabindex="-1"
+  >
+    <div class="modal-dialog modal-dialog-scrollable">
+      <div class="modal-content">
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h2>Upload Lease Agreement</h2>
+          <button type="button" class="btn-close" (click)="closeLeaseModal()">x</button>
         </div>
-        <div class="card-body">
-          <div class="row">
-            <div *ngFor="let image of leaseImages" class="col-md-4 mb-3">
-              <img [src]="image.img" alt="Lease Image" class="img-fluid rounded border" />
+        <!-- Modal Body -->
+        <div class="modal-body">
+          <div class="upload-section">
+            <div>
+              <label class="btn btn-default p-0 w-100 mb-3">
+                <input type="file" (change)="onFileSelectedLease($event)" class="d-none" />
+                <i class="bi bi-upload"></i> Select File
+              </label>
+              <button (click)="upload()" class="btn btn-success w-100">
+                <i class="bi bi-arrow-up-circle"></i> Upload
+              </button>
+            </div>
+            <div *ngIf="preview" class="mt-3">
+              <h4>Preview:</h4>
+              <img [src]="preview" class="img-fluid rounded border" alt="Lease Preview" />
             </div>
           </div>
         </div>
-      </div>
-    </div>
-
-    <!-- Payment History -->
-    <div *ngIf="paymentDetails.length > 0" class="payment-history mt-4">
-      <div class="card shadow">
-        <div class="card-header bg-success text-white">
-          <h4>Payment History</h4>
-        </div>
-        <div class="card-body">
-          <table class="table table-striped">
-            <thead>
-              <tr>
-                <th>Tenant Name</th>
-                <th>Room</th>
-                <th>Amount</th>
-                <th>Reference Number</th>
-                <th>Date</th>
-                <th>Proof of Payment</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="let payment of paymentDetails">
-                <td>{{ payment.tenant_fullname }}</td>
-                <td>{{ payment.room || 'N/A' }}</td>
-                <td>₱{{ payment.amount }}</td>
-                <td>{{ payment.reference_number || 'N/A' }}</td>
-                <td>{{ payment.payment_date | date: 'short' }}</td>
-                <td>
-                  <button *ngIf="payment.proof_of_payment"  (click)="openProofModal(payment.proof_of_payment)" class="btn btn-outline-primary btn-sm">
-                    <i class="bi bi-eye"></i> View
-                  </button>
-                  <button class="btn btn-info btn-sm" (click)="generateInvoice(payment)">
-                    <i class="bi bi-file-earmark-pdf"></i> Generate Invoice
-                  </button>
-                  <button class="btn btn-warning btn-sm" (click)="updatePaymentVisibility(payment.invoice_id)">
-                    <i class="bi bi-archive"></i> Archive
-                  </button>
-                  <span *ngIf="!payment.proof_of_payment" class="text-danger">No Proof</span>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-
-    <!-- Back Button -->
-    <button class="btn btn-secondary mt-3" (click)="clearSelection()">Back to Tenant Grid</button>
-  </div>
-
-  <!-- Message Section -->
-  <div *ngIf="message" class="alert alert-info shadow-sm mt-4" role="alert">
-    <i class="bi bi-info-circle"></i> {{ message }}
-  </div>
-  <!-- Modal For Proof of Payment -->
-  <div class="modal" id="ProofModal" tabindex="-1">
-    <div class="modal-dialog modal-dialog-scrollable">
-      <div class="modal-content">
-
-        <!-- Modal Header -->
-        <div class="modal-header">
-          <h2>Proof of Payment</h2>
-          <button type="button" class="btn-close" (click)="closeProofModal()">x</button>
-        </div>
-
-        <!-- Modal Body -->
-        <div class="modal-body">
-          <div *ngIf="selectedProof">
-            <img [src]="selectedProof" alt="Proof of Payment" class="img-fluid rounded border" />
-          </div>
-        </div>
-
         <!-- Modal Footer -->
         <div class="modal-footer"></div>
       </div>
     </div>
   </div>
-  <!--End of Proof of Payment Modal-->
+
+  <!-- Payment History -->
+  <div *ngIf="paymentDetails.length > 0" class="payment-history mt-4">
+    <div class="card shadow">
+      <div class="card-header bg-success text-white">
+        <h4>Payment History</h4>
+      </div>
+      <div class="card-body">
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>Tenant Name</th>
+              <th>Room</th>
+              <th>Amount</th>
+              <th>Reference Number</th>
+              <th>Date</th>
+              <th>Proof of Payment</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let payment of paymentDetails">
+              <td>{{ payment.tenant_fullname }}</td>
+              <td>{{ payment.room || 'N/A' }}</td>
+              <td>₱{{ payment.amount }}</td>
+              <td>{{ payment.reference_number || 'N/A' }}</td>
+              <td>{{ payment.payment_date | date: 'short' }}</td>
+              <td>
+                <button *ngIf="payment.proof_of_payment"  (click)="openProofModal(payment.proof_of_payment)" class="btn btn-outline-primary btn-sm">
+                  <i class="bi bi-eye"></i> View
+                </button>
+                <button class="btn btn-info btn-sm" (click)="generateInvoice(payment)">
+                  <i class="bi bi-file-earmark-pdf"></i> Generate Invoice
+                </button>
+                <button class="btn btn-warning btn-sm" (click)="updatePaymentVisibility(payment.invoice_id)">
+                  <i class="bi bi-archive"></i> Archive
+                </button>
+                <span *ngIf="!payment.proof_of_payment" class="text-danger">No Proof</span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Back Button -->
+  <button class="btn btn-secondary mt-3" (click)="clearSelection()">Back to Tenant Grid</button>
+</div>
+
+<!-- Message Section -->
+<div *ngIf="message" class="alert alert-info shadow-sm mt-4" role="alert">
+  <i class="bi bi-info-circle"></i> {{ message }}
+</div>
+
+<!-- Modal For Proof of Payment -->
+<div class="modal" id="ProofModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-scrollable">
+    <div class="modal-content">
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h2>Proof of Payment</h2>
+        <button type="button" class="btn-close" (click)="closeProofModal()">x</button>
+      </div>
+      <!-- Modal Body -->
+      <div class="modal-body">
+        <div *ngIf="selectedProof">
+          <img [src]="selectedProof" alt="Proof of Payment" class="img-fluid rounded border" />
+        </div>
+      </div>
+      <!-- Modal Footer -->
+      <div class="modal-footer"></div>
+    </div>
+  </div>
+</div>
+<!--End of Proof of Payment Modal-->
 </div>

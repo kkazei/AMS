@@ -372,3 +372,21 @@ p {
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
 }
 
+.search-bar {
+  max-width: 300px;
+  position: relative;
+}
+
+.search-bar input {
+  padding: 10px 20px;
+  border-radius: 20px;
+  border: 1px solid #ccc;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.search-bar input:focus {
+  border-color: #3498db;
+  box-shadow: 0 2px 5px rgba(0, 123, 255, 0.25);
+  outline: none;
+}
