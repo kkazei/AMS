@@ -6,8 +6,20 @@ body {
     margin: 20px;
   }
 
+  .btn-qr{
+    background-color: #241e57;
+    color: white;
+    padding: 5px;
+    border-width: 1px solid; 
+    border-radius: 5px;
+  }
+
   h1{
     color: #241e57 !important;
+  }
+
+  h1:hover{
+    cursor: pointer;
   }
 
   .container {
@@ -27,6 +39,10 @@ body {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); /* Adjust button size */
     gap: 15px;
+  }
+
+  .btn btn-primary{
+    align-items: end;
   }
 
 
@@ -143,50 +159,115 @@ p {
 /* File Upload Section */
 .upload-section {
   background-color: #ffffff;
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  margin: 20px auto;
-  max-width: 600px;
+  padding: 40px;
+  border-radius: 12px;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+  margin: 30px auto;
+  max-width: 650px;
   text-align: center;
+  transition: box-shadow 0.3s ease, transform 0.3s ease;
+}
+
+.upload-section:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
 }
 
 .upload-section label {
   display: inline-block;
   background-color: #3498db;
   color: #fff;
-  padding: 10px 20px;
-  border-radius: 5px;
+  padding: 12px 25px;
+  border-radius: 8px;
   cursor: pointer;
-  margin-right: 10px;
-  transition: background-color 0.3s;
+  margin-right: 15px;
+  font-size: 16px;
+  font-weight: 600;
+  transition: background-color 0.3s, transform 0.3s ease;
 }
 
 .upload-section label:hover {
   background-color: #2980b9;
+  transform: translateY(-2px);
+}
+
+.upload-section input[type="file"] {
+  display: none;
 }
 
 .upload-section button {
   background-color: #2ecc71;
   color: #fff;
   border: none;
-  padding: 10px 20px;
-  border-radius: 5px;
-  margin: 20px;
+  padding: 12px 25px;
+  border-radius: 8px;
+  margin-top: 25px;
   cursor: pointer;
-  transition: background-color 0.3s;
+  font-size: 16px;
+  font-weight: 600;
+  transition: background-color 0.3s, transform 0.3s ease;
 }
 
 .upload-section button:hover {
   background-color: #27ae60;
+  transform: translateY(-2px);
 }
 
 .upload-section .preview {
-  margin-top: 20px;
+  margin-top: 25px;
   max-width: 100%;
+  max-height: 350px;
   border-radius: 8px;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.3s ease;
 }
+
+.upload-section .preview:hover {
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+}
+
+.upload-section .preview img {
+  max-width: 100%;
+  max-height: 300px;
+  object-fit: contain;
+  border-radius: 8px;
+}
+
+.upload-section p {
+  font-size: 14px;
+  color: #7f8c8d;
+  margin-top: 10px;
+}
+
+@media (max-width: 768px) {
+  .upload-section {
+    padding: 30px;
+    margin: 20px;
+  }
+
+  .upload-section label,
+  .upload-section button {
+    padding: 12px 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .upload-section {
+    padding: 20px;
+    margin: 15px;
+    max-width: 100%;
+  }
+
+  .upload-section label,
+  .upload-section button {
+    padding: 10px 15px;
+  }
+
+  .upload-section p {
+    font-size: 12px;
+  }
+}
+
 
 /* Status Message */
 .alert {
@@ -373,7 +454,7 @@ p {
 }
 
 .search-bar {
-  max-width: 300px;
+  width: 500px;
   position: relative;
 }
 
@@ -390,3 +471,39 @@ p {
   box-shadow: 0 2px 5px rgba(0, 123, 255, 0.25);
   outline: none;
 }
+
+/* General Page Styles */
+.card-header {
+  font-size: 1.1rem;
+}
+
+h2 {
+  font-weight: bold;
+}
+
+.table th {
+  font-weight: bold;
+  color: #495057;
+}
+
+.table td {
+  vertical-align: middle;
+}
+
+.btn-info {
+  background-color: #17a2b8;
+  border: none;
+  color: #fff;
+}
+
+.btn-warning {
+  background-color: #ffc107;
+  border: none;
+  color: #fff;
+}
+
+.text-danger {
+  font-size: 0.9rem;
+}
+
+

@@ -545,19 +545,157 @@ textarea.form-control {
   }
 }
 
-/* Responsive Adjustments */
+@media (max-width: 768px) {
+  .qr-payment-section {
+    flex-direction: column; /* Stack QR and attachments */
+  }
+
+  .qr-code-section, .attachment-section {
+    flex: 0 0 100%; /* Full width on smaller screens */
+    margin-bottom: 20px;
+  }
+
+  .attachment-upload {
+    font-size: 1rem; /* Adjust font size */
+  }
+}
+
+/* Modal Styling */
+.modal-content {
+  width: 90%;
+  max-width: 100%;
+  margin: auto;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  background: #343a40;
+  color: white;
+}
+
+.modal-body {
+  padding: 1rem;
+  max-height: 70vh;
+  overflow-y: auto;
+}
+
+.modal-dialog {
+  position: relative;
+  margin: 3rem auto;
+  max-width: 600px;
+  width: 90%;
+}
+
 @media (max-width: 768px) {
   .modal-dialog {
-    max-width: 95%;
+    width: 95%; /* Full width modal */
   }
 
   .modal-header h2 {
     font-size: 1.5rem;
   }
+
+  .modal-body {
+    max-height: 60vh; /* Adjust body height on smaller screens */
+  }
 }
 
-@media (max-height: 600px) {
-  .modal-body {
-    max-height: 300px;
+/* Button Styling */
+.btn {
+  margin-top: 10px;
+  display: inline-block;
+  padding: 10px 20px;
+  font-size: 1rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.3s;
+}
+
+.btn-primary {
+  background: linear-gradient(145deg, #7363ff, #241e57);
+  color: white;
+}
+
+@media (max-width: 768px) {
+  .btn {
+    width: 100%; /* Make buttons full-width on small screens */
+  }
+}
+
+/* Table Styling */
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+  border-radius: 8px;
+}
+
+.table th, .table td {
+  padding: 12px;
+  text-align: left;
+}
+
+.table-hover tbody tr:hover {
+  background-color: #f9f9f9;
+}
+
+/* Card Styling */
+.card {
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  margin-bottom: 20px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.card-header {
+  padding: 16px;
+  font-weight: bold;
+  background: #241e57;
+}
+
+.card-body {
+  padding: 16px;
+}
+
+.card-img-top {
+  width: 100%;
+  height: auto;
+  border-bottom: 1px solid #ddd;
+}
+
+/* Animations */
+@keyframes slide-down {
+  from {
+    transform: translateY(-20%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  .col-md-4 {
+    flex: 0 0 100%;
+    max-width: 100%;
+  }
+
+  .modal-dialog {
+    width: 95%;
+  }
+
+  .card-body {
+    font-size: 14px; /* Reduce text size on small screens */
   }
 }

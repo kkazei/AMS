@@ -69,7 +69,7 @@
   </div>
   
   <!-- Tenant Grid Section -->
-  <div *ngIf="!currentSection" class="tenant-grid-container">
+  <div *ngIf="!isPaymentFormVisible && !currentSection" class="tenant-grid-container">
     <div class="grid-container">
       <button class="grid-item" (click)="showSection('announcements')">
         <i class="material-icons">person</i>
@@ -89,205 +89,181 @@
       </button>
     </div>
   </div>
-  
-  
 
   <!-- Modal For Concerns -->
-<div *ngIf="currentSection === 'concerns'" class="content-section">
-  <button class="btn btn-secondary mb-3" (click)="backToGrid()">Back</button>
-  <div class="card shadow">
-    <div class="card-header bg-gradient-dark text-white">
-      <h5 class="mb-0"><i class="bi bi-flag"></i> Manage Concerns</h5>
-    </div>
-    <div class="card-body">
-      <!-- Create New Concern Form -->
-      <form (ngSubmit)="createConcern()">
-        <div class="form-group">
-          <label for="subject">Subject</label>
-          <input
-            type="text"
-            id="subject"
-            required
-            class="form-control"
-            placeholder="Subject"
-            [(ngModel)]="concerntitle"
-            name="subject"
-            #subjectInput="ngModel"
-          />
-          <div *ngIf="subjectInput.invalid && subjectInput.touched" class="error-message">
-            Subject is required.
-          </div>
-        </div>
-        <div class="form-group">
-          <label for="description">Description</label>
-          <textarea
-            id="description"
-            required
-            class="form-control"
-            placeholder="Describe your concern"
-            [(ngModel)]="concerncontent"
-            name="description"
-            #descriptionInput="ngModel"
-          ></textarea>
-          <div *ngIf="descriptionInput.invalid && descriptionInput.touched" class="error-message">
-            Description is required.
-          </div>
-        </div>
-        <div class="form-group">
-          <label for="attachment">Attachment</label>
-          <input
-            type="file"
-            id="attachment"
-            class="form-control"
-            (change)="onImageFileSelected($event)"
-          />
-        </div>
-        <button type="submit" class="btn btn-primary" [disabled]="!concerntitle || !concerncontent">
-          Submit Concern
-        </button>
-      </form>
-      <p *ngIf="message">{{ message }}</p>
-      
-      <!-- Existing Concerns List -->
-      <div class="concerns-list mt-4">
-        <h3>Existing Concerns</h3>
-        <div *ngIf="concerns && concerns.length > 0">
-          <div *ngFor="let concern of concerns" class="card mb-3">
-            <div class="card-body">
-              <h5>{{ concern.title }}</h5>
-              <p>{{ concern.description }}</p>
-              <img *ngIf="concern.image_path" [src]="concern.image_path" alt="Concern Image" class="img-fluid" />
+  <div *ngIf="currentSection === 'concerns'" class="content-section">
+    <button class="btn btn-secondary mb-3" (click)="backToGrid()">Back</button>
+    <div class="card shadow">
+      <div class="card-header bg-gradient-dark text-white">
+        <h5 class="mb-0"><i class="bi bi-flag"></i> Manage Concerns</h5>
+      </div>
+      <div class="card-body">
+        <!-- Create New Concern Form -->
+        <form (ngSubmit)="createConcern()">
+          <div class="form-group">
+            <label for="subject">Subject</label>
+            <input
+              type="text"
+              id="subject"
+              required
+              class="form-control"
+              placeholder="Subject"
+              [(ngModel)]="concerntitle"
+              name="subject"
+              #subjectInput="ngModel"
+            />
+            <div *ngIf="subjectInput.invalid && subjectInput.touched" class="error-message">
+              Subject is required.
             </div>
           </div>
-        </div>
-        <div *ngIf="!concerns || concerns.length === 0">
-          <p class="text-center text-muted">No concerns available.</p>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-<!-- End of Concerns Modal -->
-
-
-<!-- Announcements Section -->
-<div *ngIf="currentSection === 'announcements'" class="content-section">
-  <button class="btn btn-secondary mb-3" (click)="backToGrid()">Back</button>
-  <div class="card shadow">
-    <div class="card-header bg-gradient-dark text-white">
-      <h5 class="mb-0"><i class="bi bi-megaphone"></i> Latest Announcements</h5>
-    </div>
-    <div class="card-body">
-      <div *ngIf="posts?.length; else noPosts">
-        <div class="row">
-          <div class="col-md-4" *ngFor="let post of posts">
-            <div class="card mb-3">
-              <div class="card-body">
-                <h5 class="post-title">{{ post.title }}</h5>
-                <p class="post-date">{{ post.created_at | date: 'short' }}</p>
-                <p class="post-content">{{ post.content }}</p>
-                <div *ngIf="post.image_path">
-                  <img [src]="post.image_path" alt="Post Image" class="post-image" />
-                </div>
-                <button type="button" class="btn btn-outline-primary btn-sm view-btn" (click)="openFullAnnouncementModal(post)">
-                  <i class="bi bi-printer"></i> View
-                </button>
-              </div>
+          <div class="form-group">
+            <label for="description">Description</label>
+            <textarea
+              id="description"
+              required
+              class="form-control"
+              placeholder="Describe your concern"
+              [(ngModel)]="concerncontent"
+              name="description"
+              #descriptionInput="ngModel"
+            ></textarea>
+            <div *ngIf="descriptionInput.invalid && descriptionInput.touched" class="error-message">
+              Description is required.
             </div>
           </div>
-        </div>
-      </div>
-      <ng-template #noPosts>
-        <p class="text-center text-muted">No announcements available.</p>
-      </ng-template>
-    </div>
-  </div>
-</div>
-
-
-
-
-<!-- Payment History Section -->
-<div *ngIf="currentSection === 'paymentHistory'" class="content-section">
-  <button class="btn btn-secondary mb-3" (click)="backToGrid()">Back</button>
-  
-  <!-- Payment Card -->
-  <div *ngFor="let payment of paymentDetails" class="card shadow mb-3">
-    <div class="card-header bg-gradient-dark text-white">
-      <h5 class="mb-0"><i class="bi bi-receipt"></i> Payment Details</h5>
-    </div>
-    <div class="card-body">
-      <div class="row">
-        <!-- Reference Number and Transaction Date -->
-        <div class="col-md-6">
-          <p><strong>Reference Number:</strong> {{ payment.reference_number || 'N/A' }}</p>
-          <p><strong>Transaction Date:</strong> {{ payment.payment_date | date: 'short' }}</p>
-        </div>
+          <div class="form-group">
+            <label for="attachment">Attachment</label>
+            <input
+              type="file"
+              id="attachment"
+              class="form-control"
+              (change)="onImageFileSelected($event)"
+            />
+          </div>
+          <button type="submit" class="btn btn-primary" [disabled]="!concerntitle || !concerncontent">
+            Submit Concern
+          </button>
+        </form>
+        <p *ngIf="message">{{ message }}</p>
         
-        <!-- Description and Amount -->
-        <div class="col-md-6">
-          <p><strong>Amount:</strong> PHP {{ payment.amount }}</p>
+        <!-- Existing Concerns List -->
+        <div class="concerns-list mt-4">
+          <h3>Existing Concerns</h3>
+          <div *ngIf="concerns && concerns.length > 0">
+            <div *ngFor="let concern of concerns" class="card mb-3">
+              <div class="card-body">
+                <h5>{{ concern.title }}</h5>
+                <p>{{ concern.description }}</p>
+                <img *ngIf="concern.image_path" [src]="concern.image_path" alt="Concern Image" class="img-fluid" />
+              </div>
+            </div>
+          </div>
+          <div *ngIf="!concerns || concerns.length === 0">
+            <p class="text-center text-muted">No concerns available.</p>
+          </div>
         </div>
-      </div>
-
-      <!-- Share Button -->
-      <div class="d-flex justify-content-between mt-3">
-        <a *ngIf="payment.proof_of_payment" 
-           [href]="payment.proof_of_payment" 
-           target="_blank" 
-           class="btn btn-outline-primary btn-sm">
-           <i class="bi bi-eye"></i> View Proof of Payment
-        </a>
-        <span *ngIf="!payment.proof_of_payment" class="text-danger">No Proof</span>
       </div>
     </div>
   </div>
-  
-</div>
 
-
-
-
-<!-- Lease Agreement Section -->
-<div *ngIf="currentSection === 'leaseAgreement'" class="content-section">
-  <button class="btn btn-secondary mb-3" (click)="backToGrid()">Back</button>
-  <div class="card shadow">
-    <div class="card-header bg-gradient-dark text-white">
-      <h5 class="mb-0"><i class="bi bi-images"></i> Lease Images</h5>
-    </div>
-    <div class="card-body">
-      <div *ngIf="leaseImages?.length; else noImages">
-        <div class="row">
-          <div class="col-md-4" *ngFor="let image of leaseImages">
-            <div class="card mb-3">
-              <img
-                [src]="image.img"
-                class="card-img-top lease-image"
-                alt="Lease Image"
-              />
-              <div class="card-body">
-                <p class="card-text">{{ image.description || 'No description' }}</p>
-                <!-- Print Button -->
-                <button
-                type="button"
-                class="btn btn-outline-primary btn-sm"
-                (click)="printImage(image.img)"
-              >
-                <i class="bi bi-printer"></i> Print
-              </button>
-                <button type="button" class="btn btn-outline-primary btn-sm" (click)="openFullAnnouncementModal(posts)">
-                  <i class="bi bi-printer"></i> View
-                </button>
+  <!-- Announcements Section -->
+  <div *ngIf="currentSection === 'announcements'" class="content-section">
+    <button class="btn btn-secondary mb-3" (click)="backToGrid()">Back</button>
+    <div class="card shadow">
+      <div class="card-header bg-gradient-dark text-white">
+        <h5 class="mb-0"><i class="bi bi-megaphone"></i> Latest Announcements</h5>
+      </div>
+      <div class="card-body">
+        <div *ngIf="posts?.length; else noPosts">
+          <div class="row">
+            <div class="col-md-4" *ngFor="let post of posts">
+              <div class="card mb-3">
+                <div class="card-body">
+                  <h5 class="post-title">{{ post.title }}</h5>
+                  <p class="post-date">{{ post.created_at | date: 'short' }}</p>
+                  <p class="post-content">{{ post.content }}</p>
+                  <div *ngIf="post.image_path">
+                    <img [src]="post.image_path" alt="Post Image" class="post-image" />
+                  </div>
+                </div>
               </div>
             </div>
           </div>
         </div>
+        <ng-template #noPosts>
+          <p class="text-center text-muted">No announcements available.</p>
+        </ng-template>
       </div>
-      <ng-template #noImages>
-        <p class="text-center text-muted">No lease images available.</p>
-      </ng-template>
+    </div>
+  </div>
+
+  <!-- Payment History Section -->
+  <div *ngIf="currentSection === 'paymentHistory'" class="content-section">
+    <button class="btn btn-secondary mb-3" (click)="backToGrid()">Back</button>
+    <!-- Payment Card -->
+    <div *ngFor="let payment of paymentDetails" class="card shadow mb-3">
+      <div class="card-header bg-gradient-dark text-white">
+        <h5 class="mb-0"><i class="bi bi-receipt"></i> Payment Details</h5>
+      </div>
+      <div class="card-body">
+        <div class="row">
+          <div class="col-md-6">
+            <p><strong>Reference Number:</strong> {{ payment.reference_number || 'N/A' }}</p>
+            <p><strong>Transaction Date:</strong> {{ payment.payment_date | date: 'short' }}</p>
+          </div>
+          <div class="col-md-6">
+            <p><strong>Amount:</strong> PHP {{ payment.amount }}</p>
+          </div>
+        </div>
+        <div class="d-flex justify-content-between mt-3">
+          <a *ngIf="payment.proof_of_payment" 
+             [href]="payment.proof_of_payment" 
+             target="_blank" 
+             class="btn btn-outline-primary btn-sm">
+             <i class="bi bi-eye"></i> View Proof of Payment
+          </a>
+          <span *ngIf="!payment.proof_of_payment" class="text-danger">No Proof</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Lease Agreement Section -->
+  <div *ngIf="currentSection === 'leaseAgreement'" class="content-section">
+    <button class="btn btn-secondary mb-3" (click)="backToGrid()">Back</button>
+    <div class="card shadow">
+      <div class="card-header bg-gradient-dark text-white">
+        <h5 class="mb-0"><i class="bi bi-images"></i> Lease Images</h5>
+      </div>
+      <div class="card-body">
+        <div *ngIf="leaseImages?.length; else noImages">
+          <div class="row">
+            <div class="col-md-4" *ngFor="let image of leaseImages">
+              <div class="card mb-3">
+                <img
+                  [src]="image.img"
+                  class="card-img-top lease-image"
+                  alt="Lease Image"
+                />
+                <div class="card-body">
+                  <p class="card-text">{{ image.description || 'No description' }}</p>
+                  <button
+                  type="button"
+                  class="btn btn-outline-primary btn-sm"
+                  (click)="printImage(image.img)"
+                >
+                  <i class="bi bi-printer"></i> Print
+                </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <ng-template #noImages>
+          <p class="text-center text-muted">No lease images available.</p>
+        </ng-template>
+      </div>
     </div>
   </div>
 </div>
 
-    </div>
