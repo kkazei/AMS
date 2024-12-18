@@ -38,18 +38,23 @@ export class AppComponent {
       '/register', 
       '/tenant-login', 
       '/tenant-register', 
-      '/tenant-dashboard'
+      '/tenant-dashboard',
     ];
-    return !hiddenRoutes.includes(this.router.url);
+    // Exclude routes with dynamic IDs like /view-announcement/:id
+    return !hiddenRoutes.includes(this.router.url) && !this.router.url.startsWith('/view-announcement/');
   }
 
   // Function to check if the tenant topnav should be shown based on current route
-  shouldShowTenantNav() {
-    const tenantRoutes = [
-      '/tenant-dashboard'
-    ];
-    return tenantRoutes.includes(this.router.url);
-  }
+shouldShowTenantNav() {
+  const tenantRoutes = [
+    '/tenant-dashboard',
+    '/view-announcement'  // This includes both /view-announcement and /view-announcement/:id
+  ];
+  
+  // Check if the current route starts with any of the tenant-related routes
+  return tenantRoutes.some(route => this.router.url.startsWith(route));
+}
+
 
   // Function to check if the screen size is mobile
   isMobile() {

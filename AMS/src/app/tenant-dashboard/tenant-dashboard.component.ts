@@ -108,6 +108,18 @@ currentSection: string | null = null; // Tracks the current section
     this.currentSection = null; // Return to grid
   }
 
+  viewConcerns() {
+    this.currentSection = 'concernsList';
+  }
+
+  viewAnnouncement(postId: number): void {
+    console.log('postId:', postId); // Log the ID
+    if (postId === undefined || postId === null) {
+      console.error('Error: postId is undefined or null!');
+      return;
+    }
+    this.router.navigate(['/view-announcement', postId]);
+  }
 
   loadLeaseImages(): void {
     const currentUserId = this.userProfile?.id; // Use the logged-in user's ID

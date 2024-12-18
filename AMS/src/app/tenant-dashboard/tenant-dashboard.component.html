@@ -90,81 +90,89 @@
     </div>
   </div>
 
-  <!-- Modal For Concerns -->
-  <div *ngIf="currentSection === 'concerns'" class="content-section">
-    <button class="btn btn-secondary mb-3" (click)="backToGrid()">Back</button>
-    <div class="card shadow">
-      <div class="card-header bg-gradient-dark text-white">
-        <h5 class="mb-0"><i class="bi bi-flag"></i> Manage Concerns</h5>
-      </div>
-      <div class="card-body">
-        <!-- Create New Concern Form -->
-        <form (ngSubmit)="createConcern()">
-          <div class="form-group">
-            <label for="subject">Subject</label>
-            <input
-              type="text"
-              id="subject"
-              required
-              class="form-control"
-              placeholder="Subject"
-              [(ngModel)]="concerntitle"
-              name="subject"
-              #subjectInput="ngModel"
-            />
-            <div *ngIf="subjectInput.invalid && subjectInput.touched" class="error-message">
-              Subject is required.
-            </div>
+ <!-- Modal For Concerns -->
+<div *ngIf="currentSection === 'concerns'" class="content-section">
+  <button class="btn btn-secondary mb-3" (click)="backToGrid()">Back</button>
+  <div class="card shadow">
+    <div class="card-header bg-gradient-dark text-white">
+      <h5 class="mb-0"><i class="bi bi-flag"></i> Manage Concerns</h5>
+    </div>
+    <div class="card-body">
+      <!-- Create New Concern Form -->
+      <form (ngSubmit)="createConcern()">
+        <div class="form-group">
+          <label for="subject">Subject</label>
+          <input
+            type="text"
+            id="subject"
+            required
+            class="form-control"
+            placeholder="Subject"
+            [(ngModel)]="concerntitle"
+            name="subject"
+            #subjectInput="ngModel"
+          />
+          <div *ngIf="subjectInput.invalid && subjectInput.touched" class="error-message">
+            Subject is required.
           </div>
-          <div class="form-group">
-            <label for="description">Description</label>
-            <textarea
-              id="description"
-              required
-              class="form-control"
-              placeholder="Describe your concern"
-              [(ngModel)]="concerncontent"
-              name="description"
-              #descriptionInput="ngModel"
-            ></textarea>
-            <div *ngIf="descriptionInput.invalid && descriptionInput.touched" class="error-message">
-              Description is required.
-            </div>
+        </div>
+        <div class="form-group">
+          <label for="description">Description</label>
+          <textarea
+            id="description"
+            required
+            class="form-control"
+            placeholder="Describe your concern"
+            [(ngModel)]="concerncontent"
+            name="description"
+            #descriptionInput="ngModel"
+          ></textarea>
+          <div *ngIf="descriptionInput.invalid && descriptionInput.touched" class="error-message">
+            Description is required.
           </div>
-          <div class="form-group">
-            <label for="attachment">Attachment</label>
-            <input
-              type="file"
-              id="attachment"
-              class="form-control"
-              (change)="onImageFileSelected($event)"
-            />
-          </div>
-          <button type="submit" class="btn btn-primary" [disabled]="!concerntitle || !concerncontent">
-            Submit Concern
-          </button>
-        </form>
-        <p *ngIf="message">{{ message }}</p>
-        
-        <!-- Existing Concerns List -->
-        <div class="concerns-list mt-4">
-          <h3>Existing Concerns</h3>
-          <div *ngIf="concerns && concerns.length > 0">
-            <div *ngFor="let concern of concerns" class="card mb-3">
-              <div class="card-body">
-                <h5>{{ concern.title }}</h5>
-                <p>{{ concern.description }}</p>
-                <img *ngIf="concern.image_path" [src]="concern.image_path" alt="Concern Image" class="img-fluid" />
-              </div>
-            </div>
-          </div>
-          <div *ngIf="!concerns || concerns.length === 0">
-            <p class="text-center text-muted">No concerns available.</p>
-          </div>
+        </div>
+        <div class="form-group">
+          <label for="attachment">Attachment</label>
+          <input
+            type="file"
+            id="attachment"
+            class="form-control"
+            (change)="onImageFileSelected($event)"
+          />
+        </div>
+        <button type="submit" class="btn btn-primary" [disabled]="!concerntitle || !concerncontent">
+          Submit Concern
+        </button>
+        <button type="button" class="btn btn-secondary ml-2" (click)="viewConcerns()">
+          View Concerns
+        </button>
+      </form>
+      <p *ngIf="message">{{ message }}</p>
+    </div>
+  </div>
+</div>
+
+<!-- Concerns List -->
+<div *ngIf="currentSection === 'concernsList'" class="content-section">
+  <button class="btn btn-secondary mb-3" (click)="backToGrid()">Back</button>
+  <div class="concerns-list mt-4">
+    <h3>Existing Concerns</h3>
+    <div *ngIf="concerns && concerns.length > 0">
+      <div *ngFor="let concern of concerns" class="card mb-3">
+        <div class="card-body">
+          <h5>{{ concern.title }}</h5>
+          <p class="text-muted">Created at: {{ concern.created_at | date:'short' }}</p>
+          <p class="text-muted">Status: {{ concern.status }}</p>
+          <p>{{ concern.content }}</p>
+          <img *ngIf="concern.image_path" [src]="concern.image_path" alt="Concern Image" class="img-fluid" />
         </div>
       </div>
     </div>
+    <div *ngIf="!concerns || concerns.length === 0">
+      <p class="text-center text-muted">No concerns available.</p>
+    </div>
   </div>
+</div>
 
   <!-- Announcements Section -->
   <div *ngIf="currentSection === 'announcements'" class="content-section">
@@ -185,6 +193,7 @@
                   <div *ngIf="post.image_path">
                     <img [src]="post.image_path" alt="Post Image" class="post-image" />
                   </div>
+                  <button class="btn btn-primary mt-2" (click)="viewAnnouncement(post.post_id)">View Announcement</button>
                 </div>
               </div>
             </div>

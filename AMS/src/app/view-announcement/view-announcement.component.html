@@ -1,0 +1,17 @@
+<div *ngIf="posts; else loading" class="post-view">
+    <div class="post-header">
+      <h5 class="post-title">{{ posts.title }}</h5>
+      <p class="post-date">{{ posts.created_at | date: 'short' }}</p>
+    </div>
+    <div class="post-content">
+      <p>{{ posts.content }}</p>
+      <div *ngIf="posts.image_path" class="image-container">
+        <img [src]="posts.image_path" alt="Post Image" class="post-image" />
+      </div>
+    </div>
+  </div>
+  
+  <ng-template #loading>
+    <p class="text-center text-muted">Loading announcement...</p>
+  </ng-template>
+  

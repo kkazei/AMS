@@ -14,6 +14,7 @@ import { LandlordTestComponent } from './landlord-test/landlord-test.component';
 import { ArchiveComponent } from './archive/archive.component';
 import { TenantsProfileComponent } from './tenants-profile/tenants-profile.component';
 import { LandlordAnnouncementsComponent } from './landlord-announcements/landlord-announcements.component';
+import { ViewAnnouncementComponent } from './view-announcement/view-announcement.component';
 import { AuthGuard } from './auth.guard';
 
 
@@ -33,6 +34,7 @@ export const routes: Routes = [
   {path: 'archive', component: ArchiveComponent, canActivate: [AuthGuard]},
   {path: 'tenants-profile', component: TenantsProfileComponent, canActivate: [AuthGuard]},
   {path: 'landlord-announcements', component: LandlordAnnouncementsComponent, canActivate: [AuthGuard]},
+  {path: 'view-announcement/:id', component: ViewAnnouncementComponent, canActivate: [AuthGuard]},
   {path: 'landlord-test', component: LandlordTestComponent}
  
 
