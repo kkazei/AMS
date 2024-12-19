@@ -284,7 +284,7 @@
       </div>
 
       <!-- Modal Body -->
-      <div class="modal-body">
+      <div class="modal-body overflow-auto">
         <div *ngIf="concerns && concerns.length" class="concerns-list">
           <div *ngFor="let concern of concerns" class="concern-item">
             <h3>{{ concern.title }}</h3>
@@ -311,6 +311,7 @@
   </div>
 </div>
 <!-- End of Modal For Concerns -->
+
 
 
 

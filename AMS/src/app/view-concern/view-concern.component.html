@@ -1,19 +1,20 @@
 <div *ngIf="concerns; else loading" class="post-view">
-    <div class="post-header">
-      <h5 class="post-title">{{ concerns.title }}</h5>
-      <p class="post-date">{{ concerns.created_at | date: 'short' }}</p>
-      <p>Status: {{ concerns.status }}</p>
-    </div>
-    <div class="post-content">
-      <p>{{ concerns.content }}</p>
-      <div *ngIf="concerns.image_path" class="image-container">
-        <img [src]="concerns.image_path" alt="Post Image" class="post-image" />
-      </div>
-    </div>
-    <button *ngIf="concerns.status !== 'solved'" (click)="markAsSolved(concerns)">Mark as Solved</button>
+  <button class="back-button" (click)="goBack()">← Back</button> <!-- Back Button -->
+  
+  <div class="post-header">
+    <h5 class="post-title">{{ concerns.title }}</h5>
+    <p class="post-date">{{ concerns.created_at | date: 'short' }}</p>
+    <p>Status: <span [ngClass]="{'badge': true, 'solved': concerns.status === 'solved', 'unsolved': concerns.status !== 'solved'}">{{ concerns.status }}</span></p>
   </div>
-  
-  <ng-template #loading>
-    <p class="text-center text-muted">Loading announcement...</p>
-  </ng-template>
-  
+  <div class="post-content">
+    <p>{{ concerns.content }}</p>
+    <div *ngIf="concerns.image_path" class="image-container">
+      <img [src]="concerns.image_path" alt="Post Image" class="post-image" />
+    </div>
+  </div>
+  <button *ngIf="concerns.status !== 'solved'" (click)="markAsSolved(concerns)" class="solve-button">Mark as Solved</button>
+</div>
+
+<ng-template #loading>
+  <p class="loading-text">Loading announcement...</p>
+</ng-template>

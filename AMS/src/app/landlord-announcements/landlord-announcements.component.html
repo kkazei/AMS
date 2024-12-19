@@ -1,27 +1,32 @@
 <div class="container mt-1">
-
-<div class="d-flex justify-content-between align-items-center mb-4">
-  <h1 class="display-6 fw-bold text-primary">Announcements</h1>
-</div>
-<div class="announcements-feed">
-  <!-- Announcements List -->
-  <div class="announcement-grid">
-    <div class="announcement" *ngFor="let post of posts">
-      <div class="announcement-header">
-        <h4>{{ truncateText(post.title) }}</h4>
-        <button class="btn btn-primary mt-2 btn-fixed-bottom" (click)="viewPostAnnouncement(post.post_id)">View Announcement</button>
-        <button class="btn btn-danger" (click)="deletePost(post.post_id)">Delete</button>
-      </div>
-      <div class="announcement-body">
-        <p>{{ post.content }}</p>
-        <div *ngIf="post.image_path">
-          <img [src]="post.image_path" alt="Post Image" class="post-image" />
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="display-6 fw-bold text-primary">Announcements</h1>
+  </div>
+  <div class="announcements-feed">
+    <div class="announcement-row">
+      <!-- Announcements List -->
+      <div class="announcement" *ngFor="let post of posts">
+        <div class="announcement-header">
+          <h4>{{ truncateText(post.title) }}</h4>
+          
+        </div>
+        <div class="announcement-body">
+          <p>{{ post.content }}</p>
+          <img *ngIf="post.image_path" [src]="post.image_path" alt="Post Image" class="post-image" />
+        </div>
+        <div class="announcement-footer">
+          <small>{{ post.date | date:'short' }}</small>
+        </div>
+        <div class="button-group">
+          <button class="btn btn-primary mt-2" (click)="viewPostAnnouncement(post.post_id)">
+            View Announcement
+          </button>
+          <button class="btn btn-danger mt-2" (click)="deletePost(post.post_id)">
+            Delete
+          </button>
         </div>
       </div>
-      <div class="announcement-footer">
-        <small>{{ post.date | date:'short' }}</small>
-      </div>
+      
     </div>
   </div>
-</div>
 </div>

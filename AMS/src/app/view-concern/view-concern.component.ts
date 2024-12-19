@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { AuthService } from '../services/auth.services';
 import Swal from 'sweetalert2';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-view-concern',
@@ -16,7 +17,8 @@ export class ViewConcernComponent implements OnInit {
   concernId!: number; // Use the non-null assertion operator
   concerns: any;
   
-  constructor(private route: ActivatedRoute, private authService: AuthService) {}
+  
+  constructor(private route: ActivatedRoute, private authService: AuthService, private location: Location) {}
   ngOnInit(): void {
     console.log('ngOnInit called');
     const idParam = this.route.snapshot.paramMap.get('id');
@@ -74,6 +76,10 @@ export class ViewConcernComponent implements OnInit {
           });
         }
       );
+    }
+
+    goBack(): void {
+      this.location.back(); // This will navigate the user back to the previous page
     }
 }
 

@@ -542,7 +542,7 @@ td.paid {
 .concern-item button {
   width: 100%;
   box-sizing: border-box;
-  margin-top: auto;
+  margin-top: 10px;
 }
 
 /* Concern Item Hover Effects */
@@ -728,6 +728,7 @@ td.paid {
   border-radius: 8px;
 
 }
+
 
 .modal-content {
   background-color: #ffffff;

@@ -250,19 +250,19 @@ aria-hidden="true"
 </div>
 </div>
 
- <!-- Month Filter Dropdown -->
- <div class="d-flex justify-content-end mb-3">
-  <select class="form-select w-auto" [(ngModel)]="selectedMonth" (change)="filterPaymentsByMonth()">
-    <option value="">Select Month</option>
-    <option *ngFor="let month of months" [value]="month.value">{{ month.name }}</option>
-  </select>
-</div>
   
 <!-- Bottom Section: Payment History -->
 <div class="card shadow mt-4 border-0">
-  <div class="card-header bg-success text-white fw-bold">
-    Payment History
+  <div class="card-header bg-success text-white fw-bold d-flex justify-content-between align-items-center">
+    <span>Payment History</span> <!-- Left-aligned title -->
+    <div class="d-flex justify-content-end">
+      <select class="form-select w-auto" [(ngModel)]="selectedMonth" (change)="filterPaymentsByMonth()">
+        <option value="">Select Month</option>
+        <option *ngFor="let month of months" [value]="month.value">{{ month.name }}</option>
+      </select>
+    </div>
   </div>
+  
   <div class="card-body">
     <table class="table table-striped align-middle mb-0">
       <thead>
@@ -292,10 +292,11 @@ aria-hidden="true"
             <button *ngIf="payment.proof_of_payment" (click)="openProofModal(payment.proof_of_payment)" class="btn btn-outline-primary btn-sm">
               <i class="bi bi-eye"></i> View
             </button>
+            <span *ngIf="!payment.proof_of_payment" class="text-danger fw-bold">No Proof</span>
             <button class="btn btn-info btn-sm" (click)="generateInvoice(payment)">
               Generate Invoice
             </button>
-            <span *ngIf="!payment.proof_of_payment" class="text-danger fw-bold">No Proof</span>
+            
           </td>
         </tr>
       </tbody>

@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { AuthService } from '../services/auth.services';
-import { Router, RouterModule } from '@angular/router';
+import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import Swal from 'sweetalert2';
@@ -10,14 +10,15 @@ import Swal from 'sweetalert2';
   standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './landlord-announcements.component.html',
-  styleUrl: './landlord-announcements.component.css'
+  styleUrls: ['./landlord-announcements.component.css'] // Note: Ensure plural "styleUrls"
 })
 export class LandlordAnnouncementsComponent {
   userProfile: any;
   posts: any[] = [];
-  title: string ='';
-  content: string ='';
+  title: string = '';
+  content: string = '';
   selectedFile: File | null = null;
+
   constructor(private authService: AuthService, private router: Router) {}
 
   ngOnInit(): void {
@@ -26,11 +27,11 @@ export class LandlordAnnouncementsComponent {
       this.userProfile = this.authService.getUserProfileFromToken();
       console.log('Token:', token);
       console.log('User profile:', this.userProfile);
-  
+
       if (this.userProfile.usertype === 'landlord') {
         this.getPosts();
       } else {
-        console.error('Access denied. User is not an admin.');
+        console.error('Access denied. User is not a landlord.');
         this.router.navigate(['/login']);
       }
     } else {
@@ -43,13 +44,10 @@ export class LandlordAnnouncementsComponent {
     this.authService.getPosts().subscribe(
       (response: any[]) => {
         console.log('Posts fetched:', response);
-        this.posts = response.map(post => {
-          return {
-            ...post,
-            image_path: `http://localhost/amsAPI/api/${post.image_path}` // Adjust the base URL as needed
-          };
-        });
-        console.log('Posts with updated image paths:', this.posts);
+        this.posts = response.map(post => ({
+          ...post,
+          image_path: `http://localhost/amsAPI/api/${post.image_path}` // Adjust the base URL as needed
+        }));
       },
       (error) => {
         console.error('Error fetching posts:', error);
@@ -66,20 +64,27 @@ export class LandlordAnnouncementsComponent {
     postData.append('title', this.title.trim() || 'Untitled Post');
     postData.append('content', this.content.trim());
     postData.append('landlord_id', this.userProfile.id.toString());
-  
+
     if (this.selectedFile) {
       postData.append('image', this.selectedFile, this.selectedFile.name);
     }
-  
+
     this.authService.createAnnouncement(postData).subscribe(
-      (response) => {
+      (response: any) => {
         console.log('Post created successfully:', response);
         Swal.fire({
           icon: 'success',
           title: 'Post Created',
           text: 'Your announcement post has been created successfully!',
         }).then(() => {
-          this.getPosts(); // Refresh posts
+          // Prepend the newly created post to the top of the list
+          const newPost = {
+            ...response,
+            image_path: response.image_path
+              ? `http://localhost/amsAPI/api/${response.image_path}`
+              : null, // Ensure the correct URL
+          };
+          this.posts.unshift(newPost); // Add the new post to the beginning of the array
           this.title = '';
           this.content = '';
           this.selectedFile = null;
@@ -100,7 +105,6 @@ export class LandlordAnnouncementsComponent {
     this.authService.deletePost(postId).subscribe(
       (response) => {
         console.log('Post deleted:', response);
-        // Remove the deleted post from the posts array
         this.posts = this.posts.filter(post => post.post_id !== postId);
       },
       (error) => {
@@ -110,15 +114,10 @@ export class LandlordAnnouncementsComponent {
   }
 
   viewPostAnnouncement(postId: number): void {
-    console.log('postId:', postId); // Log the ID
-    if (postId === undefined || postId === null) {
-      console.error('Error: postId is undefined or null!');
-      return;
-    }
     this.router.navigate(['/view-post-announcement', postId]);
   }
 
-  truncateText(text: string, limit: number = 15): string {
+  truncateText(text: string, limit: number = 25): string {
     return text.length > limit ? text.substring(0, limit) + '...' : text;
   }
-}  
+}
