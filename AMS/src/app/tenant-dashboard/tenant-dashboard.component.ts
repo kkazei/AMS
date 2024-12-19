@@ -38,6 +38,9 @@ export class TenantDashboardComponent implements OnInit {
 paymentProofPreview: string | null = null; // To store the preview URL of the uploaded file
 selectedPost: any = null;
 currentSection: string | null = null; // Tracks the current section
+isModalOpen = false;
+selectedProof: string | null = null;
+isProofModalOpen: boolean = false;
 
 
 
@@ -68,8 +71,32 @@ currentSection: string | null = null; // Tracks the current section
 }
 
 
+truncateText(text: string, limit: number = 140): string {
+  return text.length > limit ? text.substring(0, limit) + '...' : text;
+}
 
- 
+// Open the proof modal
+openProofModal(proof: any): void {
+  this.selectedProof = proof;
+  const modal = document.getElementById("ProofModal");
+  if (modal != null) {
+    modal.style.display = "block";
+  }
+}
+
+closeProofModal(): void {
+  const modal = document.getElementById("ProofModal");
+  if (modal != null) {
+    modal.style.display = "none";
+  }
+}
+
+
+
+closeModal() {
+  this.isModalOpen = false; // Close the modal
+}
+
 
   loadPaymentDetails(): void {
     this.authService.getPaymentDetails().subscribe(
@@ -110,6 +137,10 @@ currentSection: string | null = null; // Tracks the current section
 
   viewConcerns() {
     this.currentSection = 'concernsList';
+  }
+
+  manageConcerns(): void {
+    this.currentSection = 'concerns';
   }
 
   viewAnnouncement(postId: number): void {

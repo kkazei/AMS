@@ -151,25 +151,35 @@
     </div>
   </div>
 </div>
-
 <!-- Concerns List -->
 <div *ngIf="currentSection === 'concernsList'" class="content-section">
   <button class="btn btn-secondary mb-3" (click)="backToGrid()">Back</button>
-  <div class="concerns-list mt-4">
-    <h3>Existing Concerns</h3>
-    <div *ngIf="concerns && concerns.length > 0">
-      <div *ngFor="let concern of concerns" class="card mb-3">
-        <div class="card-body">
-          <h5>{{ concern.title }}</h5>
-          <p class="text-muted">Created at: {{ concern.created_at | date:'short' }}</p>
-          <p class="text-muted">Status: {{ concern.status }}</p>
-          <p>{{ concern.content }}</p>
-          <img *ngIf="concern.image_path" [src]="concern.image_path" alt="Concern Image" class="img-fluid" />
+  <button class="btn btn-secondary mb-3 ml-2" (click)="manageConcerns()">Manage Concerns</button>
+  <div class="card shadow">
+    <div class="card-header bg-gradient-dark text-white">
+      <h5 class="mb-0"><i class="bi bi-exclamation-circle"></i> Existing Concerns</h5>
+    </div>
+    <div class="card-body">
+      <div *ngIf="concerns?.length; else noConcerns">
+        <div class="row">
+          <div class="col-md-4" *ngFor="let concern of concerns">
+            <div class="card mb-3">
+              <div class="card-body">
+                <h5 class="post-title">{{ concern.title }}</h5>
+                <p class="post-date">Created at: {{ concern.created_at | date:'short' }}</p>
+                <p class="post-status">Status: {{ concern.status }}</p>
+                <p class="post-content">{{ truncateText(concern.content) }}</p>
+                <div *ngIf="concern.image_path">
+                  <img [src]="concern.image_path" alt="Concern Image" class="post-image" />
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
-    <div *ngIf="!concerns || concerns.length === 0">
-      <p class="text-center text-muted">No concerns available.</p>
+      <ng-template #noConcerns>
+        <p class="text-center text-muted">No concerns available.</p>
+      </ng-template>
     </div>
   </div>
 </div>
@@ -189,11 +199,11 @@
                 <div class="card-body">
                   <h5 class="post-title">{{ post.title }}</h5>
                   <p class="post-date">{{ post.created_at | date: 'short' }}</p>
-                  <p class="post-content">{{ post.content }}</p>
+                  <p class="post-content">{{ truncateText(post.content) }}</p>
                   <div *ngIf="post.image_path">
                     <img [src]="post.image_path" alt="Post Image" class="post-image" />
                   </div>
-                  <button class="btn btn-primary mt-2" (click)="viewAnnouncement(post.post_id)">View Announcement</button>
+                  <button class="btn btn-primary mt-2 btn-fixed-bottom" (click)="viewAnnouncement(post.post_id)">View Announcement</button>
                 </div>
               </div>
             </div>
@@ -207,35 +217,64 @@
   </div>
 
   <!-- Payment History Section -->
-  <div *ngIf="currentSection === 'paymentHistory'" class="content-section">
-    <button class="btn btn-secondary mb-3" (click)="backToGrid()">Back</button>
-    <!-- Payment Card -->
-    <div *ngFor="let payment of paymentDetails" class="card shadow mb-3">
-      <div class="card-header bg-gradient-dark text-white">
-        <h5 class="mb-0"><i class="bi bi-receipt"></i> Payment Details</h5>
+<div *ngIf="currentSection === 'paymentHistory'" class="content-section">
+  <button class="btn btn-secondary mb-3" (click)="backToGrid()">Back</button>
+  <!-- Payment Card -->
+  <div *ngFor="let payment of paymentDetails" class="card shadow mb-3">
+    <div class="card-header bg-gradient-dark text-white">
+      <h5 class="mb-0"><i class="bi bi-receipt"></i> Payment Details</h5>
+    </div>
+    <div class="payment-card-body">
+      <div class="row">
+        <div class="col-md-6">
+          <p><strong>Reference Number:</strong> {{ payment.reference_number || 'N/A' }}</p>
+          <p><strong>Transaction Date:</strong> {{ payment.payment_date | date: 'short' }}</p>
+        </div>
+        <div class="col-md-6">
+          <p><strong>Amount:</strong> PHP {{ payment.amount }}</p>
+        </div>
       </div>
-      <div class="card-body">
-        <div class="row">
-          <div class="col-md-6">
-            <p><strong>Reference Number:</strong> {{ payment.reference_number || 'N/A' }}</p>
-            <p><strong>Transaction Date:</strong> {{ payment.payment_date | date: 'short' }}</p>
-          </div>
-          <div class="col-md-6">
-            <p><strong>Amount:</strong> PHP {{ payment.amount }}</p>
-          </div>
-        </div>
-        <div class="d-flex justify-content-between mt-3">
-          <a *ngIf="payment.proof_of_payment" 
-             [href]="payment.proof_of_payment" 
-             target="_blank" 
-             class="btn btn-outline-primary btn-sm">
-             <i class="bi bi-eye"></i> View Proof of Payment
-          </a>
-          <span *ngIf="!payment.proof_of_payment" class="text-danger">No Proof</span>
-        </div>
+      <div class="d-flex justify-content-between mt-3">
+        <button 
+          *ngIf="payment.proof_of_payment" 
+          class="btn btn-outline-primary btn-sm" 
+          (click)="openProofModal(payment.proof_of_payment)">
+          <i class="bi bi-eye"></i> View Proof of Payment
+        </button>
+        <span *ngIf="!payment.proof_of_payment" class="text-danger">No Proof</span>
       </div>
     </div>
   </div>
+</div>
+
+
+<!-- Modal For Proof of Payment -->
+<div class="modal" id="ProofModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-scrollable">
+    <div class="modal-content">
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h2>Proof of Payment</h2>
+        <button type="button" class="btn-close" (click)="closeProofModal()">x</button>
+      </div>
+      <!-- Modal Body -->
+      <div class="modal-body">
+        <div *ngIf="selectedProof">
+          <img [src]="selectedProof" alt="Proof of Payment" class="img-fluid rounded border" />
+        </div>
+      </div>
+      <!-- Modal Footer -->
+      <div class="modal-footer"></div>
+    </div>
+  </div>
+</div>
+<!--End of Proof of Payment Modal-->
+
+
+
+
+
+
 
   <!-- Lease Agreement Section -->
   <div *ngIf="currentSection === 'leaseAgreement'" class="content-section">
@@ -244,7 +283,7 @@
       <div class="card-header bg-gradient-dark text-white">
         <h5 class="mb-0"><i class="bi bi-images"></i> Lease Images</h5>
       </div>
-      <div class="card-body">
+      <div class="lease-card-body">
         <div *ngIf="leaseImages?.length; else noImages">
           <div class="row">
             <div class="col-md-4" *ngFor="let image of leaseImages">
@@ -254,7 +293,7 @@
                   class="card-img-top lease-image"
                   alt="Lease Image"
                 />
-                <div class="card-body">
+                <div class="lease-card-body">
                   <p class="card-text">{{ image.description || 'No description' }}</p>
                   <button
                   type="button"
