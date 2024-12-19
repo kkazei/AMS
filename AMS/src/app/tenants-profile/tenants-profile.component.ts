@@ -54,6 +54,7 @@ export class TenantsProfileComponent {
     { name: 'December', value: '12' }
   ];
   filteredPayments: any[] = [];
+  paginatedPayments: any[] = [];
 
 
   constructor(private authService: AuthService) {}
@@ -88,14 +89,17 @@ export class TenantsProfileComponent {
 
     // New method to filter payments by month
     filterPaymentsByMonth(): void {
-      if (this.selectedMonth) {
-        const selectedMonthInt = parseInt(this.selectedMonth, 10); // Convert month value to integer
+      if (this.selectedMonth && this.paymentDetails) {
+        const selectedMonthInt = parseInt(this.selectedMonth, 10);
         this.filteredPayments = this.paymentDetails.filter((payment: { payment_date: string }) => {
-          const paymentMonth = new Date(payment.payment_date).getMonth() + 1; // Extract month
+          const paymentDate = new Date(payment.payment_date);
+          const paymentMonth = paymentDate.getMonth() + 1;
           return paymentMonth === selectedMonthInt;
         });
+        this.updatePagination();
       } else {
-        this.filteredPayments = this.paymentDetails; // Reset filter if no month is selected
+        this.filteredPayments = this.paymentDetails || [];
+        this.updatePagination();
       }
     }
     
@@ -133,6 +137,7 @@ export class TenantsProfileComponent {
   
           // Initialize filteredPayments with all payment details
           this.filteredPayments = this.paymentDetails;
+          this.updatePagination();
           console.log('Payment details for selected tenant:', this.paymentDetails);
         },
         (error) => {
@@ -141,6 +146,31 @@ export class TenantsProfileComponent {
       );
     } else {
       console.warn('No tenant selected');
+    }
+  }
+
+  updatePagination(): void {
+    this.totalPages = Math.ceil(this.filteredPayments.length / this.itemsPerPage);
+    this.paginatePayments();
+  }
+
+  paginatePayments(): void {
+    const startIndex = (this.currentPage - 1) * this.itemsPerPage;
+    const endIndex = startIndex + this.itemsPerPage;
+    this.paginatedPayments = this.filteredPayments.slice(startIndex, endIndex);
+  }
+
+  previousPage(): void {
+    if (this.currentPage > 1) {
+      this.currentPage--;
+      this.paginatePayments();
+    }
+  }
+
+  nextPage(): void {
+    if (this.currentPage < this.totalPages) {
+      this.currentPage++;
+      this.paginatePayments();
     }
   }
   
@@ -427,6 +457,56 @@ export class TenantsProfileComponent {
           console.error('Error fetching images:', error);
         }
       );
+    }
+
+    toggleSelectAll(event: any): void {
+      const isChecked = event.target.checked;
+      this.paginatedPayments.forEach(payment => payment.selected = isChecked);
+    }
+  
+    archiveSelectedPayments(): void {
+      const selectedPayments = this.filteredPayments.filter(payment => payment.selected);
+      if (selectedPayments.length === 0) {
+        Swal.fire({
+          icon: 'warning',
+          title: 'No Payments Selected',
+          text: 'Please select at least one payment to archive.',
+        });
+        return;
+      }
+  
+      Swal.fire({
+        icon: 'warning',
+        title: 'Are you sure?',
+        text: 'Do you want to archive the selected payments?',
+        showCancelButton: true,
+        confirmButtonText: 'Yes, Archive them',
+        cancelButtonText: 'Cancel',
+        reverseButtons: true,
+      }).then((result) => {
+        if (result.isConfirmed) {
+          const archivePromises = selectedPayments.map(payment => this.authService.updatePaymentVisibility(payment.invoice_id));
+          Promise.all(archivePromises)
+            .then(() => {
+              Swal.fire({
+                icon: 'success',
+                title: 'Payments Archived',
+                text: 'The selected payments have been archived successfully.',
+              }).then(() => {
+                this.getPaymentDetails(); // Refresh payment details list
+              });
+            })
+            .catch((error) => {
+              Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'Failed to archive selected payments. Please try again.',
+              });
+            });
+        } else {
+          console.log('Archive action canceled');
+        }
+      });
     }
 
     // Update payment visibility (archive payment)
