@@ -521,6 +521,28 @@ td.paid {
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   padding: 15px;
   transition: transform 0.2s, box-shadow 0.2s;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  height: 100%;
+}
+
+.concern-item h3,
+.concern-item p,
+.concern-item img {
+  margin: 0 0 10px 0;
+}
+
+.concern-item img {
+  max-width: 100%;
+  height: auto;
+}
+
+.concern-item button {
+  width: 100%;
+  box-sizing: border-box;
+  margin-top: auto;
 }
 
 /* Concern Item Hover Effects */
@@ -701,8 +723,8 @@ td.paid {
 }
 
 .modal-dialog {
-
-  max-width: 820px;
+  max-width: 1024px; /* Increase the width of the modal */
+  max-height: 90vh; /* Increase the height of the modal */
   border-radius: 8px;
 
 }
@@ -745,6 +767,8 @@ td.paid {
   font-family: 'Roboto', sans-serif;
   color: #34495e;
   line-height: 1.5;
+  max-height: 70vh; /* Set a fixed height for the modal body */
+  overflow-y: auto; /* Enable vertical scrolling */
 }
 
 .modal-body .form-group {

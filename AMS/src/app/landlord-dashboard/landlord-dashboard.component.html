@@ -288,11 +288,12 @@
         <div *ngIf="concerns && concerns.length" class="concerns-list">
           <div *ngFor="let concern of concerns" class="concern-item">
             <h3>{{ concern.title }}</h3>
-            <p>{{ concern.content }}</p>
+            <p>{{ truncateText(concern.content) }}</p>
             <p>Status: {{ concern.status }}</p>
             <div *ngIf="concern.image_path">
               <img [src]="concern.image_path" alt="Concern Image" class="concern-image" />
             </div>
+            <button class="btn btn-primary mt-2 btn-fixed-bottom" (click)="viewConcern(concern.concern_id)">View Concern</button>
             <button *ngIf="concern.status !== 'solved'" (click)="markAsSolved(concern)">Mark as Solved</button>
           </div>
         </div>

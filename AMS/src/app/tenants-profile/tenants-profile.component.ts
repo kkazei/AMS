@@ -38,6 +38,23 @@ export class TenantsProfileComponent {
   showUploadSection: boolean = false;
   showLeaseModal: boolean = false;
   showPaymentQRModal: boolean = false;
+  selectedMonth: string = "";
+  months = [
+    { name: 'January', value: '01' },
+    { name: 'February', value: '02' },
+    { name: 'March', value: '03' },
+    { name: 'April', value: '04' },
+    { name: 'May', value: '05' },
+    { name: 'June', value: '06' },
+    { name: 'July', value: '07' },
+    { name: 'August', value: '08' },
+    { name: 'September', value: '09' },
+    { name: 'October', value: '10' },
+    { name: 'November', value: '11' },
+    { name: 'December', value: '12' }
+  ];
+  filteredPayments: any[] = [];
+
 
   constructor(private authService: AuthService) {}
 
@@ -46,6 +63,7 @@ export class TenantsProfileComponent {
     if (token) {
       this.userProfile = this.authService.getUserProfileFromToken();
       this.getTenants(); // Fetch tenants from API
+      this.getPaymentDetails(); // Fetch payment details initially
     } else {
       console.warn('Token not found, user is not logged in');
     }
@@ -67,6 +85,20 @@ export class TenantsProfileComponent {
       }
     );
   }
+
+    // New method to filter payments by month
+    filterPaymentsByMonth(): void {
+      if (this.selectedMonth) {
+        const selectedMonthInt = parseInt(this.selectedMonth, 10); // Convert month value to integer
+        this.filteredPayments = this.paymentDetails.filter((payment: { payment_date: string }) => {
+          const paymentMonth = new Date(payment.payment_date).getMonth() + 1; // Extract month
+          return paymentMonth === selectedMonthInt;
+        });
+      } else {
+        this.filteredPayments = this.paymentDetails; // Reset filter if no month is selected
+      }
+    }
+    
 
   // Select a tenant to view their details
   selectTenant(tenant: any) {
@@ -98,6 +130,9 @@ export class TenantsProfileComponent {
               ...payment,
               proof_of_payment: payment.proof_of_payment ? `http://localhost/amsAPI/api/${payment.proof_of_payment}` : null
             }));
+  
+          // Initialize filteredPayments with all payment details
+          this.filteredPayments = this.paymentDetails;
           console.log('Payment details for selected tenant:', this.paymentDetails);
         },
         (error) => {
@@ -108,6 +143,7 @@ export class TenantsProfileComponent {
       console.warn('No tenant selected');
     }
   }
+  
   toggleUploadSection() {
     this.showUploadSection = !this.showUploadSection;
   }

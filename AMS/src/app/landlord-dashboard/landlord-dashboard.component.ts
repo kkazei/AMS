@@ -542,6 +542,19 @@ export class LandlordDashboardComponent implements OnInit {
     }
   }
   
+  truncateText(text: string, limit: number = 15): string {
+    return text.length > limit ? text.substring(0, limit) + '...' : text;
+  }
+
+  viewConcern(concernId: number): void {
+    console.log('concernId:', concernId); // Log the ID
+    if (concernId === undefined || concernId === null) {
+      console.error('Error: postId is undefined or null!');
+      return;
+    }
+    this.router.navigate(['/view-concern', concernId]);
+  }
+
 
   fetchTotalIncomeSinceStartOfYear(): void {
     const currentYear = new Date().getFullYear();

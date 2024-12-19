@@ -249,6 +249,13 @@ aria-hidden="true"
 </div>
 </div>
 
+ <!-- Month Filter Dropdown -->
+ <div class="d-flex justify-content-end mb-3">
+  <select class="form-select w-auto" [(ngModel)]="selectedMonth" (change)="filterPaymentsByMonth()">
+    <option value="">Select Month</option>
+    <option *ngFor="let month of months" [value]="month.value">{{ month.name }}</option>
+  </select>
+</div>
   
     <!-- Bottom Section: Payment History -->
     <div class="card shadow mt-4 border-0">
@@ -268,7 +275,7 @@ aria-hidden="true"
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let payment of paymentDetails">
+            <tr *ngFor="let payment of filteredPayments">
               <td>{{ payment.tenant_fullname }}</td>
               <td>{{ payment.room || 'N/A' }}</td>
               <td>₱{{ payment.amount }}</td>

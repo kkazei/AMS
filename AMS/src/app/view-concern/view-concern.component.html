@@ -1,0 +1,19 @@
+<div *ngIf="concerns; else loading" class="post-view">
+    <div class="post-header">
+      <h5 class="post-title">{{ concerns.title }}</h5>
+      <p class="post-date">{{ concerns.created_at | date: 'short' }}</p>
+      <p>Status: {{ concerns.status }}</p>
+    </div>
+    <div class="post-content">
+      <p>{{ concerns.content }}</p>
+      <div *ngIf="concerns.image_path" class="image-container">
+        <img [src]="concerns.image_path" alt="Post Image" class="post-image" />
+      </div>
+    </div>
+    <button *ngIf="concerns.status !== 'solved'" (click)="markAsSolved(concerns)">Mark as Solved</button>
+  </div>
+  
+  <ng-template #loading>
+    <p class="text-center text-muted">Loading announcement...</p>
+  </ng-template>
+  

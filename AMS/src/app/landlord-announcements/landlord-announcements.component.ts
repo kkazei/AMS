@@ -108,4 +108,17 @@ export class LandlordAnnouncementsComponent {
       }
     );
   }
+
+  viewPostAnnouncement(postId: number): void {
+    console.log('postId:', postId); // Log the ID
+    if (postId === undefined || postId === null) {
+      console.error('Error: postId is undefined or null!');
+      return;
+    }
+    this.router.navigate(['/view-post-announcement', postId]);
+  }
+
+  truncateText(text: string, limit: number = 15): string {
+    return text.length > limit ? text.substring(0, limit) + '...' : text;
+  }
 }  

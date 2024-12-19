@@ -8,7 +8,8 @@
   <div class="announcement-grid">
     <div class="announcement" *ngFor="let post of posts">
       <div class="announcement-header">
-        <h4>{{ post.title }}</h4>
+        <h4>{{ truncateText(post.title) }}</h4>
+        <button class="btn btn-primary mt-2 btn-fixed-bottom" (click)="viewPostAnnouncement(post.post_id)">View Announcement</button>
         <button class="btn btn-danger" (click)="deletePost(post.post_id)">Delete</button>
       </div>
       <div class="announcement-body">
