@@ -257,48 +257,62 @@ aria-hidden="true"
   </select>
 </div>
   
-    <!-- Bottom Section: Payment History -->
-    <div class="card shadow mt-4 border-0">
-      <div class="card-header bg-success text-white fw-bold">
-        Payment History
-      </div>
-      <div class="card-body">
-        <table class="table table-striped align-middle mb-0">
-          <thead>
-            <tr>
-              <th>Tenant Name</th>
-              <th>Room</th>
-              <th>Amount</th>
-              <th>Reference Number</th>
-              <th>Date</th>
-              <th>Proof of Payment</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let payment of filteredPayments">
-              <td>{{ payment.tenant_fullname }}</td>
-              <td>{{ payment.room || 'N/A' }}</td>
-              <td>₱{{ payment.amount }}</td>
-              <td>{{ payment.reference_number || 'N/A' }}</td>
-              <td>{{ payment.payment_date | date: 'MM/dd/yy, h:mm a' }}</td>
-              <td>
-                <button *ngIf="payment.proof_of_payment"  (click)="openProofModal(payment.proof_of_payment)" class="btn btn-outline-primary btn-sm">
-                  <i class="bi bi-eye"></i> View
-                </button>
-                <button class="btn btn-sm btn-info me-2">
-                  Generate Invoice
-                </button>
-                <button class="btn btn-sm btn-warning me-2">
-                  Archive
-                </button>
-                <span *ngIf="!payment.proof_of_payment" class="text-danger fw-bold">No Proof</span>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
+<!-- Bottom Section: Payment History -->
+<div class="card shadow mt-4 border-0">
+  <div class="card-header bg-success text-white fw-bold">
+    Payment History
   </div>
+  <div class="card-body">
+    <table class="table table-striped align-middle mb-0">
+      <thead>
+        <tr>
+          <th>
+            <input type="checkbox" (change)="toggleSelectAll($event)" />
+          </th>
+          <th>Tenant Name</th>
+          <th>Room</th>
+          <th>Amount</th>
+          <th>Reference Number</th>
+          <th>Date</th>
+          <th>Proof of Payment</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let payment of paginatedPayments">
+          <td>
+            <input type="checkbox" [(ngModel)]="payment.selected" />
+          </td>
+          <td>{{ payment.tenant_fullname }}</td>
+          <td>{{ payment.room || 'N/A' }}</td>
+          <td>₱{{ payment.amount }}</td>
+          <td>{{ payment.reference_number || 'N/A' }}</td>
+          <td>{{ payment.payment_date | date: 'MM/dd/yy, h:mm a' }}</td>
+          <td>
+            <button *ngIf="payment.proof_of_payment" (click)="openProofModal(payment.proof_of_payment)" class="btn btn-outline-primary btn-sm">
+              <i class="bi bi-eye"></i> View
+            </button>
+            <button class="btn btn-info btn-sm" (click)="generateInvoice(payment)">
+              Generate Invoice
+            </button>
+            <span *ngIf="!payment.proof_of_payment" class="text-danger fw-bold">No Proof</span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <button class="btn btn-danger mt-3" (click)="archiveSelectedPayments()">Archive</button>
+    <!-- Pagination Controls -->
+    <nav aria-label="Page navigation" class="mt-3">
+      <ul class="pagination justify-content-center">
+        <li class="page-item" [class.disabled]="currentPage === 1">
+          <a class="page-link" (click)="previousPage()">Previous</a>
+        </li>
+        <li class="page-item" [class.disabled]="currentPage === totalPages">
+          <a class="page-link" (click)="nextPage()">Next</a>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</div>
   
 
 <!-- Message Section -->
