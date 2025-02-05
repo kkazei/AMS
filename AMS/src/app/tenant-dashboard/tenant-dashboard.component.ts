@@ -30,7 +30,7 @@ export class TenantDashboardComponent implements OnInit {
   preview: string = '';
   imageInfos: any[] = [];
   selectedPaymentMethod: string = 'onhand'; // Default to 'onhand'
-  paymentDetails: any = null; // Payment details list
+  //paymentDetails: any = null; // Payment details list
   leaseDetails: any = null; // Lease details list
   leaseImages: any[] = []; // Lease images list
   posts: any[] = [];
@@ -41,7 +41,11 @@ currentSection: string | null = null; // Tracks the current section
 isModalOpen = false;
 selectedProof: string | null = null;
 isProofModalOpen: boolean = false;
-
+paymentDetails: any[] = [];
+paginatedPayments: any[] = [];
+currentPage: number = 1;
+itemsPerPage: number = 5;
+totalPages: number = 1;
 
 
   constructor(private authService: AuthService, private router: Router) {}
@@ -98,34 +102,51 @@ closeModal() {
 }
 
 
-  loadPaymentDetails(): void {
-    this.authService.getPaymentDetails().subscribe(
-      (response: any[]) => {
-        console.log('Payment details fetched:', response);
-  
-        const currentUserId = this.userProfile?.id; // Use the logged-in user's ID
-        if (!currentUserId) {
-          console.error('User ID not found. Unable to filter payments.');
-          return;
-        }
-  
-        // Filter payment details for the logged-in tenant
-        this.paymentDetails = response
-          .filter(payment => payment.tenant_id === currentUserId)
-          .map(payment => ({
-            ...payment,
-            proof_of_payment: payment.proof_of_payment
-              ? `http://localhost/amsAPI/api/${payment.proof_of_payment}`
-              : null
-          }));
-  
-        console.log('Filtered payment details for user:', this.paymentDetails);
-      },
-      (error) => {
-        console.error('Error fetching payment details:', error);
-      }
-    );
+
+loadPaymentDetails(): void {
+  this.authService.getPaymentDetails().subscribe(
+    (response: any[]) => {
+      console.log('Payment details fetched:', response);
+      this.paymentDetails = response
+        .filter(payment => payment.tenant_id === this.userProfile?.id)
+        .map(payment => ({
+          ...payment,
+          proof_of_payment: payment.proof_of_payment
+            ? `http://localhost/amsAPI/api/${payment.proof_of_payment}`
+            : null
+        }));
+      this.updatePagination();
+    },
+    (error) => {
+      console.error('Error fetching payment details:', error);
+    }
+  );
+}
+
+updatePagination(): void {
+  this.totalPages = Math.ceil(this.paymentDetails.length / this.itemsPerPage);
+  this.paginatePayments();
+}
+
+paginatePayments(): void {
+  const startIndex = (this.currentPage - 1) * this.itemsPerPage;
+  const endIndex = startIndex + this.itemsPerPage;
+  this.paginatedPayments = this.paymentDetails.slice(startIndex, endIndex);
+}
+
+previousPage(): void {
+  if (this.currentPage > 1) {
+    this.currentPage--;
+    this.paginatePayments();
   }
+}
+
+nextPage(): void {
+  if (this.currentPage < this.totalPages) {
+    this.currentPage++;
+    this.paginatePayments();
+  }
+}
 
   showSection(section: string): void {
     this.currentSection = section; // Set the current section

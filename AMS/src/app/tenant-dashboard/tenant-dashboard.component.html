@@ -216,11 +216,11 @@
     </div>
   </div>
 
-  <!-- Payment History Section -->
+ <!-- Payment History Section -->
 <div *ngIf="currentSection === 'paymentHistory'" class="content-section">
   <button class="btn btn-secondary mb-3" (click)="backToGrid()">Back</button>
   <!-- Payment Card -->
-  <div *ngFor="let payment of paymentDetails" class="card shadow mb-3">
+  <div *ngFor="let payment of paginatedPayments" class="card shadow mb-3">
     <div class="card-header bg-gradient-dark text-white">
       <h5 class="mb-0"><i class="bi bi-receipt"></i> Payment Details</h5>
     </div>
@@ -245,8 +245,18 @@
       </div>
     </div>
   </div>
-</div>
 
+  <!-- Pagination Controls -->
+  <div class="pagination-controls">
+    <button class="btn btn-primary" (click)="previousPage()" [disabled]="currentPage === 1">
+      Previous
+    </button>
+    <span>Page {{ currentPage }} of {{ totalPages }}</span>
+    <button class="btn btn-primary" (click)="nextPage()" [disabled]="currentPage === totalPages">
+      Next
+    </button>
+  </div>
+</div>
 
 <!-- Modal For Proof of Payment -->
 <div class="modal" id="ProofModal" tabindex="-1">
